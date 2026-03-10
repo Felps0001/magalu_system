@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Magalu System</title>
+  <meta name="theme-color" content="#d84e1f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Magalu System">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="auth-body">
+  <main class="auth-layout">
+    <section class="brand-panel">
+      <p class="eyebrow">Magalu System</p>
+      <h1 class="brand-title">Acesso rapido para check-in e pontuacao.</h1>
+      <p class="brand-copy">
+        Entre com o seu ID Magalu para acessar a area de teste da aplicacao.
+      </p>
+      <div class="brand-grid">
+        <article class="brand-card">
+          <span class="brand-label">Entrada</span>
+          <strong>Sem senha</strong>
+        </article>
+        <article class="brand-card">
+          <span class="brand-label">Login</span>
+          <strong>Por id_magalu</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="auth-card">
+      <div class="auth-card-header">
+        <p class="eyebrow">Login</p>
+        <h2>Acessar sistema</h2>
+        <p class="muted">Use o mesmo `id_magalu` cadastrado na API.</p>
+      </div>
+
+      <form id="login-form" class="auth-form">
+        <label for="id_magalu">ID Magalu</label>
+        <input id="id_magalu" name="id_magalu" type="text" placeholder="Ex.: MAG123" autocomplete="off" required>
+
+        <button id="login-button" type="submit">Entrar</button>
+        <button id="update-button" class="secondary-button" type="button">Atualizar app</button>
+        <button id="install-button" class="secondary-button" type="button" hidden>Instalar app</button>
+      </form>
+
+      <p id="login-message" class="form-message" aria-live="polite"></p>
+      <p id="update-message" class="form-message info-message" hidden></p>
+    </section>
+  </main>
+
+  <script src="/js/pwa.js"></script>
+  <script src="/js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda por Turma</title>
+  <meta name="theme-color" content="#d84e1f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Magalu System">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="dashboard-body">
+  <main class="dashboard-layout">
+    <header class="dashboard-header">
+      <div>
+        <p class="eyebrow">Agenda</p>
+        <h1>Usuarios por turma</h1>
+        <p class="muted">A lista abaixo e separada entre Turma A, Turma B e Turma C.</p>
+      </div>
+      <div class="header-actions">
+        <a class="secondary-button link-like-button" href="/teste">Voltar</a>
+        <button id="update-button" class="secondary-button" type="button">Atualizar app</button>
+        <button id="install-button" class="secondary-button" type="button" hidden>Instalar app</button>
+        <button id="logout-button" class="secondary-button" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section class="hero-card">
+      <p class="eyebrow">Agenda geral</p>
+      <h2 id="agenda-user-name">Carregando agenda...</h2>
+      <p id="agenda-user-role" class="muted">Os dados sao carregados da collection users.</p>
+      <p id="update-message" class="form-message info-message" hidden></p>
+    </section>
+
+    <section id="agenda-groups" class="agenda-grid"></section>
+  </main>
+
+  <script src="/js/pwa.js"></script>
+  <script src="/js/agenda.js"></script>
+</body>
+</html>

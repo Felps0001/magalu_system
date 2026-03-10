@@ -1,0 +1,26 @@
+{
+  "name": "Magalu System",
+  "short_name": "Magalu",
+  "description": "Aplicacao de login, check-in e pontuacao para uso em celular e desktop.",
+  "lang": "pt-BR",
+  "start_url": "/login",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4efe5",
+  "theme_color": "#d84e1f",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

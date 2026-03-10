@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Teste</title>
+  <meta name="theme-color" content="#d84e1f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Magalu System">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="dashboard-body">
+  <main class="dashboard-layout">
+    <header class="dashboard-header">
+      <div>
+        <p class="eyebrow">Acesso liberado</p>
+        <h1>Painel de teste</h1>
+        <p class="muted">Se voce chegou aqui, o login por `id_magalu` foi efetuado.</p>
+      </div>
+      <div class="header-actions">
+        <a class="secondary-button link-like-button" href="/agenda">Agenda</a>
+        <button id="update-button" class="secondary-button" type="button">Atualizar app</button>
+        <button id="install-button" class="secondary-button" type="button" hidden>Instalar app</button>
+        <button id="logout-button" class="secondary-button" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section class="hero-card">
+      <p class="eyebrow">Usuario autenticado</p>
+      <h2 id="user-name">Carregando...</h2>
+      <p id="user-role" class="muted"></p>
+      <p id="update-message" class="form-message info-message" hidden></p>
+    </section>
+
+    <section class="stats-grid">
+      <article class="stat-card">
+        <span class="brand-label">ID Magalu</span>
+        <strong id="user-id-magalu">-</strong>
+      </article>
+      <article class="stat-card">
+        <span class="brand-label">Pontos</span>
+        <strong id="user-pontos">0</strong>
+      </article>
+      <article class="stat-card">
+        <span class="brand-label">Tempo</span>
+        <strong id="user-tempo">0</strong>
+      </article>
+      <article class="stat-card">
+        <span class="brand-label">Check-ins</span>
+        <strong id="user-checkins">0</strong>
+      </article>
+    </section>
+
+    <section class="details-grid">
+      <article class="detail-card">
+        <p class="eyebrow">Dados do usuario</p>
+        <dl class="detail-list">
+          <div><dt>CPF</dt><dd id="user-cpf">-</dd></div>
+          <div><dt>Regiao</dt><dd id="user-regiao">-</dd></div>
+          <div><dt>Loja</dt><dd id="user-loja">-</dd></div>
+          <div><dt>Turma</dt><dd id="user-turma">-</dd></div>
+          <div><dt>Transfer</dt><dd id="user-transfer">-</dd></div>
+        </dl>
+      </article>
+
+      <article class="detail-card">
+        <p class="eyebrow">Estandes visitados</p>
+        <ul id="estandes-list" class="list-panel"></ul>
+      </article>
+    </section>
+  </main>
+
+  <script src="/js/pwa.js"></script>
+  <script src="/js/teste.js"></script>
+</body>
+</html>
