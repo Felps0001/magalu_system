@@ -185,7 +185,12 @@ document.addEventListener('click', async (event) => {
   const installButton = getInstallButton();
 
   if (updateButton && event.target === updateButton) {
-    checkForUpdates({ manual: true });
+    // Força reload do service worker e recarrega a página
+    if (activeRegistration && activeRegistration.waiting) {
+      activeRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
+    } else {
+      window.location.reload();
+    }
     return;
   }
 
