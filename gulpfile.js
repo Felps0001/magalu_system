@@ -1,7 +1,10 @@
 const fs = require('fs');
 const path = require('path');
+const { src, dest, series, watch } = require('gulp');
+const cleanCss = require('gulp-clean-css');
+const terser = require('gulp-terser');
 
-const projectRoot = path.resolve(__dirname, '..');
+const projectRoot = __dirname;
 const publicDir = path.join(projectRoot, 'public');
 const distDir = path.join(projectRoot, 'dist');
 
@@ -9,20 +12,26 @@ function ensureDir(dirPath) {
   fs.mkdirSync(dirPath, { recursive: true });
 }
 
-function copyDir(source, destination) {
-  ensureDir(destination);
+function cleanDist(done) {
+  fs.rmSync(distDir, { recursive: true, force: true });
+  done();
+}
 
-  for (const entry of fs.readdirSync(source, { withFileTypes: true })) {
-    const sourcePath = path.join(source, entry.name);
-    const destinationPath = path.join(destination, entry.name);
+function copyPublic() {
+  return src('public/**/*', { cwd: projectRoot, encoding: false })
+    .pipe(dest('dist', { cwd: projectRoot }));
+}
 
-    if (entry.isDirectory()) {
-      copyDir(sourcePath, destinationPath);
-      continue;
-    }
+function minifyStyles() {
+  return src('dist/**/*.css', { cwd: projectRoot, allowEmpty: true })
+    .pipe(cleanCss())
+    .pipe(dest('dist', { cwd: projectRoot }));
+}
 
-    fs.copyFileSync(sourcePath, destinationPath);
-  }
+function minifyScripts() {
+  return src('dist/**/*.js', { cwd: projectRoot, allowEmpty: true })
+    .pipe(terser())
+    .pipe(dest('dist', { cwd: projectRoot }));
 }
 
 function writeRouteIndex(routeName, sourceFileName) {
@@ -72,12 +81,23 @@ function write404Page() {
   fs.writeFileSync(notFoundPath, content, 'utf8');
 }
 
-fs.rmSync(distDir, { recursive: true, force: true });
-copyDir(publicDir, distDir);
-writeRouteIndex('login', 'login.html');
-writeRouteIndex('teste', 'teste.html');
-writeRouteIndex('agenda', 'agenda.html');
-writeRootIndex();
-write404Page();
+function writePagesRoutes(done) {
+  writeRouteIndex('login', 'login.html');
+  writeRouteIndex('teste', 'teste.html');
+  writeRouteIndex('agenda', 'agenda.html');
+  writeRootIndex();
+  write404Page();
+  console.log('Build do GitHub Pages gerado em dist/.');
+  done();
+}
 
-console.log('Build do GitHub Pages gerado em dist/.');
+function watchPages() {
+  watch('public/**/*', { cwd: projectRoot }, series(buildPages));
+}
+
+const buildPages = series(cleanDist, copyPublic, minifyStyles, minifyScripts, writePagesRoutes);
+
+exports.clean = cleanDist;
+exports['build-pages'] = buildPages;
+exports.watch = watchPages;
+exports.default = buildPages;
