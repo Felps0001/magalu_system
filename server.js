@@ -1,4 +1,6 @@
+
 require('dotenv').config();
+const cors = require('cors');
 
 const { connectToMongoDB, closeMongoDBConnection } = require('./src/config/mongodb');
 const { ensureDatabaseIndexes } = require('./src/config/collections');
@@ -7,6 +9,14 @@ const { createApp } = require('./src/app');
 const PORT = process.env.PORT || 3000;
 
 const app = createApp();
+app.use(cors({
+  origin: [
+    'https://felps0001.github.io',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
+  ],
+  credentials: true
+}));
 let server;
 
 async function startServer() {
