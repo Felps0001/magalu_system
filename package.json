@@ -15,6 +15,7 @@
     "cors": "^2.8.6",
     "dotenv": "^16.4.7",
     "express": "^5.2.1",
+    "html5-qrcode": "^2.3.8",
     "mongodb": "^6.15.0",
     "multer": "^2.1.1"
   },

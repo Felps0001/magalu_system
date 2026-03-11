@@ -36,11 +36,10 @@
       box-shadow: 0 18px 42px rgba(0, 49, 124, 0.18);
     }
 
-    .scanner-video {
+    .scanner-mount {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      display: block;
+      background: #091833;
     }
 
     .scanner-overlay {
@@ -50,6 +49,10 @@
       place-items: center;
       pointer-events: none;
       background: rgba(3, 13, 32, 0.12);
+    }
+
+    .scanner-preview.scanner-active .scanner-overlay {
+      display: none;
     }
 
     .scanner-frame {
@@ -117,8 +120,8 @@
     </section>
 
     <section class="detail-card scanner-card">
-      <div class="scanner-preview">
-        <video id="scanner-video" class="scanner-video" playsinline muted></video>
+      <div id="scanner-preview" class="scanner-preview">
+        <div id="scanner-mount" class="scanner-mount"></div>
         <div class="scanner-overlay" aria-hidden="true">
           <div class="scanner-frame"></div>
         </div>
@@ -129,7 +132,7 @@
         <button id="stop-scan-button" class="secondary-button" type="button" disabled>Parar camera</button>
       </div>
 
-      <p class="scanner-tip">Se a leitura nao abrir, confirme a permissao de camera no navegador e use HTTPS ou localhost.</p>
+      <p class="scanner-tip">No iPhone, use Safari ou Chrome atualizados e permita o acesso a camera quando solicitado.</p>
     </section>
 
     <section class="detail-card scanner-result">
@@ -147,154 +150,7 @@
   <script src="../js/runtime-config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/pwa.js"></script>
-  <script>
-    const scannerVideo = document.getElementById('scanner-video');
-    const scannerStatus = document.getElementById('scanner-status');
-    const scannerResult = document.getElementById('scanner-result');
-    const scannerResultLink = document.getElementById('scanner-result-link');
-    const startScanButton = document.getElementById('start-scan-button');
-    const stopScanButton = document.getElementById('stop-scan-button');
-
-    let mediaStream = null;
-    let animationFrameId = null;
-    let detector = null;
-    let scanLocked = false;
-
-    function setScannerStatus(message, type) {
-      scannerStatus.textContent = message;
-      scannerStatus.className = `form-message ${type}`;
-    }
-
-    function updateResult(value) {
-      scannerResult.textContent = value || 'Nenhum QR Code lido ainda.';
-
-      if (value && /^https?:\/\//i.test(value)) {
-        scannerResultLink.hidden = false;
-        scannerResultLink.href = value;
-      } else {
-        scannerResultLink.hidden = true;
-        scannerResultLink.removeAttribute('href');
-      }
-    }
-
-    function stopScanner() {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = null;
-      }
-
-      if (mediaStream) {
-        mediaStream.getTracks().forEach((track) => track.stop());
-        mediaStream = null;
-      }
-
-      scannerVideo.srcObject = null;
-      startScanButton.disabled = false;
-      stopScanButton.disabled = true;
-    }
-
-    async function scanFrame() {
-      if (!mediaStream || !detector || scanLocked) {
-        return;
-      }
-
-      try {
-        const barcodes = await detector.detect(scannerVideo);
-
-        if (Array.isArray(barcodes) && barcodes.length > 0) {
-          const qrCode = barcodes[0];
-          const value = qrCode.rawValue || 'QR Code detectado.';
-
-          scanLocked = true;
-          updateResult(value);
-          setScannerStatus('QR Code lido com sucesso.', 'success');
-
-          if (navigator.vibrate) {
-            navigator.vibrate(120);
-          }
-
-          window.setTimeout(() => {
-            scanLocked = false;
-          }, 1500);
-        }
-      } catch (error) {
-        setScannerStatus('Falha ao processar a imagem da camera.', 'error');
-        console.error(error);
-        stopScanner();
-        return;
-      }
-
-      animationFrameId = requestAnimationFrame(scanFrame);
-    }
-
-    async function startScanner() {
-      if (!('mediaDevices' in navigator) || !navigator.mediaDevices.getUserMedia) {
-        setScannerStatus('Este navegador nao suporta acesso nativo a camera.', 'error');
-        return;
-      }
-
-      if (!('BarcodeDetector' in window)) {
-        setScannerStatus('Este navegador nao suporta leitura nativa de QR Code. Use Chrome ou Edge atualizados no celular.', 'error');
-        return;
-      }
-
-      try {
-        const formats = await window.BarcodeDetector.getSupportedFormats();
-
-        if (!formats.includes('qr_code')) {
-          setScannerStatus('O leitor nativo do navegador nao suporta QR Code neste aparelho.', 'error');
-          return;
-        }
-
-        detector = new window.BarcodeDetector({ formats: ['qr_code'] });
-        mediaStream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: {
-              ideal: 'environment'
-            }
-          },
-          audio: false
-        });
-
-        scannerVideo.srcObject = mediaStream;
-        await scannerVideo.play();
-
-        startScanButton.disabled = true;
-        stopScanButton.disabled = false;
-        setScannerStatus('Camera ativa. Aponte para um QR Code.', 'info-message');
-        scanFrame();
-      } catch (error) {
-        if (error && error.name === 'NotAllowedError') {
-          setScannerStatus('Permissao de camera negada. Libere o acesso e tente novamente.', 'error');
-          return;
-        }
-
-        if (error && error.name === 'NotFoundError') {
-          setScannerStatus('Nenhuma camera encontrada neste dispositivo.', 'error');
-          return;
-        }
-
-        setScannerStatus('Nao foi possivel iniciar a camera agora.', 'error');
-        console.error(error);
-      }
-    }
-
-    startScanButton.addEventListener('click', () => {
-      updateResult('Nenhum QR Code lido ainda.');
-      startScanner();
-    });
-
-    stopScanButton.addEventListener('click', () => {
-      stopScanner();
-      setScannerStatus('Camera encerrada.', 'info-message');
-    });
-
-    window.addEventListener('beforeunload', stopScanner);
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden') {
-        stopScanner();
-      }
-    });
-  </script>
+  <script src="../vendor/html5-qrcode.min.js"></script>
+  <script src="../js/scanner.js"></script>
 </body>
 </html>
