@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agenda por Turma</title>
-  <meta name="theme-color" content="#d84e1f">
+  <meta name="theme-color" content="#0086ff">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Magalu System">
   <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../icons/icon-192.svg" type="image/svg+xml">
   <link rel="icon" href="../icons/icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
   <link rel="stylesheet" href="../styles.css">
@@ -16,7 +17,14 @@
 <body class="dashboard-body">
   <main class="dashboard-layout">
     <header class="dashboard-header">
-      <div>
+      <div class="header-brand">
+        <div class="app-mark">
+          <img class="app-mark-icon" src="../icons/icon-192.svg" alt="">
+          <div class="app-mark-copy">
+            <p class="app-mark-kicker">Area interna</p>
+            <strong class="app-mark-title">Magalu System</strong>
+          </div>
+        </div>
         <p class="eyebrow">Agenda</p>
         <h1>Usuarios por turma</h1>
         <p class="muted">A lista abaixo e separada entre Turma A, Turma B e Turma C.</p>
@@ -36,7 +44,98 @@
       <p id="update-message" class="form-message info-message" hidden></p>
     </section>
 
-    <section id="agenda-groups" class="agenda-grid"></section>
+    <section class="agenda-track" data-turma="A">
+      <div class="agenda-track-header">
+        <div class="agenda-track-copy">
+          <p class="agenda-track-kicker">Turma A</p>
+          <h2 class="agenda-track-title">Roteiro da turma</h2>
+          <p class="agenda-track-description">Programacao liberada para participantes da Turma A.</p>
+        </div>
+        <span class="agenda-track-pill">Acesso da turma</span>
+      </div>
+
+      <div class="agenda-grid agenda-grid--turma">
+        <div class="detail-card agenda-group-card">
+          <p class="eyebrow">Turma A</p>
+          <h2>Plenaria</h2>
+          <p>Horario: 14h</p>
+        </div>
+
+        <div class="detail-card agenda-group-card">
+          <p class="eyebrow">Turma A</p>
+          <h2>Almoco</h2>
+          <p>Horario: 13h</p>
+        </div>
+
+        <div class="detail-card agenda-group-card">
+          <p class="eyebrow">Turma A</p>
+          <h2>Cafe</h2>
+          <p>Horario: 11h30</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="agenda-track" data-turma="B">
+      <div class="agenda-track-header">
+        <div class="agenda-track-copy">
+          <p class="agenda-track-kicker">Turma B</p>
+          <h2 class="agenda-track-title">Roteiro da turma</h2>
+          <p class="agenda-track-description">Programacao liberada para participantes da Turma B.</p>
+        </div>
+        <span class="agenda-track-pill">Acesso da turma</span>
+      </div>
+
+      <div class="agenda-grid agenda-grid--turma">
+        <div class="detail-card agenda-group-card">
+          <p class="eyebrow">Turma B</p>
+          <h2>Plenaria</h2>
+          <p>Horario: 14h</p>
+        </div>
+
+        <div class="detail-card agenda-group-card">
+          <p class="eyebrow">Turma B</p>
+          <h2>Almoco</h2>
+          <p>Horario: 13h</p>
+        </div>
+
+        <div class="detail-card agenda-group-card">
+          <p class="eyebrow">Turma B</p>
+          <h2>Cafe</h2>
+          <p>Horario: 11h30</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="agenda-track" data-turma="C">
+      <div class="agenda-track-header">
+        <div class="agenda-track-copy">
+          <p class="agenda-track-kicker">Turma C</p>
+          <h2 class="agenda-track-title">Roteiro da turma</h2>
+          <p class="agenda-track-description">Programacao liberada para participantes da Turma C.</p>
+        </div>
+        <span class="agenda-track-pill">Acesso da turma</span>
+      </div>
+
+      <div class="agenda-grid agenda-grid--turma">
+        <div class="detail-card agenda-group-card">
+          <p class="eyebrow">Turma C</p>
+          <h2>Plenaria</h2>
+          <p>Horario: 14h</p>
+        </div>
+
+        <div class="detail-card agenda-group-card">
+          <p class="eyebrow">Turma C</p>
+          <h2>Almoco</h2>
+          <p>Horario: 13h</p>
+        </div>
+
+        <div class="detail-card agenda-group-card">
+          <p class="eyebrow">Turma C</p>
+          <h2>Cafe</h2>
+          <p>Horario: 11h30</p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script src="../js/runtime-config.js"></script>

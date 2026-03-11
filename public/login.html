@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Magalu System</title>
-  <meta name="theme-color" content="#d84e1f">
+  <meta name="theme-color" content="#0086ff">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Magalu System">
   <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../icons/icon-192.svg" type="image/svg+xml">
   <link rel="icon" href="../icons/icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
   <link rel="stylesheet" href="../styles.css">
@@ -16,6 +17,13 @@
 <body class="auth-body">
   <main class="auth-layout">
     <section class="brand-panel">
+      <div class="app-mark app-mark--inverse">
+        <img class="app-mark-icon" src="../icons/icon-192.svg" alt="">
+        <div class="app-mark-copy">
+          <p class="app-mark-kicker">Area interna</p>
+          <strong class="app-mark-title">Magalu System</strong>
+        </div>
+      </div>
       <p class="eyebrow">Magalu System</p>
       <h1 class="brand-title">Acesso rapido para check-in e pontuacao.</h1>
       <p class="brand-copy">
@@ -37,7 +45,7 @@
       <div class="auth-card-header">
         <p class="eyebrow">Login</p>
         <h2>Acessar sistema</h2>
-        <p class="muted">Use o mesmo `id_magalu` cadastrado na API.</p>
+        <p class="muted">Use o mesmo id_magalu cadastrado na API.</p>
       </div>
 
       <form id="login-form" class="auth-form">
