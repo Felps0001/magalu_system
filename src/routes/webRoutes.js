@@ -25,4 +25,8 @@ router.get('/feed', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'feed.html'));
 });
 
+router.get('/scanner', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'scanner.html'));
+});
+
 module.exports = router;

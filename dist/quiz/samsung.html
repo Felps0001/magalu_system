@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Samsung - Magalu System</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .quiz-container { max-width: 480px; margin: 40px auto; background: #fff; border-radius: 18px; box-shadow: 0 8px 32px rgba(0,89,214,0.08); padding: 32px; }
+    .quiz-header { text-align: center; margin-bottom: 24px; }
+    .quiz-question { font-size: 1.2rem; margin-bottom: 18px; }
+    .quiz-options { display: grid; gap: 12px; margin-bottom: 24px; }
+    .quiz-btn { padding: 12px 24px; border-radius: 12px; background: linear-gradient(135deg, #0086ff, #0059d6); color: #fff; font-weight: bold; border: none; cursor: pointer; }
+    .quiz-btn:disabled { background: #ccc; cursor: not-allowed; }
+    .quiz-score { font-size: 1.1rem; margin-bottom: 18px; color: #0086ff; }
+    .quiz-footer { text-align: center; margin-top: 32px; color: #888; }
+  </style>
+</head>
+<body>
+  <div class="quiz-container" id="quiz">
+    <!-- Conteúdo dinâmico -->
+  </div>
+  <div style="text-align:center;margin-top:24px;">
+    <a href="../teste/" class="quiz-btn" style="display:inline-block;text-decoration:none;">Voltar</a>
+  </div>
+  <script>
+    // Quiz config
+    const quiz = [
+      {
+        welcome: true,
+        title: 'Bem-vindo ao Quiz Samsung!',
+        description: 'Responda as perguntas e ganhe pontos. Boa sorte!'
+      },
+      {
+        question: 'Qual é a tecnologia de tela exclusiva da Samsung?',
+        options: [
+          { text: 'OLED', points: 0 },
+          { text: 'QLED', points: 2 },
+          { text: 'LCD', points: 0 }
+        ]
+      },
+      {
+        question: 'Qual linha de smartphones Samsung é voltada para alta performance?',
+        options: [
+          { text: 'Galaxy A', points: 0 },
+          { text: 'Galaxy S', points: 2 },
+          { text: 'Galaxy M', points: 0 }
+        ]
+      },
+      {
+        question: 'Qual recurso exclusivo da linha Galaxy Note?',
+        options: [
+          { text: 'S Pen', points: 4 }, // Mais pontos
+          { text: 'Câmera tripla', points: 0 },
+          { text: 'Tela curva', points: 0 }
+        ]
+      },
+      {
+        question: 'Qual é o sistema operacional dos smartphones Samsung?',
+        options: [
+          { text: 'Android', points: 2 },
+          { text: 'iOS', points: 0 },
+          { text: 'HarmonyOS', points: 0 }
+        ]
+      },
+      {
+        thankyou: true,
+        title: 'Obrigado pela participação!',
+        description: 'Seu check-in foi registrado. Pontuação: <span id="final-score"></span> pontos. Tempo total: <span id="final-time"></span>.'
+      }
+    ];
+
+    // Estande e checkin config
+    const estandeId = '69b054445c804b21df9b2022';
+    const isLocalHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    const apiBaseUrl = isLocalHost ? '' : 'https://magalu-system.onrender.com';
+    const checkinApi = `${apiBaseUrl}/api/checkins`;
+    const usersApi = `${apiBaseUrl}/api/users`;
+
+    let currentStep = 0;
+    let score = 0;
+    let quizStartedAt = null;
+    let totalTimeInSeconds = 0;
+
+    function formatDuration(totalSeconds) {
+      const safeSeconds = Math.max(0, Number(totalSeconds) || 0);
+      const minutes = Math.floor(safeSeconds / 60);
+      const seconds = safeSeconds % 60;
+
+      if (minutes === 0) {
+        return `${seconds}s`;
+      }
+
+      return `${minutes}min ${String(seconds).padStart(2, '0')}s`;
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz');
+      container.innerHTML = '';
+
+      if (quiz[currentStep].welcome) {
+        container.innerHTML = `
+          <div class="quiz-header">
+            <h2>${quiz[currentStep].title}</h2>
+            <p>${quiz[currentStep].description}</p>
+          </div>
+          <button class="quiz-btn" onclick="nextStep()">Iniciar</button>
+        `;
+        return;
+      }
+
+      if (quiz[currentStep].thankyou) {
+        container.innerHTML = `
+          <div class="quiz-header">
+            <h2>${quiz[currentStep].title}</h2>
+            <p>${quiz[currentStep].description}</p>
+          </div>
+          <div class="quiz-footer">Magalu System</div>
+        `;
+        document.getElementById('final-score').textContent = score;
+        document.getElementById('final-time').textContent = formatDuration(totalTimeInSeconds);
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="quiz-header">
+          <div class="quiz-score">Pontuação: ${score}</div>
+          <div class="quiz-question">${quiz[currentStep].question}</div>
+        </div>
+        <div class="quiz-options">
+          ${quiz[currentStep].options.map((opt, idx) => `
+            <button class="quiz-btn" onclick="answer(${idx})">${opt.text}</button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    window.nextStep = function() {
+      if (currentStep === 0 && !quizStartedAt) {
+        quizStartedAt = Date.now();
+      }
+
+      currentStep++;
+      renderQuiz();
+    };
+
+    window.answer = function(idx) {
+      score += quiz[currentStep].options[idx].points;
+      currentStep++;
+
+      if (currentStep === quiz.length - 1) {
+        totalTimeInSeconds = Math.round((Date.now() - (quizStartedAt || Date.now())) / 1000);
+        doCheckin();
+      }
+
+      renderQuiz();
+    };
+
+    async function refreshStoredUser(userId) {
+      const response = await fetch(usersApi, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      const users = await response.json();
+
+      if (!Array.isArray(users)) {
+        return;
+      }
+
+      const updatedUser = users.find((item) => item && item._id === userId);
+
+      if (updatedUser) {
+        localStorage.setItem('magalu_system_user', JSON.stringify(updatedUser));
+      }
+    }
+
+    async function doCheckin() {
+      const userRaw = localStorage.getItem('magalu_system_user');
+      let user = null;
+      try { user = JSON.parse(userRaw); } catch {}
+      if (!user || !user._id) return;
+
+      const response = await fetch(checkinApi, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
+        },
+        body: JSON.stringify({
+          userId: user._id,
+          estandeId: estandeId,
+          pontos: score,
+          tempo: totalTimeInSeconds,
+          origem: 'quiz-samsung'
+        })
+      });
+
+      if (response.ok) {
+        await refreshStoredUser(user._id);
+      }
+    }
+
+    renderQuiz();
+  </script>
+</body>
+</html>
