@@ -1,1 +1,1 @@
-window.MAGALU_RUNTIME_CONFIG=window.MAGALU_RUNTIME_CONFIG||{apiBaseUrl:"https://magalu-system.onrender.com"};
+const isLocalRuntimeHost=["localhost","127.0.0.1"].includes(window.location.hostname);window.MAGALU_RUNTIME_CONFIG=window.MAGALU_RUNTIME_CONFIG||{apiBaseUrl:isLocalRuntimeHost?"":"https://magalu-system.onrender.com"};

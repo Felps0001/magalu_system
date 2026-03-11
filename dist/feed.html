@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feed interno</title>
+  <meta name="theme-color" content="#0086ff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Magalu System">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../icons/icon-192.svg" type="image/svg+xml">
+  <link rel="icon" href="../icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="dashboard-body">
+  <main class="dashboard-layout">
+    <header class="dashboard-header">
+      <div class="header-brand">
+        <div class="app-mark">
+          <img class="app-mark-icon" src="../icons/icon-192.svg" alt="">
+          <div class="app-mark-copy">
+            <p class="app-mark-kicker">Area interna</p>
+            <strong class="app-mark-title">Magalu System</strong>
+          </div>
+        </div>
+        <p class="eyebrow">Feed</p>
+        <h1>Publicacoes do evento</h1>
+        <p class="muted">Publique uma mensagem com imagem enviada direto para o Cloudflare R2.</p>
+      </div>
+      <div class="header-actions">
+        <a class="secondary-button link-like-button" href="../teste/">Voltar</a>
+        <button id="update-button" class="secondary-button" type="button">Atualizar app</button>
+        <button id="install-button" class="secondary-button" type="button" hidden>Instalar app</button>
+        <button id="logout-button" class="secondary-button" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section class="hero-card">
+      <p class="eyebrow">Publicacao interna</p>
+      <h2 id="feed-user-name">Carregando perfil...</h2>
+      <p id="feed-user-role" class="muted">Somente usuarios autenticados podem publicar no feed.</p>
+      <p id="update-message" class="form-message info-message" hidden></p>
+    </section>
+
+    <section class="feed-layout">
+      <article class="detail-card composer-card">
+        <div>
+          <p class="eyebrow">Nova publicacao</p>
+          <h2>Enviar para o feed</h2>
+          <p class="muted">Selecione uma imagem para enviar direto ao Cloudflare R2, ou informe uma URL pronta se preferir.</p>
+        </div>
+
+        <form id="feed-form" class="composer-form" enctype="multipart/form-data">
+          <label for="feed-message">Mensagem</label>
+          <textarea id="feed-message" name="mensagem" placeholder="Escreva um aviso, destaque ou atualizacao do evento."></textarea>
+
+          <label for="feed-image-file">Imagem</label>
+          <input id="feed-image-file" name="imagem" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+
+          <label for="feed-image-url">URL pronta da imagem no R2</label>
+          <input id="feed-image-url" name="imagemUrl" type="url" placeholder="https://pub-...r2.dev/minha-imagem.jpg" autocomplete="off">
+
+          <div class="composer-actions">
+            <button id="feed-submit-button" class="primary-button" type="submit">Publicar</button>
+            <button id="feed-refresh-button" class="secondary-button" type="button">Atualizar feed</button>
+          </div>
+        </form>
+
+        <p id="feed-form-message" class="form-message" aria-live="polite"></p>
+      </article>
+
+      <section class="feed-list" id="feed-list" aria-live="polite"></section>
+    </section>
+  </main>
+
+  <script src="../js/runtime-config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/pwa.js"></script>
+  <script src="../js/feed.js"></script>
+</body>
+</html>

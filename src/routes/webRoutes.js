@@ -21,4 +21,8 @@ router.get('/agenda', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'agenda.html'));
 });
 
+router.get('/feed', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'feed.html'));
+});
+
 module.exports = router;

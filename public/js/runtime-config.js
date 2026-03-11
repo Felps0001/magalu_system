@@ -1,5 +1,7 @@
+const isLocalRuntimeHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+
 window.MAGALU_RUNTIME_CONFIG = window.MAGALU_RUNTIME_CONFIG || {
-  // Para GitHub Pages, informe aqui a URL publica do backend Node/Express.
-  // Exemplo: apiBaseUrl: 'https://seu-backend.onrender.com'
-  apiBaseUrl: 'https://magalu-system.onrender.com',
+  // Em localhost, usa o mesmo host/porta da aplicacao para facilitar o desenvolvimento.
+  // Fora do ambiente local, aponta para o backend publicado.
+  apiBaseUrl: isLocalRuntimeHost ? '' : 'https://magalu-system.onrender.com',
 };

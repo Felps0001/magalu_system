@@ -15,6 +15,11 @@ async function getCheckinsCollection() {
   return database.collection('checkins');
 }
 
+async function getFeedCollection() {
+  const database = await connectToMongoDB();
+  return database.collection('feed');
+}
+
 async function findDuplicateUserIds() {
   const usersCollection = await getUsersCollection();
 
@@ -36,6 +41,7 @@ async function findDuplicateUserIds() {
 
 async function ensureDatabaseIndexes() {
   const usersCollection = await getUsersCollection();
+  const feedCollection = await getFeedCollection();
   const duplicateUserIds = await findDuplicateUserIds();
 
   if (duplicateUserIds.length > 0) {
@@ -56,6 +62,20 @@ async function ensureDatabaseIndexes() {
     }
   );
 
+  await feedCollection.createIndex(
+    { createdAt: -1 },
+    {
+      name: 'feed_created_at_desc',
+    }
+  );
+
+  await feedCollection.createIndex(
+    { authorId: 1, createdAt: -1 },
+    {
+      name: 'feed_author_created_at_desc',
+    }
+  );
+
   return {
     warnings: [],
   };
@@ -65,5 +85,6 @@ module.exports = {
   getUsersCollection,
   getEstandesCollection,
   getCheckinsCollection,
+  getFeedCollection,
   ensureDatabaseIndexes,
 };
