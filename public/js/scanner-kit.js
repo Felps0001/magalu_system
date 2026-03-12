@@ -20,16 +20,29 @@ function updateResult(value) {
 }
 
 async function marcarKit(userId) {
-  setScannerStatus('Marcando kit para usuário...', 'info-message');
+  const api = window.magaluApi || {};
+  const buildApiUrl = api.buildApiUrl || ((path) => path);
+  const withApiDefaults = api.withApiDefaults || ((options) => options);
+  const parseApiResponse = api.parseApiResponse || (async (response) => response.json());
+
+  setScannerStatus('Marcando kit para usuario...', 'info-message');
   try {
-    const resp = await fetch(`/api/users/${userId}/kit`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    if (!resp.ok) throw new Error('Erro ao marcar kit');
+    const resp = await fetch(
+      buildApiUrl(`/api/users/${userId}/kit`),
+      withApiDefaults({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      })
+    );
+    const payload = await parseApiResponse(resp);
+
+    if (!resp.ok) {
+      throw new Error(payload.error || 'Erro ao marcar kit');
+    }
+
     setScannerStatus('Kit marcado com sucesso!', 'success');
   } catch (err) {
-    setScannerStatus('Falha ao marcar kit: ' + err.message, 'error');
+    setScannerStatus(`Falha ao marcar kit: ${err.message}`, 'error');
   }
 }
 
