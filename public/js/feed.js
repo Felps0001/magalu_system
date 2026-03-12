@@ -1,5 +1,7 @@
 const feedUserName = document.getElementById('feed-user-name');
 const feedUserRole = document.getElementById('feed-user-role');
+const feedDrawerUserName = document.getElementById('feed-drawer-user-name');
+const feedDrawerUserRole = document.getElementById('feed-drawer-user-role');
 const feedList = document.getElementById('feed-list');
 const feedForm = document.getElementById('feed-form');
 const feedMessageInput = document.getElementById('feed-message');
@@ -9,6 +11,15 @@ const feedFormMessage = document.getElementById('feed-form-message');
 const feedSubmitButton = document.getElementById('feed-submit-button');
 const feedRefreshButton = document.getElementById('feed-refresh-button');
 const logoutButton = document.getElementById('logout-button');
+const menuButton = document.getElementById('feed-menu-button');
+const drawer = document.getElementById('feed-drawer');
+const drawerBackdrop = document.getElementById('feed-drawer-backdrop');
+const closeDrawerButton = document.getElementById('feed-close-drawer');
+const openComposerButton = document.getElementById('feed-open-composer');
+const composerModal = document.getElementById('feed-composer-modal');
+const closeComposerButton = document.getElementById('feed-close-composer');
+const cancelComposerButton = document.getElementById('feed-cancel-button');
+const modalBackdrop = document.getElementById('feed-modal-backdrop');
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
@@ -20,7 +31,25 @@ function redirectToFirstAccess() {
 
 function setFormMessage(message, type) {
   feedFormMessage.textContent = message;
-  feedFormMessage.className = `form-message ${type}`;
+  feedFormMessage.className = `form-message feed-mobile-message ${type}`;
+}
+
+function setDrawerState(isOpen) {
+  drawer.hidden = !isOpen;
+  drawerBackdrop.hidden = !isOpen;
+  drawer.setAttribute('aria-hidden', String(!isOpen));
+  menuButton.setAttribute('aria-expanded', String(isOpen));
+  document.body.classList.toggle('feed-ui-lock', isOpen || !composerModal.hidden);
+}
+
+function setComposerState(isOpen) {
+  composerModal.hidden = !isOpen;
+  document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden);
+
+  if (isOpen) {
+    setFormMessage('', '');
+    feedMessageInput.focus();
+  }
 }
 
 function normalizeApiError(data, fallbackMessage) {
@@ -50,13 +79,13 @@ function formatPostDate(value) {
 
 function createFeedCard(item) {
   const article = document.createElement('article');
-  article.className = 'detail-card feed-card';
+  article.className = 'feed-mobile-card';
 
   const header = document.createElement('div');
-  header.className = 'feed-card-header';
+  header.className = 'feed-mobile-card-header';
 
   const author = document.createElement('div');
-  author.className = 'feed-author';
+  author.className = 'feed-mobile-author';
 
   const authorName = document.createElement('strong');
   authorName.textContent = item.author && item.author.nome ? item.author.nome : 'Usuario';
@@ -68,7 +97,7 @@ function createFeedCard(item) {
   author.appendChild(authorMeta);
 
   const timestamp = document.createElement('span');
-  timestamp.className = 'feed-timestamp';
+  timestamp.className = 'feed-mobile-timestamp';
   timestamp.textContent = formatPostDate(item.createdAt);
 
   header.appendChild(author);
@@ -77,21 +106,21 @@ function createFeedCard(item) {
 
   if (item.mensagem) {
     const message = document.createElement('p');
-    message.className = 'feed-message';
+    message.className = 'feed-mobile-message-text';
     message.textContent = item.mensagem;
     article.appendChild(message);
   }
 
   if (item.imagemUrl) {
     const image = document.createElement('img');
-    image.className = 'feed-image';
+    image.className = 'feed-mobile-image';
     image.src = item.imagemUrl;
     image.alt = `Imagem publicada por ${authorName.textContent}`;
     image.loading = 'lazy';
     article.appendChild(image);
 
     const imageLink = document.createElement('a');
-    imageLink.className = 'feed-image-link';
+    imageLink.className = 'feed-mobile-image-link';
     imageLink.href = item.imagemUrl;
     imageLink.target = '_blank';
     imageLink.rel = 'noreferrer';
@@ -107,11 +136,11 @@ function renderFeed(items) {
 
   if (!Array.isArray(items) || items.length === 0) {
     const emptyState = document.createElement('article');
-    emptyState.className = 'detail-card feed-card';
+    emptyState.className = 'feed-mobile-card feed-mobile-card--empty';
 
     const emptyText = document.createElement('p');
-    emptyText.className = 'feed-empty';
-    emptyText.textContent = 'Nenhuma publicacao ainda. Use o formulario ao lado para criar a primeira postagem.';
+    emptyText.className = 'feed-mobile-empty';
+    emptyText.textContent = 'Nenhuma publicacao ainda. Toque no botao + para criar a primeira postagem.';
 
     emptyState.appendChild(emptyText);
     feedList.appendChild(emptyState);
@@ -226,8 +255,12 @@ if (!user) {
 } else if (window.magaluApi.requiresFirstAccess(user)) {
   redirectToFirstAccess();
 } else {
-  feedUserName.textContent = user.nome || 'Usuario autenticado';
-  feedUserRole.textContent = `${user.cargo || 'Sem cargo'} · ${user.loja || 'Sem loja'} · ${user.turma || 'Sem turma'}`;
+  const userName = user.nome || 'Usuario autenticado';
+  const userRole = `${user.cargo || 'Sem cargo'} · ${user.loja || 'Sem loja'} · ${user.turma || 'Sem turma'}`;
+  feedUserName.textContent = userName;
+  feedUserRole.textContent = userRole;
+  feedDrawerUserName.textContent = userName;
+  feedDrawerUserRole.textContent = userRole;
   loadFeed();
 }
 
@@ -248,6 +281,7 @@ feedForm.addEventListener('submit', async (event) => {
     feedForm.reset();
     setFormMessage('Publicacao criada com sucesso.', 'success');
     await loadFeed();
+    setComposerState(false);
   } catch (error) {
     setFormMessage(error.message, 'error');
   } finally {
@@ -258,10 +292,53 @@ feedForm.addEventListener('submit', async (event) => {
 
 feedRefreshButton.addEventListener('click', () => {
   setFormMessage('', '');
+  setDrawerState(false);
   loadFeed();
 });
 
 logoutButton.addEventListener('click', () => {
   window.magaluApi.clearStoredUser();
   redirectToLogin();
+});
+
+menuButton.addEventListener('click', () => {
+  setDrawerState(true);
+});
+
+closeDrawerButton.addEventListener('click', () => {
+  setDrawerState(false);
+});
+
+drawerBackdrop.addEventListener('click', () => {
+  setDrawerState(false);
+});
+
+openComposerButton.addEventListener('click', () => {
+  setComposerState(true);
+});
+
+closeComposerButton.addEventListener('click', () => {
+  setComposerState(false);
+});
+
+cancelComposerButton.addEventListener('click', () => {
+  setComposerState(false);
+});
+
+modalBackdrop.addEventListener('click', () => {
+  setComposerState(false);
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape') {
+    return;
+  }
+
+  if (!composerModal.hidden) {
+    setComposerState(false);
+  }
+
+  if (!drawer.hidden) {
+    setDrawerState(false);
+  }
 });
