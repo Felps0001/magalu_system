@@ -1,4 +1,4 @@
-const CACHE_NAME = 'magalu-system-v7';
+const CACHE_NAME = 'magalu-system-v8';
 const APP_SHELL = [
   './',
   './login/',
@@ -19,9 +19,9 @@ const APP_SHELL = [
   './manifest.webmanifest',
   './icons/icon-192.svg',
   './icons/icon-512.svg',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/apple-touch-icon.png',
+  './icons/icon-192.png?v=2',
+  './icons/icon-512.png?v=2',
+  './icons/icon-192.png?v=2',
   './offline.html',
 ];
 const OFFLINE_URL = './offline.html';
