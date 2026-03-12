@@ -81,6 +81,27 @@
         <ul id="estandes-list" class="list-panel"></ul>
       </article>
     </section>
+
+    <section class="detail-card qr-card">
+      <div class="qr-card-header">
+        <div>
+          <p class="eyebrow">QRCode do perfil</p>
+          <h2 class="qr-card-title">Seu QR Code permanente</h2>
+          <p class="muted">O conteudo do QR e um JSON com os dados principais do usuario.</p>
+        </div>
+        <button id="generate-qrcode-button" class="primary-button" type="button">Gerar QR Code</button>
+      </div>
+      <p id="qrcode-message" class="form-message info-message" hidden></p>
+      <div class="qr-card-layout">
+        <div id="qrcode-preview" class="qr-preview" aria-live="polite">
+          <p class="muted">Clique no botao para carregar o QR Code do usuario.</p>
+        </div>
+        <div class="qr-json-panel">
+          <p class="eyebrow">Payload JSON</p>
+          <pre id="qrcode-json" class="qr-json-output">Nenhum QR Code carregado ainda.</pre>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script src="../js/runtime-config.js"></script>

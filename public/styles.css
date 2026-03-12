@@ -697,6 +697,62 @@ button:hover {
   box-shadow: 0 16px 30px rgba(0, 89, 214, 0.28);
 }
 
+.qr-card {
+  display: grid;
+  gap: 20px;
+}
+
+.qr-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.qr-card-title {
+  margin: 6px 0 8px;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.04em;
+}
+
+.qr-card-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.qr-preview,
+.qr-json-panel {
+  padding: 20px;
+  border-radius: 22px;
+  border: 1px solid rgba(0, 89, 214, 0.1);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(244, 250, 255, 0.94));
+}
+
+.qr-preview {
+  display: grid;
+  place-items: center;
+  min-height: 360px;
+}
+
+.qr-preview svg {
+  display: block;
+  width: min(100%, 320px);
+  height: auto;
+  border-radius: 20px;
+}
+
+.qr-json-output {
+  margin: 0;
+  max-height: 360px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font: 0.9rem/1.55 Consolas, 'Courier New', monospace;
+  color: var(--text);
+}
+
 @media (max-width: 900px) {
   .auth-layout,
   .details-grid,
@@ -733,5 +789,13 @@ button:hover {
   .detail-card,
   .dashboard-header {
     padding: 22px;
+  }
+
+  .qr-card-header {
+    flex-direction: column;
+  }
+
+  .qr-card-layout {
+    grid-template-columns: 1fr;
   }
 }

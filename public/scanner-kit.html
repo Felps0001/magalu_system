@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Scanner de Kit Magalu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <main>
+    <h1>Scanner de Kit</h1>
+    <div id="scanner-preview" class="scanner-preview">
+      <div id="scanner-mount"></div>
+    </div>
+    <div id="scanner-status" class="form-message info-message">Aguardando inicialização...</div>
+    <div id="scanner-result" class="scanner-result">Nenhum QR Code lido ainda.</div>
+    <button id="start-scan-button">Iniciar Scanner</button>
+    <button id="stop-scan-button" disabled>Parar Scanner</button>
+  </main>
+  <script src="../vendor/html5-qrcode.min.js"></script>
+  <script src="../js/scanner-kit.js"></script>
+</body>
+</html>
