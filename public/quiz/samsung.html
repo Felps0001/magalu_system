@@ -70,7 +70,44 @@
       <p id="update-message" class="form-message profile-mobile-update" hidden></p>
       <section class="quiz-mobile-card">
         <div id="quiz" class="quiz-container">
-          <!-- Conteudo dinamico -->
+          <section id="quiz-welcome-step" class="quiz-step">
+            <div class="quiz-header">
+              <p class="profile-section-kicker">Desafio interativo</p>
+              <h2 id="quiz-welcome-title" class="quiz-title">Bem-vindo ao Quiz Samsung!</h2>
+              <p id="quiz-welcome-description" class="quiz-description">Responda as perguntas e ganhe pontos. Boa sorte!</p>
+            </div>
+            <button id="quiz-start-button" class="quiz-btn" type="button">Iniciar</button>
+          </section>
+
+          <section id="quiz-question-step" class="quiz-step" hidden>
+            <div class="quiz-header">
+              <h2 id="quiz-question-title" class="quiz-title">Pergunta</h2>
+            </div>
+            <div class="quiz-options">
+              <button class="quiz-btn quiz-option-button" type="button" data-option-index="0">Opcao 1</button>
+              <button class="quiz-btn quiz-option-button" type="button" data-option-index="1">Opcao 2</button>
+              <button class="quiz-btn quiz-option-button" type="button" data-option-index="2">Opcao 3</button>
+            </div>
+          </section>
+
+          <section id="quiz-result-step" class="quiz-step" hidden>
+            <div class="quiz-header">
+              <p class="profile-section-kicker">Resultado final</p>
+              <h2 id="quiz-result-title" class="quiz-title">Obrigado pela participacao!</h2>
+              <p id="quiz-result-description" class="quiz-description">Seu check-in foi registrado.</p>
+            </div>
+            <div class="quiz-summary">
+              <div>
+                <span class="quiz-summary-label">Pontuacao</span>
+                <strong id="quiz-final-score">0 pontos</strong>
+              </div>
+              <div>
+                <span class="quiz-summary-label">Tempo total</span>
+                <strong id="quiz-final-time">0s</strong>
+              </div>
+            </div>
+            <div class="quiz-footer">Magalu System</div>
+          </section>
         </div>
       </section>
       <a href="../perfil/" class="secondary-button quiz-back-link">Voltar para perfil</a>

@@ -5,7 +5,18 @@ const quizDrawer = document.getElementById('quiz-drawer');
 const quizDrawerBackdrop = document.getElementById('quiz-drawer-backdrop');
 const quizCloseDrawerButton = document.getElementById('quiz-close-drawer');
 const quizLogoutButton = document.getElementById('logout-button');
-const quizContainer = document.getElementById('quiz');
+const quizWelcomeStep = document.getElementById('quiz-welcome-step');
+const quizQuestionStep = document.getElementById('quiz-question-step');
+const quizResultStep = document.getElementById('quiz-result-step');
+const quizWelcomeTitle = document.getElementById('quiz-welcome-title');
+const quizWelcomeDescription = document.getElementById('quiz-welcome-description');
+const quizStartButton = document.getElementById('quiz-start-button');
+const quizQuestionTitle = document.getElementById('quiz-question-title');
+const quizOptionButtons = Array.from(document.querySelectorAll('.quiz-option-button'));
+const quizResultTitle = document.getElementById('quiz-result-title');
+const quizResultDescription = document.getElementById('quiz-result-description');
+const quizFinalScore = document.getElementById('quiz-final-score');
+const quizFinalTime = document.getElementById('quiz-final-time');
 
 const estandeId = '69b054445c804b21df9b2022';
 const quizSteps = [
@@ -86,58 +97,39 @@ function formatDuration(totalSeconds) {
   return `${minutes}min ${String(seconds).padStart(2, '0')}s`;
 }
 
+function setStepVisibility(stepName) {
+  quizWelcomeStep.hidden = stepName !== 'welcome';
+  quizQuestionStep.hidden = stepName !== 'question';
+  quizResultStep.hidden = stepName !== 'result';
+}
+
 function renderQuiz() {
   const current = quizSteps[currentStep];
 
   if (current.welcome) {
-    quizContainer.innerHTML = `
-      <div class="quiz-header">
-        <p class="profile-section-kicker">Desafio interativo</p>
-        <h2 class="quiz-title">${current.title}</h2>
-        <p class="quiz-description">${current.description}</p>
-      </div>
-      <button class="quiz-btn" type="button" data-action="next-step">Iniciar</button>
-    `;
+    quizWelcomeTitle.textContent = current.title;
+    quizWelcomeDescription.textContent = current.description;
+    setStepVisibility('welcome');
     return;
   }
 
   if (current.thankyou) {
-    quizContainer.innerHTML = `
-      <div class="quiz-header">
-        <p class="profile-section-kicker">Resultado final</p>
-        <h2 class="quiz-title">${current.title}</h2>
-        <p class="quiz-description">${current.description}</p>
-      </div>
-      <div class="quiz-summary">
-        <div>
-          <span class="quiz-summary-label">Pontuacao</span>
-          <strong>${score} pontos</strong>
-        </div>
-        <div>
-          <span class="quiz-summary-label">Tempo total</span>
-          <strong>${formatDuration(totalTimeInSeconds)}</strong>
-        </div>
-      </div>
-      <div class="quiz-footer">Magalu System</div>
-    `;
+    quizResultTitle.textContent = current.title;
+    quizResultDescription.textContent = current.description;
+    quizFinalScore.textContent = `${score} pontos`;
+    quizFinalTime.textContent = formatDuration(totalTimeInSeconds);
+    setStepVisibility('result');
     return;
   }
 
-  quizContainer.innerHTML = `
-    <div class="quiz-header">
-      <div class="quiz-score">Pontuacao: ${score}</div>
-      <h2 class="quiz-title">${current.question}</h2>
-    </div>
-    <div class="quiz-options">
-      ${current.options
-        .map(
-          (option, index) => `
-            <button class="quiz-btn" type="button" data-answer-index="${index}">${option.text}</button>
-          `
-        )
-        .join('')}
-    </div>
-  `;
+  quizQuestionTitle.textContent = current.question;
+  quizOptionButtons.forEach((button, index) => {
+    const option = current.options[index];
+    button.hidden = !option;
+    button.disabled = !option;
+    button.textContent = option ? option.text : '';
+  });
+  setStepVisibility('question');
 }
 
 function nextStep() {
@@ -226,21 +218,14 @@ if (!currentUser) {
   renderQuiz();
 }
 
-quizContainer.addEventListener('click', async (event) => {
-  const nextButton = event.target.closest('[data-action="next-step"]');
+quizStartButton.addEventListener('click', () => {
+  nextStep();
+});
 
-  if (nextButton) {
-    nextStep();
-    return;
-  }
-
-  const answerButton = event.target.closest('[data-answer-index]');
-
-  if (!answerButton) {
-    return;
-  }
-
-  await answer(Number(answerButton.dataset.answerIndex));
+quizOptionButtons.forEach((button) => {
+  button.addEventListener('click', async () => {
+    await answer(Number(button.dataset.optionIndex));
+  });
 });
 
 quizMenuButton.addEventListener('click', () => {
