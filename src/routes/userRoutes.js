@@ -2,17 +2,17 @@ const express = require('express');
 
 const {
   createUserHandler,
+  getUserKitStatusHandler,
   getUserQrCodeHandler,
   listAgendaByTurmaHandler,
   listUsersHandler,
+  marcarKitHandler,
 } = require('../controllers/userController');
 
 const router = express.Router();
 
-
-const { marcarKitHandler } = require('../controllers/userController');
-
 router.get('/agenda', listAgendaByTurmaHandler);
+router.get('/:userId/kit', getUserKitStatusHandler);
 router.get('/:userId/qrcode', getUserQrCodeHandler);
 router.get('/', listUsersHandler);
 router.post('/', createUserHandler);

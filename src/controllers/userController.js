@@ -106,6 +106,49 @@ async function getUserQrCodeHandler(req, res) {
   }
 }
 
+async function getUserKitStatusHandler(req, res) {
+  try {
+    const { userId } = req.params;
+
+    if (!ObjectId.isValid(userId)) {
+      res.status(400).json({ error: 'O id do usuario informado e invalido.' });
+      return;
+    }
+
+    const usersCollection = await getUsersCollection();
+    const user = await usersCollection.findOne(
+      { _id: new ObjectId(userId) },
+      {
+        projection: {
+          nome: 1,
+          id_magalu: 1,
+          loja: 1,
+          turma: 1,
+          cargo: 1,
+          kit: 1,
+        },
+      }
+    );
+
+    if (!user) {
+      res.status(404).json({ error: 'Usuario nao encontrado.' });
+      return;
+    }
+
+    res.json({
+      userId: String(user._id),
+      nome: user.nome || '',
+      id_magalu: user.id_magalu || '',
+      loja: user.loja || '',
+      turma: user.turma || '',
+      cargo: user.cargo || '',
+      kit: Boolean(user.kit),
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 async function listUsersHandler(req, res) {
   try {
     const usersCollection = await getUsersCollection();
@@ -205,6 +248,7 @@ async function marcarKitHandler(req, res) {
 
 module.exports = {
   createUserHandler,
+  getUserKitStatusHandler,
   getUserQrCodeHandler,
   listUsersHandler,
   listAgendaByTurmaHandler,

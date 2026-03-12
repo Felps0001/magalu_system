@@ -3,6 +3,8 @@
 
 const scannerStatus = document.getElementById('scanner-status');
 const scannerResult = document.getElementById('scanner-result');
+const kitStatusSummary = document.getElementById('kit-status-summary');
+const kitStatusMeta = document.getElementById('kit-status-meta');
 const startScanButton = document.getElementById('start-scan-button');
 const stopScanButton = document.getElementById('stop-scan-button');
 const scannerPreview = document.getElementById('scanner-preview');
@@ -19,11 +21,39 @@ function updateResult(value) {
   scannerResult.textContent = value || 'Nenhum QR Code lido ainda.';
 }
 
-async function marcarKit(userId) {
+function updateKitStatus(summary, meta) {
+  kitStatusSummary.textContent = summary;
+  kitStatusMeta.textContent = meta;
+}
+
+function getApiHelpers() {
   const api = window.magaluApi || {};
-  const buildApiUrl = api.buildApiUrl || ((path) => path);
-  const withApiDefaults = api.withApiDefaults || ((options) => options);
-  const parseApiResponse = api.parseApiResponse || (async (response) => response.json());
+
+  return {
+    buildApiUrl: api.buildApiUrl || ((path) => path),
+    withApiDefaults: api.withApiDefaults || ((options) => options),
+    parseApiResponse: api.parseApiResponse || (async (response) => response.json()),
+  };
+}
+
+async function consultarKit(userId) {
+  const { buildApiUrl, withApiDefaults, parseApiResponse } = getApiHelpers();
+
+  const response = await fetch(
+    buildApiUrl(`/api/users/${userId}/kit`),
+    withApiDefaults({ method: 'GET' })
+  );
+  const payload = await parseApiResponse(response);
+
+  if (!response.ok) {
+    throw new Error(payload.error || 'Erro ao consultar kit');
+  }
+
+  return payload;
+}
+
+async function marcarKit(userId) {
+  const { buildApiUrl, withApiDefaults, parseApiResponse } = getApiHelpers();
 
   setScannerStatus('Marcando kit para usuario...', 'info-message');
   try {
@@ -44,6 +74,22 @@ async function marcarKit(userId) {
   } catch (err) {
     setScannerStatus(`Falha ao marcar kit: ${err.message}`, 'error');
   }
+}
+
+async function processarKit(userId) {
+  const user = await consultarKit(userId);
+  const meta = `ID Magalu: ${user.id_magalu || '-'}\nLoja: ${user.loja || '-'}\nCargo: ${user.cargo || '-'}\nTurma: ${user.turma || '-'}`;
+
+  if (user.kit) {
+    updateKitStatus(`Kit ja retirado por ${user.nome || 'usuario'}.`, meta);
+    setScannerStatus('Este usuario ja retirou o kit.', 'success');
+    return;
+  }
+
+  updateKitStatus(`Kit pendente para ${user.nome || 'usuario'}.`, meta);
+  setScannerStatus('Kit pendente. Marcando retirada...', 'info-message');
+  await marcarKit(userId);
+  updateKitStatus(`Kit retirado por ${user.nome || 'usuario'}.`, meta);
 }
 
 async function stopScanner() {
@@ -107,7 +153,13 @@ async function startScanner() {
           setScannerStatus('QR sem userId.', 'error');
           return;
         }
-        await marcarKit(userId);
+        try {
+          await processarKit(userId);
+        } catch (error) {
+          updateKitStatus('Falha ao consultar usuario.', 'Verifique se o QR pertence ao ambiente publicado e se o usuario existe no banco.');
+          setScannerStatus(`Falha ao consultar kit: ${error.message}`, 'error');
+          return;
+        }
         if (navigator.vibrate) navigator.vibrate(120);
       },
       () => {}

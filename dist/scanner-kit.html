@@ -5,6 +5,33 @@
   <title>Scanner de Kit Magalu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./styles.css">
+  <style>
+    .kit-status-panel {
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid rgba(0, 89, 214, 0.12);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .kit-status-panel h2 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+    }
+
+    .kit-status-summary {
+      margin: 0 0 8px;
+      font-weight: 700;
+      color: #0d2142;
+    }
+
+    .kit-status-meta {
+      margin: 0;
+      color: #4a5d7a;
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+  </style>
 </head>
 <body>
   <main>
@@ -14,6 +41,11 @@
     </div>
     <div id="scanner-status" class="form-message info-message">Aguardando inicialização...</div>
     <div id="scanner-result" class="scanner-result">Nenhum QR Code lido ainda.</div>
+    <section class="kit-status-panel" aria-live="polite">
+      <h2>Status do kit</h2>
+      <p id="kit-status-summary" class="kit-status-summary">Nenhum usuario consultado ainda.</p>
+      <p id="kit-status-meta" class="kit-status-meta">Escaneie um QR Code para consultar o status do kit.</p>
+    </section>
     <button id="start-scan-button">Iniciar Scanner</button>
     <button id="stop-scan-button" disabled>Parar Scanner</button>
   </main>
