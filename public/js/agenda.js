@@ -1,5 +1,3 @@
-const STORAGE_KEY = 'magalu_system_user';
-
 const turmaSections = Array.from(document.querySelectorAll('[data-turma]'));
 const logoutButton = document.getElementById('logout-button');
 const agendaUserName = document.getElementById('agenda-user-name');
@@ -7,6 +5,10 @@ const agendaUserRole = document.getElementById('agenda-user-role');
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
+}
+
+function redirectToFirstAccess() {
+  window.location.replace(window.magaluApi.buildAppUrl('/primeiro-acesso/'));
 }
 
 function normalizeTurma(value) {
@@ -23,20 +25,6 @@ function normalizeTurma(value) {
 function setSectionVisibility(section, visible) {
   section.hidden = !visible;
   section.style.display = visible ? 'grid' : 'none';
-}
-
-function readStoredUser() {
-  const rawUser = localStorage.getItem(STORAGE_KEY);
-
-  if (!rawUser) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(rawUser);
-  } catch (error) {
-    return null;
-  }
 }
 
 function renderAgendaForTurma(turma) {
@@ -70,15 +58,17 @@ function renderAgendaForTurma(turma) {
   agendaUserRole.textContent = 'A agenda geral aparece para todos, e abaixo voce visualiza apenas os compromissos da sua turma.';
 }
 
-const user = readStoredUser();
+const user = window.magaluApi.readStoredUser();
 
 if (!user) {
   redirectToLogin();
+} else if (window.magaluApi.requiresFirstAccess(user)) {
+  redirectToFirstAccess();
 } else {
   renderAgendaForTurma(user.turma || user.Turma || '');
 }
 
 logoutButton.addEventListener('click', () => {
-  localStorage.removeItem(STORAGE_KEY);
+  window.magaluApi.clearStoredUser();
   redirectToLogin();
 });

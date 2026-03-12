@@ -3,6 +3,7 @@ function createUser({
   id_magalu,
   cpf,
   regiao,
+  cidade,
   loja,
   cargo,
   turma,
@@ -17,10 +18,12 @@ function createUser({
     id_magalu,
     cpf,
     regiao,
+    cidade,
     loja,
     cargo,
     turma,
     transfer: Boolean(transfer),
+    firstAccessCompleted: false,
     kit: false, // campo kit default false
   };
 }
@@ -40,6 +43,7 @@ function buildUserQrData(user, generatedAt = new Date().toISOString()) {
       nome: user.nome || '',
       cpf: user.cpf || '',
       regiao: user.regiao || '',
+      cidade: user.cidade || '',
       loja: user.loja || '',
       cargo: user.cargo || '',
       turma: user.turma || '',

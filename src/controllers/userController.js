@@ -4,6 +4,65 @@ const QRCode = require('qrcode');
 const { getUsersCollection } = require('../config/collections');
 const { buildUserQrData, createUser, createUserQrPayload } = require('../models/user');
 
+function buildUserAccessPipeline(matchStage) {
+  return [
+    {
+      $match: matchStage,
+    },
+    {
+      $lookup: {
+        from: 'checkins',
+        localField: '_id',
+        foreignField: 'userId',
+        as: 'checkins',
+      },
+    },
+    {
+      $addFields: {
+        pontos: { $sum: '$checkins.pontos' },
+        tempo: { $sum: '$checkins.tempo' },
+        totalCheckins: { $size: '$checkins' },
+      },
+    },
+    {
+      $lookup: {
+        from: 'estandes',
+        localField: 'checkins.estandeId',
+        foreignField: '_id',
+        as: 'estandesVisitados',
+      },
+    },
+    {
+      $limit: 1,
+    },
+  ];
+}
+
+async function findUserWithAccessData(usersCollection, matchStage) {
+  return usersCollection.aggregate(buildUserAccessPipeline(matchStage)).next();
+}
+
+function normalizeEditableUserFields(payload = {}) {
+  const editableFields = ['nome', 'regiao', 'cidade', 'loja', 'cargo', 'turma'];
+  const normalizedPayload = {};
+
+  editableFields.forEach((fieldName) => {
+    if (Object.prototype.hasOwnProperty.call(payload, fieldName)) {
+      normalizedPayload[fieldName] = typeof payload[fieldName] === 'string'
+        ? payload[fieldName].trim()
+        : '';
+    }
+  });
+
+  if (Object.prototype.hasOwnProperty.call(payload, 'transfer')) {
+    const { transfer } = payload;
+
+    normalizedPayload.transfer = transfer === true || transfer === 'true' || transfer === '1' || transfer === 1;
+  }
+
+  return normalizedPayload;
+}
+
 async function ensureUserQrCode(usersCollection, user) {
   if (user.qrCodePayload) {
     return user;
@@ -62,6 +121,51 @@ async function createUserHandler(req, res) {
       return;
     }
 
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function updateUserProfileHandler(req, res) {
+  try {
+    const { userId } = req.params;
+
+    if (!ObjectId.isValid(userId)) {
+      res.status(400).json({ error: 'O id do usuario informado e invalido.' });
+      return;
+    }
+
+    const usersCollection = await getUsersCollection();
+    const existingUser = await usersCollection.findOne({ _id: new ObjectId(userId) });
+
+    if (!existingUser) {
+      res.status(404).json({ error: 'Usuario nao encontrado.' });
+      return;
+    }
+
+    const editableFields = normalizeEditableUserFields(req.body);
+    const qrCodeGeneratedAt = new Date().toISOString();
+    const updatedUser = {
+      ...existingUser,
+      ...editableFields,
+      firstAccessCompleted: true,
+    };
+
+    await usersCollection.updateOne(
+      { _id: existingUser._id },
+      {
+        $set: {
+          ...editableFields,
+          firstAccessCompleted: true,
+          qrCodeGeneratedAt,
+          qrCodePayload: createUserQrPayload(updatedUser, qrCodeGeneratedAt),
+        },
+      }
+    );
+
+    const refreshedUser = await findUserWithAccessData(usersCollection, { _id: existingUser._id });
+
+    res.json(refreshedUser);
+  } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
@@ -253,4 +357,5 @@ module.exports = {
   listUsersHandler,
   listAgendaByTurmaHandler,
   marcarKitHandler,
+  updateUserProfileHandler,
 };

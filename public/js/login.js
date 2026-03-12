@@ -3,12 +3,10 @@ const loginButton = document.getElementById('login-button');
 const loginMessage = document.getElementById('login-message');
 const loginInput = document.getElementById('id_magalu');
 
-const STORAGE_KEY = 'magalu_system_user';
-
-const existingSession = localStorage.getItem(STORAGE_KEY);
+const existingSession = window.magaluApi.readStoredUser();
 
 if (existingSession) {
-  window.location.replace(window.magaluApi.buildAppUrl('/teste/'));
+  window.location.replace(window.magaluApi.getAuthenticatedHomeUrl(existingSession));
 }
 
 function setMessage(message, type) {
@@ -45,11 +43,11 @@ loginForm.addEventListener('submit', async (event) => {
       throw new Error(data.error || 'Nao foi possivel efetuar o login.');
     }
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data.user));
+    window.magaluApi.storeUser(data.user);
     setMessage('Login efetuado. Redirecionando...', 'success');
 
     window.setTimeout(() => {
-      window.location.href = window.magaluApi.buildAppUrl('/teste/');
+      window.location.href = window.magaluApi.getAuthenticatedHomeUrl(data.user);
     }, 400);
   } catch (error) {
     setMessage(error.message, 'error');

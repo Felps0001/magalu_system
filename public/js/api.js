@@ -20,7 +20,7 @@ function buildApiUrl(path) {
 }
 
 function getAppRootUrl() {
-  const routeNames = new Set(['login', 'teste', 'agenda', 'feed', 'scanner', 'scanner-kit', 'quiz']);
+  const routeNames = new Set(['login', 'primeiro-acesso', 'teste', 'agenda', 'feed', 'scanner', 'scanner-kit', 'quiz']);
   const currentUrl = new URL(window.location.href);
   const segments = currentUrl.pathname.split('/').filter(Boolean);
 
@@ -53,6 +53,36 @@ function buildAppUrl(path = '/') {
   return new URL(normalizedPath, rootUrl).toString();
 }
 
+function readStoredUser() {
+  const rawUser = localStorage.getItem('magalu_system_user');
+
+  if (!rawUser) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(rawUser);
+  } catch (error) {
+    return null;
+  }
+}
+
+function storeUser(user) {
+  localStorage.setItem('magalu_system_user', JSON.stringify(user));
+}
+
+function clearStoredUser() {
+  localStorage.removeItem('magalu_system_user');
+}
+
+function requiresFirstAccess(user) {
+  return Boolean(user) && user.firstAccessCompleted !== true;
+}
+
+function getAuthenticatedHomeUrl(user) {
+  return buildAppUrl(requiresFirstAccess(user) ? '/primeiro-acesso/' : '/teste/');
+}
+
 function withApiDefaults(options = {}) {
   const headers = new Headers(options.headers || {});
 
@@ -82,7 +112,12 @@ async function parseApiResponse(response) {
 window.magaluApi = {
   buildAppUrl,
   buildApiUrl,
+  clearStoredUser,
+  getAuthenticatedHomeUrl,
   getAppRootUrl,
   parseApiResponse,
+  readStoredUser,
+  requiresFirstAccess,
+  storeUser,
   withApiDefaults,
 };

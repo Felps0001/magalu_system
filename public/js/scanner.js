@@ -5,9 +5,19 @@ const startScanButton = document.getElementById('start-scan-button');
 const stopScanButton = document.getElementById('stop-scan-button');
 const scannerPreview = document.getElementById('scanner-preview');
 
+const currentUser = window.magaluApi.readStoredUser();
+
 let html5QrCode = null;
 let lastDecodedValue = '';
 let redirectTimeoutId = null;
+
+if (!currentUser) {
+  window.location.replace(window.magaluApi.buildAppUrl('/'));
+}
+
+if (window.magaluApi.requiresFirstAccess(currentUser)) {
+  window.location.replace(window.magaluApi.buildAppUrl('/primeiro-acesso/'));
+}
 
 function setScannerStatus(message, type) {
   scannerStatus.textContent = message;

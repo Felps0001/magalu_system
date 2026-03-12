@@ -1,7 +1,8 @@
-const CACHE_NAME = 'magalu-system-v8';
+const CACHE_NAME = 'magalu-system-v10';
 const APP_SHELL = [
   './',
   './login/',
+  './primeiro-acesso/',
   './teste/',
   './agenda/',
   './feed/',
@@ -11,6 +12,7 @@ const APP_SHELL = [
   './js/api.js',
   './js/agenda.js',
   './js/feed.js',
+  './js/first-access.js',
   './js/login.js',
   './js/scanner.js',
   './js/teste.js',

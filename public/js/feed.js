@@ -1,5 +1,3 @@
-const STORAGE_KEY = 'magalu_system_user';
-
 const feedUserName = document.getElementById('feed-user-name');
 const feedUserRole = document.getElementById('feed-user-role');
 const feedList = document.getElementById('feed-list');
@@ -16,18 +14,8 @@ function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
 }
 
-function readStoredUser() {
-  const rawUser = localStorage.getItem(STORAGE_KEY);
-
-  if (!rawUser) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(rawUser);
-  } catch (error) {
-    return null;
-  }
+function redirectToFirstAccess() {
+  window.location.replace(window.magaluApi.buildAppUrl('/primeiro-acesso/'));
 }
 
 function setFormMessage(message, type) {
@@ -231,10 +219,12 @@ async function createPost(user) {
   return data;
 }
 
-const user = readStoredUser();
+const user = window.magaluApi.readStoredUser();
 
 if (!user) {
   redirectToLogin();
+} else if (window.magaluApi.requiresFirstAccess(user)) {
+  redirectToFirstAccess();
 } else {
   feedUserName.textContent = user.nome || 'Usuario autenticado';
   feedUserRole.textContent = `${user.cargo || 'Sem cargo'} · ${user.loja || 'Sem loja'} · ${user.turma || 'Sem turma'}`;
@@ -272,6 +262,6 @@ feedRefreshButton.addEventListener('click', () => {
 });
 
 logoutButton.addEventListener('click', () => {
-  localStorage.removeItem(STORAGE_KEY);
+  window.magaluApi.clearStoredUser();
   redirectToLogin();
 });

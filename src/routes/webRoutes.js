@@ -13,6 +13,10 @@ router.get('/login', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'index.html'));
 });
 
+router.get('/primeiro-acesso', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'first-access.html'));
+});
+
 router.get('/teste', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'teste.html'));
 });

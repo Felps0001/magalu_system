@@ -1,5 +1,3 @@
-const STORAGE_KEY = 'magalu_system_user';
-
 const userName = document.getElementById('user-name');
 const userRole = document.getElementById('user-role');
 const userIdMagalu = document.getElementById('user-id-magalu');
@@ -22,6 +20,10 @@ let currentUser = null;
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
+}
+
+function redirectToFirstAccess() {
+  window.location.replace(window.magaluApi.buildAppUrl('/primeiro-acesso/'));
 }
 
 function setQrCodeMessage(message, type = 'info-message') {
@@ -95,7 +97,7 @@ async function loadUserQrCode(options = {}) {
       qrCodeGeneratedAt: data.qrCodeGeneratedAt,
       qrCodePayload: data.qrCodePayload,
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
+    window.magaluApi.storeUser(currentUser);
     setQrCodeMessage(successMessage, 'success');
     generateQrCodeButton.textContent = 'QR Code carregado';
   } catch (error) {
@@ -128,12 +130,13 @@ function renderVisitedStands(estandesVisitados) {
   });
 }
 
-const rawUser = localStorage.getItem(STORAGE_KEY);
+const user = window.magaluApi.readStoredUser();
 
-if (!rawUser) {
+if (!user) {
   redirectToLogin();
+} else if (window.magaluApi.requiresFirstAccess(user)) {
+  redirectToFirstAccess();
 } else {
-  const user = JSON.parse(rawUser);
   currentUser = user;
 
   userName.textContent = user.nome || 'Usuario';
@@ -162,6 +165,6 @@ generateQrCodeButton.addEventListener('click', () => {
 });
 
 logoutButton.addEventListener('click', () => {
-  localStorage.removeItem(STORAGE_KEY);
+  window.magaluApi.clearStoredUser();
   redirectToLogin();
 });

@@ -848,6 +848,209 @@ button:hover {
   text-decoration: underline;
 }
 
+.first-access-body {
+  margin: 0;
+  min-height: 100svh;
+  background: #ffffff;
+  color: var(--text);
+}
+
+.first-access-mobile-shell {
+  width: min(100%, 430px);
+  min-height: 100svh;
+  margin: 0 auto;
+  background: #ffffff;
+}
+
+.first-access-top-panel {
+  position: relative;
+}
+
+.first-access-top-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.first-access-top-content {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  gap: 38px;
+  padding: max(36px, env(safe-area-inset-top)) 28px 44px;
+}
+
+.first-access-top-logo {
+  width: min(46vw, 180px);
+  height: auto;
+  display: block;
+}
+
+.first-access-top-copy {
+  display: grid;
+  gap: 6px;
+}
+
+.first-access-top-title,
+.first-access-top-subtitle {
+  margin: 0;
+  color: #ffffff;
+}
+
+.first-access-top-title {
+  font-size: 40px;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+  font-weight: 800;
+}
+
+.first-access-top-subtitle {
+  font-size: clamp(1.1rem, 5vw, 2rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+}
+
+.first-access-mobile-panel {
+  padding: 20px 26px calc(36px + env(safe-area-inset-bottom));
+}
+
+.first-access-mobile-form {
+  display: grid;
+  gap: 20px;
+}
+
+.first-access-mobile-input {
+  width: 100%;
+  height: 78px;
+  padding: 0 38px;
+  border: 0;
+  border-radius: 18px;
+  background: #d3d3d3;
+  color: #303030;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  box-shadow: none;
+}
+
+.first-access-mobile-input::placeholder {
+  color: #8f8f8f;
+}
+
+.first-access-mobile-input:focus {
+  outline: 2px solid rgba(26, 144, 235, 0.45);
+  outline-offset: 2px;
+}
+
+.first-access-mobile-input--locked {
+  color: #7d7d7d;
+}
+
+.first-access-mobile-meta {
+  display: grid;
+  gap: 10px;
+  margin-top: -2px;
+}
+
+.first-access-mobile-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.first-access-mobile-checkbox {
+  width: 38px;
+  height: 38px;
+  margin: 0;
+  border: 0;
+  border-radius: 12px;
+  appearance: none;
+  background: #d3d3d3;
+  cursor: pointer;
+}
+
+.first-access-mobile-checkbox:checked {
+  background: linear-gradient(135deg, #1a90eb, #0686ef);
+  box-shadow: inset 0 0 0 10px #d3d3d3;
+}
+
+.first-access-mobile-checkbox-label {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.first-access-mobile-policy-link {
+  color: var(--accent-dark);
+  text-decoration: underline;
+}
+
+.first-access-mobile-cpf {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+}
+
+.first-access-mobile-submit {
+  width: min(300px, 100%);
+  padding: 0;
+  min-height: auto;
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.first-access-mobile-submit:hover {
+  transform: none;
+  background: transparent;
+}
+
+.first-access-mobile-submit-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.first-access-mobile-submit:disabled {
+  opacity: 0.72;
+  cursor: wait;
+}
+
+.first-access-mobile-message,
+.first-access-mobile-update {
+  margin: 0;
+}
+
+.first-access-mobile-message {
+  min-height: 24px;
+  color: var(--text);
+}
+
+.first-access-mobile-update {
+  color: rgba(118, 195, 255, 0.94);
+}
+
+.first-access-mobile-logout {
+  margin-top: 12px;
+  padding: 0;
+  min-height: auto;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.first-access-mobile-logout:hover {
+  transform: none;
+  color: var(--text);
+}
+
 .detail-list {
   margin: 0;
   display: grid;
@@ -988,6 +1191,29 @@ button:hover {
 
   .auth-body--magalu {
     padding: 0;
+  }
+
+  .first-access-mobile-panel {
+    padding-inline: 18px;
+  }
+
+  .first-access-top-content {
+    gap: 28px;
+    padding-inline: 18px;
+    padding-bottom: 34px;
+  }
+
+  .first-access-top-logo {
+    width: min(42vw, 150px);
+  }
+
+  .first-access-mobile-input {
+    height: 72px;
+    padding-inline: 26px;
+  }
+
+  .first-access-mobile-submit {
+    width: 100%;
   }
 
   .brand-panel,
