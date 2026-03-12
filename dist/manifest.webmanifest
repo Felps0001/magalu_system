@@ -3,7 +3,7 @@
   "short_name": "Magalu",
   "description": "Aplicacao de login, check-in e pontuacao para uso em celular e desktop.",
   "lang": "pt-BR",
-  "start_url": "./login/",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",

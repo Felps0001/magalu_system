@@ -23,18 +23,224 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: Bahnschrift, "Trebuchet MS", sans-serif;
+  font-family: "Raleway", Bahnschrift, "Trebuchet MS", sans-serif;
   color: var(--text);
-  background:
-    radial-gradient(circle at top left, rgba(0, 134, 255, 0.24), transparent 30%),
-    radial-gradient(circle at top right, rgba(95, 212, 255, 0.22), transparent 26%),
-    radial-gradient(circle at bottom right, rgba(255, 210, 63, 0.18), transparent 24%),
-    linear-gradient(160deg, var(--bg), var(--bg-alt));
+  background: #ffffff;
 }
 
 .auth-body,
 .dashboard-body {
   padding: 32px;
+}
+
+.auth-body--magalu {
+  min-height: 100svh;
+  padding: 0;
+  color: #ffffff;
+  background: #ffffff;
+}
+
+.auth-body--magalu::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 14%, rgba(79, 197, 255, 0.12), transparent 30%),
+    radial-gradient(circle at 12% 72%, rgba(255, 183, 0, 0.1), transparent 24%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.18));
+  pointer-events: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.auth-mobile-shell {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 430px);
+  min-height: 100svh;
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  background: #ffffff;
+}
+
+.auth-mobile-hero {
+  position: relative;
+  min-height: 70svh;
+  padding: max(28px, env(safe-area-inset-top)) 28px 40px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: clamp(56px, 12vh, 144px);
+  background: linear-gradient(180deg, #1a90eb 0%, #0686ef 100%);
+  border-bottom-right-radius: min(34vw, 138px);
+  overflow: hidden;
+}
+
+.auth-mobile-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0)),
+    url('./assets/img/bg-index.png') center top / cover no-repeat;
+  opacity: 0.32;
+  pointer-events: none;
+}
+
+.auth-mobile-hero::after {
+  content: '';
+  position: absolute;
+  inset: auto -68px -88px auto;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+
+.auth-mobile-brand,
+.auth-mobile-copy {
+  position: relative;
+  z-index: 1;
+}
+
+.auth-mobile-brand {
+  display: grid;
+  justify-items: start;
+}
+
+.auth-mobile-logo {
+  width: min(57vw, 222px);
+  height: auto;
+  display: block;
+  margin-top: 120px;
+}
+
+.auth-mobile-copy {
+  align-self: center;
+  padding-left: 4px;
+}
+
+.auth-mobile-title {
+  margin: 0;
+  font-size: 44px;
+  line-height: 0.97;
+  letter-spacing: -0.06em;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.auth-mobile-panel {
+  padding: 28px 28px calc(36px + env(safe-area-inset-bottom));
+  background: #ffffff;
+}
+
+.auth-mobile-form {
+  display: grid;
+  gap: 12px;
+}
+
+.auth-mobile-input {
+  width: 100%;
+  height: 60px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 14px;
+  background: #d8d8d8;
+  color: #303030;
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.auth-mobile-input::placeholder {
+  color: #8e8e8e;
+}
+
+.auth-mobile-input:focus {
+  outline: 2px solid rgba(26, 144, 235, 0.35);
+  outline-offset: 2px;
+}
+
+.auth-mobile-primary {
+  width: min(228px, 100%);
+  padding: 0;
+  min-height: auto;
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.auth-mobile-primary:hover {
+  transform: none;
+  background: transparent;
+}
+
+.auth-mobile-primary:disabled {
+  opacity: 0.78;
+  cursor: wait;
+}
+
+.auth-mobile-primary-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.auth-mobile-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.auth-mobile-link {
+  padding: 0;
+  min-height: auto;
+  border-radius: 0;
+  color: rgba(255, 255, 255, 0.76);
+  background: transparent;
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.auth-mobile-link:hover {
+  transform: none;
+  color: #ffffff;
+}
+
+.auth-mobile-link:disabled {
+  opacity: 0.64;
+  cursor: not-allowed;
+}
+
+.auth-mobile-status,
+.auth-mobile-update {
+  margin: 12px 0 0;
+}
+
+.auth-mobile-status {
+  min-height: 24px;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.auth-mobile-update {
+  min-height: 20px;
+  color: rgba(118, 195, 255, 0.94);
+  font-size: 0.88rem;
 }
 
 .auth-layout,
@@ -270,7 +476,6 @@ body {
 
 button {
   border: 0;
-  border-radius: 999px;
   padding: 15px 22px;
   font: inherit;
   font-weight: 700;
@@ -285,8 +490,6 @@ button:hover {
 #login-button {
   margin-top: 8px;
   color: #fff;
-  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-  box-shadow: 0 16px 30px rgba(0, 89, 214, 0.28);
 }
 
 .secondary-button {
@@ -783,6 +986,10 @@ button:hover {
     padding: 18px;
   }
 
+  .auth-body--magalu {
+    padding: 0;
+  }
+
   .brand-panel,
   .auth-card,
   .hero-card,
@@ -797,5 +1004,16 @@ button:hover {
 
   .qr-card-layout {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 901px) {
+  .auth-body--magalu {
+    display: grid;
+    place-items: center;
+  }
+
+  .auth-mobile-shell {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04);
   }
 }

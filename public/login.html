@@ -2,69 +2,64 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Login Magalu System</title>
-  <meta name="theme-color" content="#0086ff">
+  <meta name="theme-color" content="#0a0a0a">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Magalu System">
-  <link rel="manifest" href="../manifest.webmanifest">
-  <link rel="icon" href="../icons/icon-192.svg" type="image/svg+xml">
-  <link rel="icon" href="../icons/icon-192.png" type="image/png">
-  <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
-  <link rel="stylesheet" href="../styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.svg" type="image/svg+xml">
+  <link rel="icon" href="./icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="./styles.css">
 </head>
-<body class="auth-body">
-  <main class="auth-layout">
-    <section class="brand-panel">
-      <div class="app-mark app-mark--inverse">
-        <img class="app-mark-icon" src="../icons/icon-192.svg" alt="">
-        <div class="app-mark-copy">
-          <p class="app-mark-kicker">Area interna</p>
-          <strong class="app-mark-title">Magalu System</strong>
-        </div>
+<body class="auth-body auth-body--magalu">
+  <main class="auth-mobile-shell">
+    <section class="auth-mobile-hero" aria-label="Apresentacao do aplicativo">
+      <div class="auth-mobile-brand">
+        <img class="auth-mobile-logo" src="./assets/img/magalu-logo-white.png" alt="Magalu">
       </div>
-      <p class="eyebrow">Magalu System</p>
-      <h1 class="brand-title">Acesso rapido para check-in e pontuacao.</h1>
-      <p class="brand-copy">
-        Entre com o seu ID Magalu para acessar a area de teste da aplicacao.
-      </p>
-      <div class="brand-grid">
-        <article class="brand-card">
-          <span class="brand-label">Entrada</span>
-          <strong>Sem senha</strong>
-        </article>
-        <article class="brand-card">
-          <span class="brand-label">Login</span>
-          <strong>Por id_magalu</strong>
-        </article>
+
+      <div class="auth-mobile-copy">
+        <h1 class="auth-mobile-title">Bem-vindo!<br>Sua experiencia<br>comeca aqui.</h1>
       </div>
     </section>
 
-    <section class="auth-card">
-      <div class="auth-card-header">
-        <p class="eyebrow">Login</p>
-        <h2>Acessar sistema</h2>
-        <p class="muted">Use o mesmo id_magalu cadastrado na API.</p>
-      </div>
+    <section class="auth-mobile-panel">
+      <form id="login-form" class="auth-mobile-form">
+        <label class="sr-only" for="id_magalu">ID Magalu</label>
+        <input
+          id="id_magalu"
+          name="id_magalu"
+          class="auth-mobile-input"
+          type="text"
+          placeholder="Digite seu ID Magalu"
+          autocomplete="off"
+          required
+        >
 
-      <form id="login-form" class="auth-form">
-        <label for="id_magalu">ID Magalu</label>
-        <input id="id_magalu" name="id_magalu" type="text" placeholder="Ex.: MAG123" autocomplete="off" required>
+        <button id="login-button" class="auth-mobile-primary" type="submit" aria-label="Acessar">
+          <img class="auth-mobile-primary-image" src="./assets/img/btn-index.png" alt="">
+        </button>
 
-        <button id="login-button" type="submit">Entrar</button>
-        <button id="update-button" class="secondary-button" type="button">Atualizar app</button>
-        <button id="install-button" class="secondary-button" type="button" hidden>Instalar app</button>
+        <div class="auth-mobile-actions">
+          <button id="update-button" class="auth-mobile-link" type="button">Atualizar app</button>
+          <button id="install-button" class="auth-mobile-link" type="button" hidden>Instalar app</button>
+        </div>
       </form>
 
-      <p id="login-message" class="form-message" aria-live="polite"></p>
-      <p id="update-message" class="form-message info-message" hidden></p>
+      <p id="login-message" class="form-message auth-mobile-status" aria-live="polite"></p>
+      <p id="update-message" class="form-message auth-mobile-update" hidden></p>
     </section>
   </main>
 
-  <script src="../js/runtime-config.js"></script>
-  <script src="../js/api.js"></script>
-  <script src="../js/pwa.js"></script>
-  <script src="../js/login.js"></script>
+  <script src="./js/runtime-config.js"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/pwa.js"></script>
+  <script src="./js/login.js"></script>
 </body>
 </html>

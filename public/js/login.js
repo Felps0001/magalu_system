@@ -27,7 +27,7 @@ loginForm.addEventListener('submit', async (event) => {
   }
 
   loginButton.disabled = true;
-  loginButton.textContent = 'Entrando...';
+  loginButton.setAttribute('aria-busy', 'true');
   setMessage('', '');
 
   try {
@@ -55,6 +55,6 @@ loginForm.addEventListener('submit', async (event) => {
     setMessage(error.message, 'error');
   } finally {
     loginButton.disabled = false;
-    loginButton.textContent = 'Entrar';
+    loginButton.removeAttribute('aria-busy');
   }
 });

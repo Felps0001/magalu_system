@@ -45,21 +45,9 @@ function writeRouteIndex(routeName, sourceFileName) {
 
 function writeRootIndex() {
   const rootIndexPath = path.join(distDir, 'index.html');
-  const content = `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=./login/">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Magalu System</title>
-</head>
-<body>
-  <p>Redirecionando para o login...</p>
-</body>
-</html>
-`;
+  const sourcePath = path.join(publicDir, 'index.html');
 
-  fs.writeFileSync(rootIndexPath, content, 'utf8');
+  fs.copyFileSync(sourcePath, rootIndexPath);
 }
 
 function write404Page() {
@@ -68,7 +56,7 @@ function write404Page() {
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=./login/">
+  <meta http-equiv="refresh" content="0; url=./">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Magalu System</title>
 </head>
@@ -82,7 +70,7 @@ function write404Page() {
 }
 
 function writePagesRoutes(done) {
-  writeRouteIndex('login', 'login.html');
+  writeRouteIndex('login', 'index.html');
   writeRouteIndex('teste', 'teste.html');
   writeRouteIndex('agenda', 'agenda.html');
   writeRouteIndex('feed', 'feed.html');
