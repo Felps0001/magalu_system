@@ -21,7 +21,7 @@ const logoutButton = document.getElementById('logout-button');
 let currentUser = null;
 
 function redirectToLogin() {
-  window.location.replace(new URL('../login/', window.location.href));
+  window.location.replace(new URL('../', window.location.href));
 }
 
 function setQrCodeMessage(message, type = 'info-message') {

@@ -13,7 +13,7 @@ const feedRefreshButton = document.getElementById('feed-refresh-button');
 const logoutButton = document.getElementById('logout-button');
 
 function redirectToLogin() {
-  window.location.replace(new URL('../login/', window.location.href));
+  window.location.replace(new URL('../', window.location.href));
 }
 
 function readStoredUser() {
