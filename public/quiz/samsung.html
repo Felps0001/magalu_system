@@ -4,209 +4,81 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quiz Samsung - Magalu System</title>
+  <meta name="theme-color" content="#0086ff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Magalu System">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../icons/icon-192.png?v=2" type="image/png">
+  <link rel="icon" href="../icons/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../icons/icon-192.png?v=2">
   <link rel="stylesheet" href="../styles.css">
-  <style>
-    .quiz-container { max-width: 480px; margin: 40px auto; background: #fff; border-radius: 18px; box-shadow: 0 8px 32px rgba(0,89,214,0.08); padding: 32px; }
-    .quiz-header { text-align: center; margin-bottom: 24px; }
-    .quiz-question { font-size: 1.2rem; margin-bottom: 18px; }
-    .quiz-options { display: grid; gap: 12px; margin-bottom: 24px; }
-    .quiz-btn { padding: 12px 24px; border-radius: 12px; background: linear-gradient(135deg, #0086ff, #0059d6); color: #fff; font-weight: bold; border: none; cursor: pointer; }
-    .quiz-btn:disabled { background: #ccc; cursor: not-allowed; }
-    .quiz-score { font-size: 1.1rem; margin-bottom: 18px; color: #0086ff; }
-    .quiz-footer { text-align: center; margin-top: 32px; color: #888; }
-  </style>
 </head>
-<body>
-  <div class="quiz-container" id="quiz">
-    <!-- Conteúdo dinâmico -->
-  </div>
-  <div style="text-align:center;margin-top:24px;">
-    <a href="../perfil/" class="quiz-btn" style="display:inline-block;text-decoration:none;">Voltar</a>
-  </div>
-  <script>
-    // Quiz config
-    const quiz = [
-      {
-        welcome: true,
-        title: 'Bem-vindo ao Quiz Samsung!',
-        description: 'Responda as perguntas e ganhe pontos. Boa sorte!'
-      },
-      {
-        question: 'Qual é a tecnologia de tela exclusiva da Samsung?',
-        options: [
-          { text: 'OLED', points: 0 },
-          { text: 'QLED', points: 2 },
-          { text: 'LCD', points: 0 }
-        ]
-      },
-      {
-        question: 'Qual linha de smartphones Samsung é voltada para alta performance?',
-        options: [
-          { text: 'Galaxy A', points: 0 },
-          { text: 'Galaxy S', points: 2 },
-          { text: 'Galaxy M', points: 0 }
-        ]
-      },
-      {
-        question: 'Qual recurso exclusivo da linha Galaxy Note?',
-        options: [
-          { text: 'S Pen', points: 4 }, // Mais pontos
-          { text: 'Câmera tripla', points: 0 },
-          { text: 'Tela curva', points: 0 }
-        ]
-      },
-      {
-        question: 'Qual é o sistema operacional dos smartphones Samsung?',
-        options: [
-          { text: 'Android', points: 2 },
-          { text: 'iOS', points: 0 },
-          { text: 'HarmonyOS', points: 0 }
-        ]
-      },
-      {
-        thankyou: true,
-        title: 'Obrigado pela participação!',
-        description: 'Seu check-in foi registrado. Pontuação: <span id="final-score"></span> pontos. Tempo total: <span id="final-time"></span>.'
-      }
-    ];
+<body class="quiz-mobile-body">
+  <main class="feed-mobile-shell quiz-mobile-shell">
+    <button id="quiz-drawer-backdrop" class="feed-backdrop" type="button" hidden aria-label="Fechar menu"></button>
 
-    // Estande e checkin config
-    const estandeId = '69b054445c804b21df9b2022';
-    const isLocalHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
-    const apiBaseUrl = isLocalHost ? '' : 'https://magalu-system.onrender.com';
-    const checkinApi = `${apiBaseUrl}/api/checkins`;
-    const usersApi = `${apiBaseUrl}/api/users`;
+    <aside id="quiz-drawer" class="feed-drawer" aria-hidden="true" hidden>
+      <div class="feed-drawer-header">
+        <img class="feed-drawer-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
+        <button id="quiz-close-drawer" class="feed-drawer-close" type="button" aria-label="Fechar menu">×</button>
+      </div>
 
-    let currentStep = 0;
-    let score = 0;
-    let quizStartedAt = null;
-    let totalTimeInSeconds = 0;
+      <div class="feed-drawer-user">
+        <strong id="quiz-drawer-user-name">Carregando usuario...</strong>
+        <p id="quiz-drawer-user-role">Quiz de treinamento do evento.</p>
+      </div>
 
-    function formatDuration(totalSeconds) {
-      const safeSeconds = Math.max(0, Number(totalSeconds) || 0);
-      const minutes = Math.floor(safeSeconds / 60);
-      const seconds = safeSeconds % 60;
+      <nav class="feed-drawer-nav" aria-label="Navegacao principal">
+        <a class="feed-drawer-link" href="../perfil/">Perfil</a>
+        <a class="feed-drawer-link" href="../agenda/">Agenda</a>
+        <a class="feed-drawer-link" href="../scanner/">Scanner</a>
+        <a class="feed-drawer-link" href="../feed/">Feed</a>
+      </nav>
 
-      if (minutes === 0) {
-        return `${seconds}s`;
-      }
+      <div class="feed-drawer-actions">
+        <button id="update-button" class="feed-drawer-button" type="button">Atualizar app</button>
+        <button id="install-button" class="feed-drawer-button" type="button" hidden>Instalar app</button>
+        <button id="logout-button" class="feed-drawer-button feed-drawer-button--ghost" type="button">Sair</button>
+      </div>
+    </aside>
 
-      return `${minutes}min ${String(seconds).padStart(2, '0')}s`;
-    }
-
-    function renderQuiz() {
-      const container = document.getElementById('quiz');
-      container.innerHTML = '';
-
-      if (quiz[currentStep].welcome) {
-        container.innerHTML = `
-          <div class="quiz-header">
-            <h2>${quiz[currentStep].title}</h2>
-            <p>${quiz[currentStep].description}</p>
-          </div>
-          <button class="quiz-btn" onclick="nextStep()">Iniciar</button>
-        `;
-        return;
-      }
-
-      if (quiz[currentStep].thankyou) {
-        container.innerHTML = `
-          <div class="quiz-header">
-            <h2>${quiz[currentStep].title}</h2>
-            <p>${quiz[currentStep].description}</p>
-          </div>
-          <div class="quiz-footer">Magalu System</div>
-        `;
-        document.getElementById('final-score').textContent = score;
-        document.getElementById('final-time').textContent = formatDuration(totalTimeInSeconds);
-        return;
-      }
-
-      container.innerHTML = `
-        <div class="quiz-header">
-          <div class="quiz-score">Pontuação: ${score}</div>
-          <div class="quiz-question">${quiz[currentStep].question}</div>
+    <section class="feed-top-panel" aria-label="Quiz Samsung">
+      <img class="feed-top-image" src="../assets/img/layer-topo.png" alt="Quiz Samsung">
+      <div class="feed-top-content">
+        <div class="feed-top-bar">
+          <img class="feed-top-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
+          <button id="quiz-menu-button" class="feed-top-menu" type="button" aria-controls="quiz-drawer" aria-expanded="false" aria-label="Abrir menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
         </div>
-        <div class="quiz-options">
-          ${quiz[currentStep].options.map((opt, idx) => `
-            <button class="quiz-btn" onclick="answer(${idx})">${opt.text}</button>
-          `).join('')}
+
+        <div class="feed-top-copy">
+          <h1 class="feed-top-title">Quiz</h1>
+          <p class="feed-top-subtitle">Responda as perguntas e acumule pontos no estande Samsung.</p>
+          <div class="feed-top-user">
+            <strong id="quiz-user-name">Samsung</strong>
+            <p id="quiz-user-role">Valide seus conhecimentos e registre seu check-in ao final.</p>
+          </div>
         </div>
-      `;
-    }
+      </div>
+    </section>
 
-    window.nextStep = function() {
-      if (currentStep === 0 && !quizStartedAt) {
-        quizStartedAt = Date.now();
-      }
-
-      currentStep++;
-      renderQuiz();
-    };
-
-    window.answer = function(idx) {
-      score += quiz[currentStep].options[idx].points;
-      currentStep++;
-
-      if (currentStep === quiz.length - 1) {
-        totalTimeInSeconds = Math.round((Date.now() - (quizStartedAt || Date.now())) / 1000);
-        doCheckin();
-      }
-
-      renderQuiz();
-    };
-
-    async function refreshStoredUser(userId) {
-      const response = await fetch(usersApi, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
-      });
-
-      if (!response.ok) {
-        return;
-      }
-
-      const users = await response.json();
-
-      if (!Array.isArray(users)) {
-        return;
-      }
-
-      const updatedUser = users.find((item) => item && item._id === userId);
-
-      if (updatedUser) {
-        localStorage.setItem('magalu_system_user', JSON.stringify(updatedUser));
-      }
-    }
-
-    async function doCheckin() {
-      const userRaw = localStorage.getItem('magalu_system_user');
-      let user = null;
-      try { user = JSON.parse(userRaw); } catch {}
-      if (!user || !user._id) return;
-
-      const response = await fetch(checkinApi, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true'
-        },
-        body: JSON.stringify({
-          userId: user._id,
-          estandeId: estandeId,
-          pontos: score,
-          tempo: totalTimeInSeconds,
-          origem: 'quiz-samsung'
-        })
-      });
-
-      if (response.ok) {
-        await refreshStoredUser(user._id);
-      }
-    }
-
-    renderQuiz();
-  </script>
+    <section class="quiz-mobile-panel">
+      <p id="update-message" class="form-message profile-mobile-update" hidden></p>
+      <section class="quiz-mobile-card">
+        <div id="quiz" class="quiz-container">
+          <!-- Conteudo dinamico -->
+        </div>
+      </section>
+      <a href="../perfil/" class="secondary-button quiz-back-link">Voltar para perfil</a>
+    </section>
+  </main>
+  <script src="../js/runtime-config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/pwa.js"></script>
+  <script src="../js/quiz-samsung.js"></script>
 </body>
 </html>

@@ -13,137 +13,95 @@
   <link rel="icon" href="../icons/icon-192.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="../icons/icon-192.png?v=2">
   <link rel="stylesheet" href="../styles.css">
-  <style>
-    .scanner-layout {
-      display: grid;
-      gap: 22px;
-    }
-
-    .scanner-card {
-      display: grid;
-      gap: 18px;
-    }
-
-    .scanner-preview {
-      position: relative;
-      overflow: hidden;
-      width: min(100%, 420px);
-      aspect-ratio: 1 / 1;
-      margin: 0 auto;
-      border-radius: 0;
-      border: 1px solid rgba(0, 89, 214, 0.12);
-      background: linear-gradient(180deg, rgba(9, 24, 51, 0.94), rgba(17, 42, 86, 0.96));
-      box-shadow: 0 18px 42px rgba(0, 49, 124, 0.18);
-    }
-
-    .scanner-mount {
-      width: 100%;
-      height: 100%;
-      background: #091833;
-    }
-
-    .scanner-overlay {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      pointer-events: none;
-      background: rgba(3, 13, 32, 0.12);
-    }
-
-    .scanner-preview.scanner-active .scanner-overlay {
-      display: none;
-    }
-
-    .scanner-frame {
-      width: calc(100% - 36px);
-      height: calc(100% - 36px);
-      border: 3px solid rgba(255, 255, 255, 0.96);
-      border-radius: 0;
-      box-shadow: inset 0 0 0 1px rgba(0, 134, 255, 0.18);
-    }
-
-    .scanner-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .scanner-result {
-      display: grid;
-      gap: 12px;
-      word-break: break-word;
-    }
-
-    .scanner-result-value {
-      padding: 16px 18px;
-      border-radius: 18px;
-      background: rgba(240, 247, 255, 0.96);
-      border: 1px solid rgba(0, 89, 214, 0.1);
-      font-weight: 700;
-      color: var(--accent-dark);
-    }
-
-    .scanner-tip {
-      margin: 0;
-      color: var(--muted);
-    }
-  </style>
 </head>
-<body class="dashboard-body">
-  <main class="dashboard-layout scanner-layout">
-    <header class="dashboard-header">
-      <div class="header-brand">
-        <div class="app-mark">
-          <img class="app-mark-icon" src="../icons/icon-192.svg" alt="">
-          <div class="app-mark-copy">
-            <p class="app-mark-kicker">Area interna</p>
-            <strong class="app-mark-title">Magalu System</strong>
+<body class="scanner-mobile-body">
+  <main class="feed-mobile-shell scanner-mobile-shell">
+    <button id="scanner-drawer-backdrop" class="feed-backdrop" type="button" hidden aria-label="Fechar menu"></button>
+
+    <aside id="scanner-drawer" class="feed-drawer" aria-hidden="true" hidden>
+      <div class="feed-drawer-header">
+        <img class="feed-drawer-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
+        <button id="scanner-close-drawer" class="feed-drawer-close" type="button" aria-label="Fechar menu">×</button>
+      </div>
+
+      <div class="feed-drawer-user">
+        <strong id="scanner-drawer-user-name">Carregando usuario...</strong>
+        <p id="scanner-drawer-user-role">Leitura de QR code em tempo real.</p>
+      </div>
+
+      <nav class="feed-drawer-nav" aria-label="Navegacao principal">
+        <a class="feed-drawer-link" href="../perfil/">Perfil</a>
+        <a class="feed-drawer-link" href="../agenda/">Agenda</a>
+        <a class="feed-drawer-link feed-drawer-link--current" href="../scanner/" aria-current="page">Scanner</a>
+        <a class="feed-drawer-link" href="../feed/">Feed</a>
+      </nav>
+
+      <div class="feed-drawer-actions">
+        <button id="update-button" class="feed-drawer-button" type="button">Atualizar app</button>
+        <button id="install-button" class="feed-drawer-button" type="button" hidden>Instalar app</button>
+        <button id="logout-button" class="feed-drawer-button feed-drawer-button--ghost" type="button">Sair</button>
+      </div>
+    </aside>
+
+    <section class="feed-top-panel" aria-label="Scanner do evento">
+      <img class="feed-top-image" src="../assets/img/layer-topo.png" alt="Scanner Magalu">
+      <div class="feed-top-content">
+        <div class="feed-top-bar">
+          <img class="feed-top-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
+          <button id="scanner-menu-button" class="feed-top-menu" type="button" aria-controls="scanner-drawer" aria-expanded="false" aria-label="Abrir menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+
+        <div class="feed-top-copy">
+          <h1 class="feed-top-title">Scanner</h1>
+          <p class="feed-top-subtitle">Abra a camera e aponte para um QR code para validar o acesso.</p>
+          <div class="feed-top-user">
+            <strong id="scanner-user-name">Camera do aparelho</strong>
+            <p id="scanner-user-role">Em celulares compativeis, a camera traseira sera usada automaticamente.</p>
           </div>
         </div>
-        <p class="eyebrow">Scanner</p>
-        <h1>Ler QR Code</h1>
-        <p class="muted">Abra a camera do celular dentro da aplicacao e aponte para o QR Code para capturar o conteudo.</p>
       </div>
-      <div class="header-actions">
-        <a class="secondary-button link-like-button" href="../perfil/">Voltar</a>
-        <button id="update-button" class="secondary-button" type="button">Atualizar app</button>
-        <button id="install-button" class="secondary-button" type="button" hidden>Instalar app</button>
-      </div>
-    </header>
-
-    <section class="hero-card">
-      <p class="eyebrow">Camera do aparelho</p>
-      <h2>Leitura em tempo real</h2>
-      <p class="muted">Em celulares compatíveis, a camera traseira sera usada automaticamente.</p>
-      <p id="scanner-status" class="form-message info-message">Toque em iniciar para abrir a camera.</p>
     </section>
 
-    <section class="detail-card scanner-card">
-      <div id="scanner-preview" class="scanner-preview">
-        <div id="scanner-mount" class="scanner-mount"></div>
-        <div class="scanner-overlay" aria-hidden="true">
-          <div class="scanner-frame"></div>
+    <section class="scanner-mobile-panel">
+      <article class="scanner-mobile-card">
+        <div class="scanner-mobile-card-header">
+          <p class="profile-section-kicker">Status do scanner</p>
+          <p id="scanner-status" class="form-message scanner-mobile-status">Toque em iniciar para abrir a camera.</p>
         </div>
-      </div>
 
-      <div class="scanner-actions">
-        <button id="start-scan-button" class="primary-button" type="button">Iniciar camera</button>
-        <button id="stop-scan-button" class="secondary-button" type="button" disabled>Parar camera</button>
-      </div>
+        <div id="scanner-preview" class="scanner-preview">
+          <div id="scanner-mount" class="scanner-mount"></div>
+          <div class="scanner-overlay" aria-hidden="true">
+            <div class="scanner-frame"></div>
+          </div>
+        </div>
 
-      <p class="scanner-tip">No iPhone, use Safari ou Chrome atualizados e permita o acesso a camera quando solicitado.</p>
-    </section>
+        <div class="scanner-actions">
+          <button id="start-scan-button" class="primary-button" type="button">Iniciar camera</button>
+          <button id="stop-scan-button" class="secondary-button" type="button" disabled>Parar camera</button>
+        </div>
 
-    <section class="detail-card scanner-result">
-      <div>
-        <p class="eyebrow">Ultimo QR Code lido</p>
-        <h2>Resultado</h2>
-      </div>
-      <div id="scanner-result" class="scanner-result-value">Nenhum QR Code lido ainda.</div>
-      <div class="scanner-actions">
-        <a id="scanner-result-link" class="secondary-button" href="#" target="_blank" rel="noreferrer" hidden>Abrir resultado</a>
-      </div>
+        <p class="scanner-tip">No iPhone, use Safari ou Chrome atualizados e permita o acesso a camera quando solicitado.</p>
+      </article>
+
+      <article class="scanner-mobile-card scanner-result">
+        <div class="scanner-mobile-card-header">
+          <div>
+            <p class="profile-section-kicker">Ultimo QR Code lido</p>
+            <h2 class="profile-section-title">Resultado</h2>
+          </div>
+        </div>
+
+        <div id="scanner-result" class="scanner-result-value">Nenhum QR Code lido ainda.</div>
+
+        <div class="scanner-actions">
+          <a id="scanner-result-link" class="secondary-button" href="#" target="_blank" rel="noreferrer" hidden>Abrir resultado</a>
+        </div>
+      </article>
     </section>
   </main>
 

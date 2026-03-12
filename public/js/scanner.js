@@ -4,6 +4,15 @@ const scannerResultLink = document.getElementById('scanner-result-link');
 const startScanButton = document.getElementById('start-scan-button');
 const stopScanButton = document.getElementById('stop-scan-button');
 const scannerPreview = document.getElementById('scanner-preview');
+const scannerUserName = document.getElementById('scanner-user-name');
+const scannerUserRole = document.getElementById('scanner-user-role');
+const drawerUserName = document.getElementById('scanner-drawer-user-name');
+const drawerUserRole = document.getElementById('scanner-drawer-user-role');
+const menuButton = document.getElementById('scanner-menu-button');
+const drawer = document.getElementById('scanner-drawer');
+const drawerBackdrop = document.getElementById('scanner-drawer-backdrop');
+const closeDrawerButton = document.getElementById('scanner-close-drawer');
+const logoutButton = document.getElementById('logout-button');
 
 const currentUser = window.magaluApi.readStoredUser();
 
@@ -19,9 +28,28 @@ if (window.magaluApi.requiresFirstAccess(currentUser)) {
   window.location.replace(window.magaluApi.buildAppUrl('/primeiro-acesso/'));
 }
 
+function setDrawerState(isOpen) {
+  drawer.hidden = !isOpen;
+  drawerBackdrop.hidden = !isOpen;
+  drawer.setAttribute('aria-hidden', String(!isOpen));
+  menuButton.setAttribute('aria-expanded', String(isOpen));
+  document.body.classList.toggle('feed-ui-lock', isOpen);
+}
+
 function setScannerStatus(message, type) {
   scannerStatus.textContent = message;
   scannerStatus.className = `form-message ${type}`;
+}
+
+setDrawerState(false);
+
+if (currentUser) {
+  const userNameText = currentUser.nome || 'Usuario';
+  const userRoleText = `${currentUser.cargo || 'Sem cargo'} · ${currentUser.loja || 'Sem loja'}`;
+  scannerUserName.textContent = userNameText;
+  scannerUserRole.textContent = userRoleText;
+  drawerUserName.textContent = userNameText;
+  drawerUserRole.textContent = userRoleText;
 }
 
 function updateResult(value) {
@@ -159,6 +187,23 @@ stopScanButton.addEventListener('click', async () => {
   setScannerStatus('Camera encerrada.', 'info-message');
 });
 
+menuButton.addEventListener('click', () => {
+  setDrawerState(true);
+});
+
+closeDrawerButton.addEventListener('click', () => {
+  setDrawerState(false);
+});
+
+drawerBackdrop.addEventListener('click', () => {
+  setDrawerState(false);
+});
+
+logoutButton.addEventListener('click', () => {
+  window.magaluApi.clearStoredUser();
+  window.location.replace(window.magaluApi.buildAppUrl('/'));
+});
+
 window.addEventListener('beforeunload', () => {
   stopScanner();
 });
@@ -166,5 +211,11 @@ window.addEventListener('beforeunload', () => {
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') {
     stopScanner();
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !drawer.hidden) {
+    setDrawerState(false);
   }
 });
