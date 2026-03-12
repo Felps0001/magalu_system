@@ -6,7 +6,7 @@ const agendaUserName = document.getElementById('agenda-user-name');
 const agendaUserRole = document.getElementById('agenda-user-role');
 
 function redirectToLogin() {
-  window.location.replace(new URL('../', window.location.href));
+  window.location.replace(window.magaluApi.buildAppUrl('/'));
 }
 
 function normalizeTurma(value) {

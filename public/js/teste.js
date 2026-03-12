@@ -21,7 +21,7 @@ const logoutButton = document.getElementById('logout-button');
 let currentUser = null;
 
 function redirectToLogin() {
-  window.location.replace(new URL('../', window.location.href));
+  window.location.replace(window.magaluApi.buildAppUrl('/'));
 }
 
 function setQrCodeMessage(message, type = 'info-message') {

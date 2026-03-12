@@ -116,7 +116,7 @@ async function registerServiceWorker() {
   }
 
   try {
-    const serviceWorkerUrl = new URL('../sw.js', window.location.href);
+    const serviceWorkerUrl = window.magaluApi.buildAppUrl('/sw.js');
     const registration = await navigator.serviceWorker.register(serviceWorkerUrl, {
       updateViaCache: 'none',
     });

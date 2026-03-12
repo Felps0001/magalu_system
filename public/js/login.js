@@ -8,7 +8,7 @@ const STORAGE_KEY = 'magalu_system_user';
 const existingSession = localStorage.getItem(STORAGE_KEY);
 
 if (existingSession) {
-  window.location.replace(new URL('../teste/', window.location.href));
+  window.location.replace(window.magaluApi.buildAppUrl('/teste/'));
 }
 
 function setMessage(message, type) {
@@ -49,7 +49,7 @@ loginForm.addEventListener('submit', async (event) => {
     setMessage('Login efetuado. Redirecionando...', 'success');
 
     window.setTimeout(() => {
-      window.location.href = new URL('../teste/', window.location.href);
+      window.location.href = window.magaluApi.buildAppUrl('/teste/');
     }, 400);
   } catch (error) {
     setMessage(error.message, 'error');

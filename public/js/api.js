@@ -19,6 +19,40 @@ function buildApiUrl(path) {
   return `${baseUrl}${normalizedPath}`;
 }
 
+function getAppRootUrl() {
+  const routeNames = new Set(['login', 'teste', 'agenda', 'feed', 'scanner', 'scanner-kit', 'quiz']);
+  const currentUrl = new URL(window.location.href);
+  const segments = currentUrl.pathname.split('/').filter(Boolean);
+
+  if (segments.length === 0) {
+    return `${currentUrl.origin}/`;
+  }
+
+  let workingSegments = [...segments];
+  const lastSegment = workingSegments[workingSegments.length - 1];
+
+  if (lastSegment.includes('.')) {
+    workingSegments = workingSegments.slice(0, -1);
+  }
+
+  const lastDirectory = workingSegments[workingSegments.length - 1];
+
+  if (routeNames.has(lastDirectory)) {
+    workingSegments = workingSegments.slice(0, -1);
+  }
+
+  const basePath = workingSegments.length > 0 ? `/${workingSegments.join('/')}/` : '/';
+
+  return `${currentUrl.origin}${basePath}`;
+}
+
+function buildAppUrl(path = '/') {
+  const rootUrl = getAppRootUrl();
+  const normalizedPath = path.startsWith('/') ? path.slice(1) : path;
+
+  return new URL(normalizedPath, rootUrl).toString();
+}
+
 function withApiDefaults(options = {}) {
   const headers = new Headers(options.headers || {});
 
@@ -46,7 +80,9 @@ async function parseApiResponse(response) {
 }
 
 window.magaluApi = {
+  buildAppUrl,
   buildApiUrl,
+  getAppRootUrl,
   parseApiResponse,
   withApiDefaults,
 };
