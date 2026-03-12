@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Primeiro acesso</title>
+  <meta name="theme-color" content="#0086ff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Magalu System">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../icons/icon-192.png?v=2" type="image/png">
+  <link rel="icon" href="../icons/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../icons/icon-192.png?v=2">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="first-access-body">
+  <main class="first-access-mobile-shell">
+    <section class="first-access-top-panel" aria-label="Primeiro acesso">
+      <img class="first-access-top-image" src="../assets/img/layer-topo.png" alt="Primeiro acesso Magalu">
+      <div class="first-access-top-content">
+        <img class="first-access-top-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
+        <div class="first-access-top-copy">
+          <h1 class="first-access-top-title">Primeiro acesso?</h1>
+          <p class="first-access-top-subtitle">Faça seu cadastro.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="first-access-mobile-panel">
+      <form id="first-access-form" class="first-access-mobile-form">
+        <label class="sr-only" for="profile-nome">Nome</label>
+        <input id="profile-nome" name="nome" class="first-access-mobile-input" type="text" placeholder="Digite seu Nome" autocomplete="name" required>
+
+        <label class="sr-only" for="profile-cargo">Setor</label>
+        <input id="profile-cargo" name="cargo" class="first-access-mobile-input" type="text" placeholder="Setor" autocomplete="organization-title">
+
+        <label class="sr-only" for="profile-loja">Unidade</label>
+        <input id="profile-loja" name="loja" class="first-access-mobile-input" type="text" placeholder="Unidade" autocomplete="organization">
+
+        <label class="sr-only" for="profile-regiao">Estado</label>
+        <input id="profile-regiao" name="regiao" class="first-access-mobile-input" type="text" placeholder="Estado" autocomplete="address-level1">
+
+        <label class="sr-only" for="profile-cidade">Cidade</label>
+        <input id="profile-cidade" name="cidade" class="first-access-mobile-input" type="text" placeholder="Cidade" autocomplete="address-level2">
+
+        <label class="sr-only" for="profile-id-magalu">Codigo colaborador</label>
+        <input id="profile-id-magalu" name="id_magalu" class="first-access-mobile-input first-access-mobile-input--locked" type="text" placeholder="Codigo colaborador" readonly>
+
+        <div class="first-access-mobile-meta">
+          <div class="first-access-mobile-checkbox-row">
+            <input id="privacy-consent" class="first-access-mobile-checkbox" type="checkbox" required>
+            <label for="privacy-consent" class="first-access-mobile-checkbox-label">
+              Concordo com a
+              <a href="#" class="first-access-mobile-policy-link">Politica de Privacidade</a>
+            </label>
+          </div>
+
+          <p class="first-access-mobile-cpf">CPF: <span id="profile-cpf">-</span></p>
+        </div>
+
+        <button id="first-access-submit" class="first-access-mobile-submit" type="submit" aria-label="Acessar">
+          <img class="first-access-mobile-submit-image" src="../assets/img/btn-index.png" alt="">
+        </button>
+
+        <p id="first-access-message" class="form-message first-access-mobile-message" aria-live="polite"></p>
+        <p id="update-message" class="form-message first-access-mobile-update" hidden></p>
+      </form>
+
+      <button id="update-button" type="button" hidden>Atualizar app</button>
+      <button id="install-button" type="button" hidden>Instalar app</button>
+      <button id="logout-button" class="first-access-mobile-logout" type="button">Sair</button>
+    </section>
+  </main>
+
+  <script src="../js/runtime-config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/pwa.js"></script>
+  <script src="../js/first-access.js"></script>
+</body>
+</html>

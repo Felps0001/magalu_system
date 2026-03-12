@@ -20,7 +20,7 @@ function buildApiUrl(path) {
 }
 
 function getAppRootUrl() {
-  const routeNames = new Set(['login', 'primeiro-acesso', 'teste', 'agenda', 'feed', 'scanner', 'scanner-kit', 'quiz']);
+  const routeNames = new Set(['login', 'primeiro-acesso', 'perfil', 'teste', 'agenda', 'feed', 'scanner', 'scanner-kit', 'quiz']);
   const currentUrl = new URL(window.location.href);
   const segments = currentUrl.pathname.split('/').filter(Boolean);
 
@@ -80,7 +80,7 @@ function requiresFirstAccess(user) {
 }
 
 function getAuthenticatedHomeUrl(user) {
-  return buildAppUrl(requiresFirstAccess(user) ? '/primeiro-acesso/' : '/teste/');
+  return buildAppUrl(requiresFirstAccess(user) ? '/primeiro-acesso/' : '/perfil/');
 }
 
 function withApiDefaults(options = {}) {

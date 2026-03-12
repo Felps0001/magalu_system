@@ -22,8 +22,8 @@ function createApp() {
     next();
   });
   app.use(express.json());
-  app.use(express.static(publicDirectory));
   app.use(webRoutes);
+  app.use(express.static(publicDirectory));
   app.use('/api', routes);
 
   return app;

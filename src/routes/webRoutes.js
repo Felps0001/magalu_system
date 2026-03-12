@@ -17,8 +17,12 @@ router.get('/primeiro-acesso', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'first-access.html'));
 });
 
+router.get('/perfil', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'perfil.html'));
+});
+
 router.get('/teste', (req, res) => {
-  res.sendFile(path.join(publicDirectory, 'teste.html'));
+  res.redirect('/perfil/');
 });
 
 router.get('/agenda', (req, res) => {

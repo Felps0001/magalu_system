@@ -72,7 +72,8 @@ function write404Page() {
 function writePagesRoutes(done) {
   writeRouteIndex('login', 'index.html');
   writeRouteIndex('primeiro-acesso', 'first-access.html');
-  writeRouteIndex('teste', 'teste.html');
+  writeRouteIndex('perfil', 'perfil.html');
+  writeRouteIndex('teste', 'perfil.html');
   writeRouteIndex('agenda', 'agenda.html');
   writeRouteIndex('feed', 'feed.html');
   writeRouteIndex('scanner', 'scanner.html');

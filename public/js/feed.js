@@ -52,6 +52,9 @@ function setComposerState(isOpen) {
   }
 }
 
+setDrawerState(false);
+setComposerState(false);
+
 function normalizeApiError(data, fallbackMessage) {
   if (data && typeof data.error === 'string' && data.error.trim()) {
     const trimmedError = data.error.trim();

@@ -15,7 +15,7 @@ function redirectToLogin() {
 }
 
 function redirectToDashboard() {
-  window.location.replace(window.magaluApi.buildAppUrl('/teste/'));
+  window.location.replace(window.magaluApi.buildAppUrl('/perfil/'));
 }
 
 function setFirstAccessMessage(message, type = '') {
