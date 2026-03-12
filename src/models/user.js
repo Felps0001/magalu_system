@@ -44,6 +44,7 @@ function buildUserQrData(user, generatedAt = new Date().toISOString()) {
       cargo: user.cargo || '',
       turma: user.turma || '',
       transfer: Boolean(user.transfer),
+      kit: typeof user.kit === 'boolean' ? user.kit : false,
     },
   };
 }
