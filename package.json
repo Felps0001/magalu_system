@@ -18,7 +18,8 @@
     "html5-qrcode": "^2.3.8",
     "mongodb": "^6.15.0",
     "multer": "^2.1.1",
-    "qrcode": "^1.5.4"
+    "qrcode": "^1.5.4",
+    "redis": "^5.11.0"
   },
   "devDependencies": {
     "gulp": "^5.0.1",

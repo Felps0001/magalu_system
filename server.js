@@ -3,6 +3,7 @@ require('dotenv').config();
 const cors = require('cors');
 
 const { connectToMongoDB, closeMongoDBConnection } = require('./src/config/mongodb');
+const { connectToRedis, closeRedisConnection, getRedisStatus } = require('./src/config/redis');
 const { ensureDatabaseIndexes } = require('./src/config/collections');
 const { createApp } = require('./src/app');
 
@@ -22,6 +23,7 @@ let server;
 async function startServer() {
   try {
     const database = await connectToMongoDB();
+    await connectToRedis();
     const { warnings } = await ensureDatabaseIndexes();
 
     warnings.forEach((warning) => {
@@ -31,6 +33,7 @@ async function startServer() {
     server = app.listen(PORT, () => {
       console.log(`Servidor Express rodando na porta ${PORT}`);
       console.log(`MongoDB conectado ao banco: ${database.databaseName}`);
+      console.log(`Redis status: ${getRedisStatus()}`);
     });
   } catch (error) {
     console.error('Erro ao iniciar o servidor:', error.message);
@@ -54,6 +57,7 @@ async function shutdown(signal) {
     }
 
     await closeMongoDBConnection();
+  await closeRedisConnection();
     console.log(`Conexao com MongoDB encerrada apos sinal ${signal}.`);
     process.exit(0);
   } catch (error) {

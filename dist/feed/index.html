@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feed interno</title>
+  <meta name="theme-color" content="#0086ff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Magalu System">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../icons/icon-192.png?v=2" type="image/png">
+  <link rel="icon" href="../icons/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../icons/icon-192.png?v=2">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="feed-mobile-body">
+  <main class="feed-mobile-shell">
+    <button id="feed-drawer-backdrop" class="feed-backdrop" type="button" hidden aria-label="Fechar menu"></button>
+
+    <aside id="feed-drawer" class="feed-drawer" aria-hidden="true" hidden>
+      <div class="feed-drawer-header">
+        <img class="feed-drawer-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
+        <button id="feed-close-drawer" class="feed-drawer-close" type="button" aria-label="Fechar menu">×</button>
+      </div>
+
+      <div class="feed-drawer-user">
+        <strong id="feed-drawer-user-name">Carregando perfil...</strong>
+        <p id="feed-drawer-user-role">Somente usuarios autenticados podem acessar.</p>
+      </div>
+
+      <nav class="feed-drawer-nav" aria-label="Navegacao principal">
+        <a class="feed-drawer-link" href="../perfil/">Perfil</a>
+        <a class="feed-drawer-link" href="../agenda/">Agenda</a>
+        <a class="feed-drawer-link" href="../scanner/">Scanner</a>
+        <a class="feed-drawer-link feed-drawer-link--current" href="../feed/" aria-current="page">Feed</a>
+      </nav>
+
+      <div class="feed-drawer-actions">
+        <button id="feed-refresh-button" class="feed-drawer-button" type="button">Atualizar feed</button>
+        <button id="update-button" class="feed-drawer-button" type="button">Atualizar app</button>
+        <button id="install-button" class="feed-drawer-button" type="button" hidden>Instalar app</button>
+        <button id="logout-button" class="feed-drawer-button feed-drawer-button--ghost" type="button">Sair</button>
+      </div>
+    </aside>
+
+    <section class="feed-top-panel" aria-label="Feed interno">
+      <img class="feed-top-image" src="../assets/img/layer-topo.png" alt="Feed interno Magalu">
+      <div class="feed-top-content">
+        <div class="feed-top-bar">
+          <img class="feed-top-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
+          <button id="feed-menu-button" class="feed-top-menu" type="button" aria-controls="feed-drawer" aria-expanded="false" aria-label="Abrir menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+
+        <div class="feed-top-copy">
+          <h1 class="feed-top-title">Feed interno</h1>
+          <p class="feed-top-subtitle">Atualizacoes, fotos e avisos do evento.</p>
+          <div class="feed-top-user">
+            <strong id="feed-user-name">Carregando perfil...</strong>
+            <p id="feed-user-role">Somente usuarios autenticados podem publicar no feed.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="feed-mobile-panel">
+      <p id="update-message" class="form-message feed-mobile-update" hidden></p>
+      <p id="feed-form-message" class="form-message feed-mobile-message" aria-live="polite"></p>
+      <section class="feed-mobile-list" id="feed-list" aria-live="polite"></section>
+    </section>
+
+    <button id="feed-open-composer" class="feed-fab" type="button" aria-haspopup="dialog" aria-controls="feed-composer-modal" aria-label="Nova publicacao">+</button>
+
+    <section id="feed-composer-modal" class="feed-modal" role="dialog" aria-modal="true" aria-labelledby="feed-composer-title" hidden>
+      <button id="feed-modal-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar publicacao"></button>
+      <div class="feed-modal-panel">
+        <div class="feed-modal-header">
+          <div>
+            <p class="feed-modal-kicker">Nova publicacao</p>
+            <h2 id="feed-composer-title">Postar no feed</h2>
+          </div>
+          <button id="feed-close-composer" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
+        </div>
+
+        <form id="feed-form" class="composer-form feed-modal-form" enctype="multipart/form-data">
+          <label for="feed-message">Mensagem</label>
+          <textarea id="feed-message" name="mensagem" placeholder="Escreva um aviso, destaque ou atualizacao do evento."></textarea>
+
+          <label for="feed-image-file">Imagem</label>
+          <input id="feed-image-file" name="imagem" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+
+          <label for="feed-image-url">URL pronta da imagem no R2</label>
+          <input id="feed-image-url" name="imagemUrl" type="url" placeholder="https://pub-...r2.dev/minha-imagem.jpg" autocomplete="off">
+
+          <div class="feed-modal-actions">
+            <button id="feed-submit-button" class="primary-button" type="submit">Publicar</button>
+            <button id="feed-cancel-button" class="secondary-button" type="button">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="../js/runtime-config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/pwa.js"></script>
+  <script src="../js/feed.js"></script>
+</body>
+</html>

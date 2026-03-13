@@ -1,4 +1,5 @@
 const { connectToMongoDB } = require('../config/mongodb');
+const { getRedisStatus } = require('../config/redis');
 
 async function getHealth(req, res) {
   try {
@@ -7,6 +8,7 @@ async function getHealth(req, res) {
     res.json({
       status: 'ok',
       mongo: database.databaseName,
+      redis: getRedisStatus(),
     });
   } catch (error) {
     res.status(500).json({

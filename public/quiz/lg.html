@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz Samsung - Magalu System</title>
-  <meta name="theme-color" content="#0086ff">
+  <title>Quiz LG - Magalu System</title>
+  <meta name="theme-color" content="#a50034">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Magalu System">
@@ -43,8 +43,8 @@
       </div>
     </aside>
 
-    <section class="feed-top-panel" aria-label="Quiz Samsung">
-      <img class="feed-top-image" src="../assets/img/layer-topo.png" alt="Quiz Samsung">
+    <section class="feed-top-panel" aria-label="Quiz LG">
+      <img class="feed-top-image" src="../assets/img/layer-topo.png" alt="Quiz LG">
       <div class="feed-top-content">
         <div class="feed-top-bar">
           <img class="feed-top-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
@@ -57,10 +57,8 @@
 
         <div class="feed-top-copy">
           <h1 class="feed-top-title">Quiz</h1>
-          <p id="quiz-brand-subtitle" class="feed-top-subtitle">Responda as perguntas e acumule pontos no estande Samsung.</p>
+          <p id="quiz-brand-subtitle" class="feed-top-subtitle">Responda as perguntas e acumule pontos no estande LG.</p>
           <div class="feed-top-user">
-            <strong id="quiz-user-name">Samsung</strong>
-            <p id="quiz-user-role">Valide seus conhecimentos e registre seu check-in ao final.</p>
           </div>
         </div>
       </div>
@@ -73,7 +71,7 @@
           <section id="quiz-welcome-step" class="quiz-step">
             <div class="quiz-header">
               <p class="profile-section-kicker">Desafio interativo</p>
-              <h2 id="quiz-welcome-title" class="quiz-title">Bem-vindo ao Quiz Samsung!</h2>
+              <h2 id="quiz-welcome-title" class="quiz-title">Bem-vindo ao Quiz LG!</h2>
               <p id="quiz-welcome-description" class="quiz-description">Responda as perguntas e ganhe pontos. Boa sorte!</p>
             </div>
             <button id="quiz-start-button" class="quiz-btn" type="button">Iniciar</button>
@@ -118,46 +116,47 @@
   <script src="../js/pwa.js"></script>
   <script>
     window.MAGALU_QUIZ_CONFIG = {
-      brandName: 'Samsung',
-      brandSubtitle: 'Responda as perguntas e acumule pontos no estande Samsung.',
+      brandName: 'LG',
+      brandSubtitle: 'Responda as perguntas e acumule pontos no estande LG.',
       brandDescription: 'Valide seus conhecimentos e registre seu check-in ao final.',
-      welcomeTitle: 'Bem-vindo ao Quiz Samsung!',
-      welcomeDescription: 'Responda as perguntas e ganhe pontos. Boa sorte!',
+      welcomeTitle: 'Bem-vindo ao Quiz LG!',
+      welcomeDescription: 'Teste seus conhecimentos sobre a marca e acumule pontos no desafio.',
       resultTitle: 'Obrigado pela participacao!',
       resultDescription: 'Seu check-in foi registrado.',
-      quizOrigin: 'quiz-samsung',
-      estandeId: '69b054445c804b21df9b2022',
+      quizOrigin: 'quiz-lg',
+      estandeId: '69b0560c5c804b21df9b2025',
+      allowQueryParamEstandeId: true,
       questions: [
         {
-          question: 'Qual e a tecnologia de tela exclusiva da Samsung?',
+          question: 'Qual tecnologia de televisores da LG e reconhecida pelos pixels com iluminacao individual?',
           options: [
-            { text: 'OLED', points: 0 },
-            { text: 'QLED', points: 2 },
-            { text: 'LCD', points: 0 }
+            { text: 'NanoCell', points: 0 },
+            { text: 'OLED evo', points: 2 },
+            { text: 'QNED Mini LED', points: 0 }
           ]
         },
         {
-          question: 'Qual linha de smartphones Samsung e voltada para alta performance?',
+          question: 'Nas Smart TVs da LG, qual plataforma organiza apps, streaming e comandos da experiencia conectada?',
           options: [
-            { text: 'Galaxy A', points: 0 },
-            { text: 'Galaxy S', points: 2 },
-            { text: 'Galaxy M', points: 0 }
+            { text: 'webOS', points: 2 },
+            { text: 'Tizen', points: 0 },
+            { text: 'Google TV', points: 0 }
           ]
         },
         {
-          question: 'Qual recurso exclusivo da linha Galaxy Note?',
+          question: 'Qual linha da LG combina geladeira, lava e seca, ar-condicionado e outros produtos para uma casa conectada?',
           options: [
-            { text: 'S Pen', points: 4 },
-            { text: 'Camera tripla', points: 0 },
-            { text: 'Tela curva', points: 0 }
+            { text: 'LG ThinQ', points: 4 },
+            { text: 'LG Smart View', points: 0 },
+            { text: 'LG Home Sync', points: 0 }
           ]
         },
         {
-          question: 'Qual e o sistema operacional dos smartphones Samsung?',
+          question: 'Em lavanderia, qual diferencial e bastante associado a lava e seca premium da LG?',
           options: [
-            { text: 'Android', points: 2 },
-            { text: 'iOS', points: 0 },
-            { text: 'HarmonyOS', points: 0 }
+            { text: 'Tecnologia AI DD', points: 2 },
+            { text: 'Turbo Cool', points: 0 },
+            { text: 'Dual Frost', points: 0 }
           ]
         }
       ]

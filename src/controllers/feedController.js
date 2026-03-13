@@ -3,6 +3,7 @@ const { ObjectId } = require('mongodb');
 const { getFeedCollection, getUsersCollection } = require('../config/collections');
 const { createFeedUploadUrl, uploadFeedImage } = require('../config/r2');
 const { createFeed } = require('../models/feed');
+const { buildCacheKey, deleteCacheKey, getOrSetJsonCache } = require('../services/cache');
 
 const ALLOWED_IMAGE_MIME_TYPES = new Set([
   'image/jpeg',
@@ -11,6 +12,8 @@ const ALLOWED_IMAGE_MIME_TYPES = new Set([
   'image/gif',
 ]);
 const MAX_IMAGE_SIZE_BYTES = 8 * 1024 * 1024;
+const FEED_CACHE_KEY = buildCacheKey(['feed', 'list']);
+const FEED_CACHE_TTL_SECONDS = Number(process.env.REDIS_TTL_FEED_SECONDS || 30);
 
 async function resolveAuthor({ authorId, authorIdMagalu }) {
   const usersCollection = await getUsersCollection();
@@ -64,6 +67,7 @@ async function createFeedHandler(req, res) {
     });
 
     const result = await feedCollection.insertOne(feed);
+    await deleteCacheKey(FEED_CACHE_KEY);
 
     res.status(201).json({
       _id: result.insertedId,
@@ -137,42 +141,49 @@ async function createFeedUploadUrlHandler(req, res) {
 
 async function listFeedHandler(req, res) {
   try {
-    const feedCollection = await getFeedCollection();
-    const items = await feedCollection.aggregate([
-      {
-        $sort: {
-          createdAt: -1,
-        },
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'authorId',
-          foreignField: '_id',
-          as: 'author',
-        },
-      },
-      {
-        $unwind: {
-          path: '$author',
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $project: {
-          mensagem: 1,
-          imagemUrl: 1,
-          createdAt: 1,
-          updatedAt: 1,
-          author: {
-            _id: '$author._id',
-            nome: { $ifNull: ['$author.nome', 'Usuario'] },
-            id_magalu: '$author.id_magalu',
-            loja: '$author.loja',
+    const items = await getOrSetJsonCache({
+      key: FEED_CACHE_KEY,
+      ttlSeconds: FEED_CACHE_TTL_SECONDS,
+      loader: async () => {
+        const feedCollection = await getFeedCollection();
+
+        return feedCollection.aggregate([
+          {
+            $sort: {
+              createdAt: -1,
+            },
           },
-        },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'authorId',
+              foreignField: '_id',
+              as: 'author',
+            },
+          },
+          {
+            $unwind: {
+              path: '$author',
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+          {
+            $project: {
+              mensagem: 1,
+              imagemUrl: 1,
+              createdAt: 1,
+              updatedAt: 1,
+              author: {
+                _id: '$author._id',
+                nome: { $ifNull: ['$author.nome', 'Usuario'] },
+                id_magalu: '$author.id_magalu',
+                loja: '$author.loja',
+              },
+            },
+          },
+        ]).toArray();
       },
-    ]).toArray();
+    });
 
     res.json(items);
   } catch (error) {

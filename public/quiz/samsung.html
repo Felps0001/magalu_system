@@ -57,7 +57,7 @@
 
         <div class="feed-top-copy">
           <h1 class="feed-top-title">Quiz</h1>
-          <p class="feed-top-subtitle">Responda as perguntas e acumule pontos no estande Samsung.</p>
+          <p id="quiz-brand-subtitle" class="feed-top-subtitle">Responda as perguntas e acumule pontos no estande Samsung.</p>
           <div class="feed-top-user">
             <strong id="quiz-user-name">Samsung</strong>
             <p id="quiz-user-role">Valide seus conhecimentos e registre seu check-in ao final.</p>
@@ -116,6 +116,53 @@
   <script src="../js/runtime-config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/pwa.js"></script>
-  <script src="../js/quiz-samsung.js"></script>
+  <script>
+    window.MAGALU_QUIZ_CONFIG = {
+      brandName: 'Samsung',
+      brandSubtitle: 'Responda as perguntas e acumule pontos no estande Samsung.',
+      brandDescription: 'Valide seus conhecimentos e registre seu check-in ao final.',
+      welcomeTitle: 'Bem-vindo ao Quiz Samsung!',
+      welcomeDescription: 'Responda as perguntas e ganhe pontos. Boa sorte!',
+      resultTitle: 'Obrigado pela participacao!',
+      resultDescription: 'Seu check-in foi registrado.',
+      quizOrigin: 'quiz-samsung',
+      estandeId: '69b054445c804b21df9b2022',
+      questions: [
+        {
+          question: 'Qual e a tecnologia de tela exclusiva da Samsung?',
+          options: [
+            { text: 'OLED', points: 0 },
+            { text: 'QLED', points: 2 },
+            { text: 'LCD', points: 0 }
+          ]
+        },
+        {
+          question: 'Qual linha de smartphones Samsung e voltada para alta performance?',
+          options: [
+            { text: 'Galaxy A', points: 0 },
+            { text: 'Galaxy S', points: 2 },
+            { text: 'Galaxy M', points: 0 }
+          ]
+        },
+        {
+          question: 'Qual recurso exclusivo da linha Galaxy Note?',
+          options: [
+            { text: 'S Pen', points: 4 },
+            { text: 'Camera tripla', points: 0 },
+            { text: 'Tela curva', points: 0 }
+          ]
+        },
+        {
+          question: 'Qual e o sistema operacional dos smartphones Samsung?',
+          options: [
+            { text: 'Android', points: 2 },
+            { text: 'iOS', points: 0 },
+            { text: 'HarmonyOS', points: 0 }
+          ]
+        }
+      ]
+    };
+  </script>
+  <script src="../js/quiz.js"></script>
 </body>
 </html>

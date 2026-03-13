@@ -8,6 +8,9 @@ const quizLogoutButton = document.getElementById('logout-button');
 const quizWelcomeStep = document.getElementById('quiz-welcome-step');
 const quizQuestionStep = document.getElementById('quiz-question-step');
 const quizResultStep = document.getElementById('quiz-result-step');
+const quizBrandSubtitle = document.getElementById('quiz-brand-subtitle');
+const quizUserName = document.getElementById('quiz-user-name');
+const quizUserRole = document.getElementById('quiz-user-role');
 const quizWelcomeTitle = document.getElementById('quiz-welcome-title');
 const quizWelcomeDescription = document.getElementById('quiz-welcome-description');
 const quizStartButton = document.getElementById('quiz-start-button');
@@ -18,51 +21,11 @@ const quizResultDescription = document.getElementById('quiz-result-description')
 const quizFinalScore = document.getElementById('quiz-final-score');
 const quizFinalTime = document.getElementById('quiz-final-time');
 
-const estandeId = '69b054445c804b21df9b2022';
-const quizSteps = [
-  {
-    welcome: true,
-    title: 'Bem-vindo ao Quiz Samsung!',
-    description: 'Responda as perguntas e ganhe pontos. Boa sorte!',
-  },
-  {
-    question: 'Qual e a tecnologia de tela exclusiva da Samsung?',
-    options: [
-      { text: 'OLED', points: 0 },
-      { text: 'QLED', points: 2 },
-      { text: 'LCD', points: 0 },
-    ],
-  },
-  {
-    question: 'Qual linha de smartphones Samsung e voltada para alta performance?',
-    options: [
-      { text: 'Galaxy A', points: 0 },
-      { text: 'Galaxy S', points: 2 },
-      { text: 'Galaxy M', points: 0 },
-    ],
-  },
-  {
-    question: 'Qual recurso exclusivo da linha Galaxy Note?',
-    options: [
-      { text: 'S Pen', points: 4 },
-      { text: 'Camera tripla', points: 0 },
-      { text: 'Tela curva', points: 0 },
-    ],
-  },
-  {
-    question: 'Qual e o sistema operacional dos smartphones Samsung?',
-    options: [
-      { text: 'Android', points: 2 },
-      { text: 'iOS', points: 0 },
-      { text: 'HarmonyOS', points: 0 },
-    ],
-  },
-  {
-    thankyou: true,
-    title: 'Obrigado pela participacao!',
-    description: 'Seu check-in foi registrado.',
-  },
-];
+const quizConfig = window.MAGALU_QUIZ_CONFIG || {};
+const resolvedEstandeId = quizConfig.allowQueryParamEstandeId
+  ? (new URLSearchParams(window.location.search).get('estandeId') || quizConfig.estandeId || '')
+  : (quizConfig.estandeId || '');
+const quizQuestions = Array.isArray(quizConfig.questions) ? quizConfig.questions : [];
 
 let currentStep = 0;
 let score = 0;
@@ -103,33 +66,61 @@ function setStepVisibility(stepName) {
   quizResultStep.hidden = stepName !== 'result';
 }
 
-function renderQuiz() {
-  const current = quizSteps[currentStep];
-
-  if (current.welcome) {
-    quizWelcomeTitle.textContent = current.title;
-    quizWelcomeDescription.textContent = current.description;
-    setStepVisibility('welcome');
-    return;
+function applyQuizConfig() {
+  if (quizBrandSubtitle) {
+    quizBrandSubtitle.textContent = quizConfig.brandSubtitle || 'Responda as perguntas e acumule pontos no quiz.';
   }
 
-  if (current.thankyou) {
-    quizResultTitle.textContent = current.title;
-    quizResultDescription.textContent = current.description;
+  if (quizUserName) {
+    quizUserName.textContent = quizConfig.brandName || 'Quiz';
+  }
+
+  if (quizUserRole) {
+    quizUserRole.textContent = quizConfig.brandDescription || 'Valide seus conhecimentos e registre seu check-in ao final.';
+  }
+
+  quizWelcomeTitle.textContent = quizConfig.welcomeTitle || 'Bem-vindo ao quiz!';
+  quizWelcomeDescription.textContent = quizConfig.welcomeDescription || 'Responda as perguntas e ganhe pontos.';
+  quizResultTitle.textContent = quizConfig.resultTitle || 'Obrigado pela participacao!';
+  quizResultDescription.textContent = quizConfig.resultDescription || 'Seu quiz foi concluido.';
+}
+
+function renderQuestion() {
+  const currentQuestion = quizQuestions[currentStep - 1];
+
+  if (!currentQuestion) {
+    quizResultTitle.textContent = quizConfig.resultTitle || 'Obrigado pela participacao!';
+    quizResultDescription.textContent = quizConfig.resultDescription || 'Seu quiz foi concluido.';
     quizFinalScore.textContent = `${score} pontos`;
     quizFinalTime.textContent = formatDuration(totalTimeInSeconds);
     setStepVisibility('result');
     return;
   }
 
-  quizQuestionTitle.textContent = current.question;
+  quizQuestionTitle.textContent = currentQuestion.question;
   quizOptionButtons.forEach((button, index) => {
-    const option = current.options[index];
+    const option = currentQuestion.options[index];
     button.hidden = !option;
     button.disabled = !option;
     button.textContent = option ? option.text : '';
   });
   setStepVisibility('question');
+}
+
+function renderQuiz() {
+  if (currentStep === 0) {
+    setStepVisibility('welcome');
+    return;
+  }
+
+  if (currentStep > quizQuestions.length) {
+    quizFinalScore.textContent = `${score} pontos`;
+    quizFinalTime.textContent = formatDuration(totalTimeInSeconds);
+    setStepVisibility('result');
+    return;
+  }
+
+  renderQuestion();
 }
 
 function nextStep() {
@@ -162,6 +153,10 @@ async function refreshStoredUser(userId) {
 }
 
 async function doCheckin(user) {
+  if (!resolvedEstandeId) {
+    return false;
+  }
+
   const response = await fetch(
     window.magaluApi.buildApiUrl('/api/checkins'),
     window.magaluApi.withApiDefaults({
@@ -171,31 +166,45 @@ async function doCheckin(user) {
       },
       body: JSON.stringify({
         userId: user._id,
-        estandeId,
+        estandeId: resolvedEstandeId,
         pontos: score,
         tempo: totalTimeInSeconds,
-        origem: 'quiz-samsung',
+        origem: quizConfig.quizOrigin || 'quiz',
       }),
     })
   );
 
   if (response.ok) {
     await refreshStoredUser(user._id);
+    return true;
   }
+
+  return false;
 }
 
 async function answer(index) {
-  const current = quizSteps[currentStep];
-  score += current.options[index].points;
+  const currentQuestion = quizQuestions[currentStep - 1];
+
+  if (!currentQuestion || !currentQuestion.options[index]) {
+    return;
+  }
+
+  score += currentQuestion.options[index].points;
   currentStep += 1;
 
   const user = window.magaluApi.readStoredUser();
 
-  if (currentStep === quizSteps.length - 1) {
+  if (currentStep > quizQuestions.length) {
     totalTimeInSeconds = Math.round((Date.now() - (quizStartedAt || Date.now())) / 1000);
 
     if (user && user._id) {
-      await doCheckin(user);
+      const didCheckin = await doCheckin(user);
+
+      if (didCheckin) {
+        quizResultDescription.textContent = quizConfig.resultDescription || 'Seu check-in foi registrado.';
+      } else {
+        quizResultDescription.textContent = 'Seu quiz foi concluido. Para registrar pontos, configure o estandeId desta pagina.';
+      }
     }
   }
 
@@ -204,6 +213,7 @@ async function answer(index) {
 
 const currentUser = window.magaluApi.readStoredUser();
 
+applyQuizConfig();
 setDrawerState(false);
 
 if (!currentUser) {
