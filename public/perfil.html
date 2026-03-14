@@ -32,7 +32,7 @@
       <nav class="feed-drawer-nav" aria-label="Navegacao principal">
         <a class="feed-drawer-link feed-drawer-link--current" href="../perfil/" aria-current="page">Perfil</a>
         <a class="feed-drawer-link" href="../agenda/">Agenda</a>
-        <a class="feed-drawer-link" href="../scanner/">Scanner</a>
+        <button class="feed-drawer-link" id="open-qrcode-menu" type="button">Checkin</button>
         <a class="feed-drawer-link" href="../feed/">Feed</a>
       </nav>
 
@@ -113,10 +113,31 @@
       </article>
     </section>
 
-    <button id="profile-open-qrcode" class="profile-qr-trigger" type="button" aria-haspopup="dialog" aria-controls="profile-qrcode-modal">
+    <button id="profile-open-scanner" class="profile-qr-trigger" type="button" aria-haspopup="dialog" aria-controls="profile-scanner-modal">
       <span class="profile-qr-mini" aria-hidden="true"></span>
       <span class="profile-qr-mini-label">check-in</span>
     </button>
+    <section id="profile-scanner-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="profile-scanner-title" hidden>
+      <button id="profile-scanner-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar Scanner"></button>
+      <div class="profile-qrcode-panel">
+        <div class="profile-qrcode-header">
+          <div>
+            <p class="profile-section-kicker">Scanner de check-in</p>
+            <h2 id="profile-scanner-title" class="profile-section-title">Escaneie o QR Code</h2>
+          </div>
+          <button id="profile-close-scanner" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
+        </div>
+        <div id="scanner-preview" class="scanner-preview">
+          <div id="scanner-mount"></div>
+        </div>
+        <div id="scanner-status" class="form-message info-message">Aguardando inicialização...</div>
+        <div id="scanner-result" class="scanner-result">Nenhum QR Code lido ainda.</div>
+        <div class="profile-qrcode-actions">
+          <button id="start-scan-button" class="primary-button" type="button">Iniciar Scanner</button>
+          <button id="stop-scan-button" class="secondary-button" type="button" disabled>Parar Scanner</button>
+        </div>
+      </div>
+    </section>
 
     <section id="profile-qrcode-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="profile-qrcode-title" hidden>
       <button id="profile-qrcode-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar QR Code"></button>
@@ -144,6 +165,7 @@
   <script src="../js/runtime-config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/pwa.js"></script>
+  <script src="../vendor/html5-qrcode.min.js"></script>
   <script src="../js/perfil.js"></script>
 </body>
 </html>

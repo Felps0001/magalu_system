@@ -76,7 +76,7 @@ function writePagesRoutes(done) {
   writeRouteIndex('teste', 'perfil.html');
   writeRouteIndex('agenda', 'agenda.html');
   writeRouteIndex('feed', 'feed.html');
-  writeRouteIndex('scanner', 'scanner.html');
+  writeRouteIndex('scanner', 'perfil.html');
   writeRootIndex();
   write404Page();
   console.log('Build do GitHub Pages gerado em dist/.');

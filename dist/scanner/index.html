@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leitor de QR Code</title>
+  <title>Meu perfil</title>
   <meta name="theme-color" content="#0086ff">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -14,25 +14,25 @@
   <link rel="apple-touch-icon" href="../icons/icon-192.png?v=2">
   <link rel="stylesheet" href="../styles.css">
 </head>
-<body class="scanner-mobile-body">
-  <main class="feed-mobile-shell scanner-mobile-shell">
-    <button id="scanner-drawer-backdrop" class="feed-backdrop" type="button" hidden aria-label="Fechar menu"></button>
+<body class="profile-mobile-body">
+  <main class="feed-mobile-shell profile-mobile-shell">
+    <button id="profile-drawer-backdrop" class="feed-backdrop" type="button" hidden aria-label="Fechar menu"></button>
 
-    <aside id="scanner-drawer" class="feed-drawer" aria-hidden="true" hidden>
+    <aside id="profile-drawer" class="feed-drawer" aria-hidden="true" hidden>
       <div class="feed-drawer-header">
         <img class="feed-drawer-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
-        <button id="scanner-close-drawer" class="feed-drawer-close" type="button" aria-label="Fechar menu">×</button>
+        <button id="profile-close-drawer" class="feed-drawer-close" type="button" aria-label="Fechar menu">×</button>
       </div>
 
       <div class="feed-drawer-user">
-        <strong id="scanner-drawer-user-name">Carregando usuario...</strong>
-        <p id="scanner-drawer-user-role">Leitura de QR code em tempo real.</p>
+        <strong id="profile-drawer-user-name">Carregando perfil...</strong>
+        <p id="profile-drawer-user-role">Somente usuarios autenticados podem acessar.</p>
       </div>
 
       <nav class="feed-drawer-nav" aria-label="Navegacao principal">
-        <a class="feed-drawer-link" href="../perfil/">Perfil</a>
+        <a class="feed-drawer-link feed-drawer-link--current" href="../perfil/" aria-current="page">Perfil</a>
         <a class="feed-drawer-link" href="../agenda/">Agenda</a>
-        <a class="feed-drawer-link feed-drawer-link--current" href="../scanner/" aria-current="page">Scanner</a>
+        <button class="feed-drawer-link" id="open-qrcode-menu" type="button">Checkin</button>
         <a class="feed-drawer-link" href="../feed/">Feed</a>
       </nav>
 
@@ -43,12 +43,12 @@
       </div>
     </aside>
 
-    <section class="feed-top-panel" aria-label="Scanner do evento">
-      <img class="feed-top-image" src="../assets/img/layer-topo.png" alt="Scanner Magalu">
+    <section class="feed-top-panel" aria-label="Perfil do usuario">
+      <img class="feed-top-image" src="../assets/img/layer-topo.png" alt="Perfil Magalu">
       <div class="feed-top-content">
         <div class="feed-top-bar">
           <img class="feed-top-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
-          <button id="scanner-menu-button" class="feed-top-menu" type="button" aria-controls="scanner-drawer" aria-expanded="false" aria-label="Abrir menu">
+          <button id="profile-menu-button" class="feed-top-menu" type="button" aria-controls="profile-drawer" aria-expanded="false" aria-label="Abrir menu">
             <span></span>
             <span></span>
             <span></span>
@@ -56,52 +56,109 @@
         </div>
 
         <div class="feed-top-copy">
-          <h1 class="feed-top-title">Scanner</h1>
-          <p class="feed-top-subtitle">Abra a camera e aponte para um QR code para validar o acesso.</p>
+          <h1 class="feed-top-title">Meu perfil</h1>
+          <p class="feed-top-subtitle">Seus pontos, dados e estandes visitados no evento.</p>
           <div class="feed-top-user">
-            <strong id="scanner-user-name">Camera do aparelho</strong>
-            <p id="scanner-user-role">Em celulares compativeis, a camera traseira sera usada automaticamente.</p>
+            <strong id="user-name">Carregando...</strong>
+            <p id="user-role">Sem informacoes do perfil.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="scanner-mobile-panel">
-      <article class="scanner-mobile-card">
-        <div class="scanner-mobile-card-header">
-          <p class="profile-section-kicker">Status do scanner</p>
-          <p id="scanner-status" class="form-message scanner-mobile-status">Toque em iniciar para abrir a camera.</p>
+    <section class="profile-mobile-panel">
+      <p id="update-message" class="form-message profile-mobile-update" hidden></p>
+
+      <section class="profile-stats-grid" aria-label="Resumo do perfil">
+        <article class="profile-stat-card">
+          <span class="profile-stat-label">Pontos</span>
+          <strong id="user-pontos">0</strong>
+        </article>
+        <article class="profile-stat-card">
+          <span class="profile-stat-label">Check-ins</span>
+          <strong id="user-checkins">0</strong>
+        </article>
+        <article class="profile-stat-card profile-stat-card--wide">
+          <span class="profile-stat-label">Estandes visitados</span>
+          <strong id="user-estandes-count">0</strong>
+        </article>
+      </section>
+
+      <article class="profile-section-card">
+        <div class="profile-section-header">
+          <p class="profile-section-kicker">Dados do usuario</p>
+          <strong id="user-id-magalu" class="profile-id-badge">-</strong>
         </div>
 
-        <div id="scanner-preview" class="scanner-preview">
-          <div id="scanner-mount" class="scanner-mount"></div>
-          <div class="scanner-overlay" aria-hidden="true">
-            <div class="scanner-frame"></div>
-          </div>
-        </div>
-
-        <div class="scanner-actions">
-          <button id="start-scan-button" class="primary-button" type="button">Iniciar camera</button>
-          <button id="stop-scan-button" class="secondary-button" type="button" disabled>Parar camera</button>
-        </div>
-
-        <p class="scanner-tip">No iPhone, use Safari ou Chrome atualizados e permita o acesso a camera quando solicitado.</p>
+        <dl class="profile-detail-list">
+          <div><dt>CPF</dt><dd id="user-cpf">-</dd></div>
+          <div><dt>Cargo</dt><dd id="user-cargo">-</dd></div>
+          <div><dt>Regiao</dt><dd id="user-regiao">-</dd></div>
+          <div><dt>Cidade</dt><dd id="user-cidade">-</dd></div>
+          <div><dt>Loja</dt><dd id="user-loja">-</dd></div>
+          <div><dt>Turma</dt><dd id="user-turma">-</dd></div>
+          <div><dt>Transfer</dt><dd id="user-transfer">-</dd></div>
+        </dl>
       </article>
 
-      <article class="scanner-mobile-card scanner-result">
-        <div class="scanner-mobile-card-header">
+      <article class="profile-section-card">
+        <div class="profile-section-header">
           <div>
-            <p class="profile-section-kicker">Ultimo QR Code lido</p>
-            <h2 class="profile-section-title">Resultado</h2>
+            <p class="profile-section-kicker">Rota no evento</p>
+            <h2 class="profile-section-title">Estandes visitados</h2>
           </div>
         </div>
 
-        <div id="scanner-result" class="scanner-result-value">Nenhum QR Code lido ainda.</div>
-
-        <div class="scanner-actions">
-          <a id="scanner-result-link" class="secondary-button" href="#" target="_blank" rel="noreferrer" hidden>Abrir resultado</a>
-        </div>
+        <ul id="estandes-list" class="profile-estandes-list"></ul>
       </article>
+    </section>
+
+    <button id="profile-open-scanner" class="profile-qr-trigger" type="button" aria-haspopup="dialog" aria-controls="profile-scanner-modal">
+      <span class="profile-qr-mini" aria-hidden="true"></span>
+      <span class="profile-qr-mini-label">check-in</span>
+    </button>
+    <section id="profile-scanner-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="profile-scanner-title" hidden>
+      <button id="profile-scanner-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar Scanner"></button>
+      <div class="profile-qrcode-panel">
+        <div class="profile-qrcode-header">
+          <div>
+            <p class="profile-section-kicker">Scanner de check-in</p>
+            <h2 id="profile-scanner-title" class="profile-section-title">Escaneie o QR Code</h2>
+          </div>
+          <button id="profile-close-scanner" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
+        </div>
+        <div id="scanner-preview" class="scanner-preview">
+          <div id="scanner-mount"></div>
+        </div>
+        <div id="scanner-status" class="form-message info-message">Aguardando inicialização...</div>
+        <div id="scanner-result" class="scanner-result">Nenhum QR Code lido ainda.</div>
+        <div class="profile-qrcode-actions">
+          <button id="start-scan-button" class="primary-button" type="button">Iniciar Scanner</button>
+          <button id="stop-scan-button" class="secondary-button" type="button" disabled>Parar Scanner</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="profile-qrcode-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="profile-qrcode-title" hidden>
+      <button id="profile-qrcode-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar QR Code"></button>
+      <div class="profile-qrcode-panel">
+        <div class="profile-qrcode-header">
+          <div>
+            <p class="profile-section-kicker">QRCode do perfil</p>
+            <h2 id="profile-qrcode-title" class="profile-section-title">Seu acesso rapido</h2>
+          </div>
+          <button id="profile-close-qrcode" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
+        </div>
+
+        <div id="qrcode-preview" class="profile-qrcode-preview" aria-live="polite">
+          <!-- O QR Code será renderizado aqui -->
+        </div>
+
+        <div class="profile-qrcode-actions">
+          <button id="generate-qrcode-button" class="primary-button" type="button">Atualizar QR Code</button>
+          <button id="profile-close-qrcode-secondary" class="secondary-button" type="button">Fechar</button>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -109,6 +166,6 @@
   <script src="../js/api.js"></script>
   <script src="../js/pwa.js"></script>
   <script src="../vendor/html5-qrcode.min.js"></script>
-  <script src="../js/scanner.js"></script>
+  <script src="../js/perfil.js"></script>
 </body>
 </html>

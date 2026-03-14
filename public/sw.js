@@ -1,4 +1,4 @@
-const CACHE_NAME = 'magalu-system-v11';
+const CACHE_NAME = 'magalu-system-v12';
 const APP_SHELL = [
   './',
   './login/',
@@ -7,7 +7,7 @@ const APP_SHELL = [
   './teste/',
   './agenda/',
   './feed/',
-  './scanner/',
+  './scanner-kit.html',
   './styles.css',
   './js/runtime-config.js',
   './js/api.js',
@@ -15,7 +15,7 @@ const APP_SHELL = [
   './js/feed.js',
   './js/first-access.js',
   './js/login.js',
-  './js/scanner.js',
+  './js/scanner-kit.js',
   './js/perfil.js',
   './js/pwa.js',
   './vendor/html5-qrcode.min.js',

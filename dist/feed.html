@@ -32,7 +32,7 @@
       <nav class="feed-drawer-nav" aria-label="Navegacao principal">
         <a class="feed-drawer-link" href="../perfil/">Perfil</a>
         <a class="feed-drawer-link" href="../agenda/">Agenda</a>
-        <a class="feed-drawer-link" href="../scanner/">Scanner</a>
+        <button class="feed-drawer-link" id="feed-open-qrcode-menu" type="button">Checkin</button>
         <a class="feed-drawer-link feed-drawer-link--current" href="../feed/" aria-current="page">Feed</a>
       </nav>
 
@@ -93,14 +93,45 @@
           <label for="feed-image-file">Imagem</label>
           <input id="feed-image-file" name="imagem" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
 
-          <label for="feed-image-url">URL pronta da imagem no R2</label>
-          <input id="feed-image-url" name="imagemUrl" type="url" placeholder="https://pub-...r2.dev/minha-imagem.jpg" autocomplete="off">
-
           <div class="feed-modal-actions">
             <button id="feed-submit-button" class="primary-button" type="submit">Publicar</button>
             <button id="feed-cancel-button" class="secondary-button" type="button">Cancelar</button>
           </div>
         </form>
+      </div>
+    </section>
+
+    <section id="feed-qrcode-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="feed-qrcode-title" hidden>
+      <button id="feed-qrcode-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar QR Code"></button>
+      <div class="profile-qrcode-panel">
+        <div class="profile-qrcode-header">
+          <div>
+            <p class="profile-section-kicker">QRCode do perfil</p>
+            <h2 id="feed-qrcode-title" class="profile-section-title">Seu acesso rapido</h2>
+          </div>
+          <button id="feed-close-qrcode" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
+        </div>
+
+        <div id="feed-qrcode-preview" class="profile-qrcode-preview" aria-live="polite">
+          <!-- O QR Code sera renderizado aqui -->
+        </div>
+
+        <div class="profile-qrcode-actions">
+          <button id="feed-generate-qrcode-button" class="primary-button" type="button">Atualizar QR Code</button>
+          <button id="feed-close-qrcode-secondary" class="secondary-button" type="button">Fechar</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="feed-image-modal" class="feed-modal feed-image-modal" role="dialog" aria-modal="true" aria-labelledby="feed-image-modal-title" hidden>
+      <button id="feed-image-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar imagem"></button>
+      <div class="feed-modal-panel feed-image-modal-panel">
+        
+
+        <figure class="feed-image-modal-figure">
+          <img id="feed-image-preview" class="feed-image-modal-preview" alt="Visualizacao ampliada da imagem da publicacao">
+          <figcaption id="feed-image-caption" class="feed-image-modal-caption"></figcaption>
+        </figure>
       </div>
     </section>
   </main>

@@ -34,7 +34,7 @@ router.get('/feed', (req, res) => {
 });
 
 router.get('/scanner', (req, res) => {
-  res.sendFile(path.join(publicDirectory, 'scanner.html'));
+  res.redirect('/perfil/');
 });
 
 module.exports = router;

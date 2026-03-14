@@ -32,7 +32,7 @@
       <nav class="feed-drawer-nav" aria-label="Navegacao principal">
         <a class="feed-drawer-link" href="../perfil/">Perfil</a>
         <a class="feed-drawer-link feed-drawer-link--current" href="../agenda/" aria-current="page">Agenda</a>
-        <a class="feed-drawer-link" href="../scanner/">Scanner</a>
+        <button class="feed-drawer-link" id="agenda-open-qrcode-menu" type="button">Checkin</button>
         <a class="feed-drawer-link" href="../feed/">Feed</a>
       </nav>
 
@@ -301,10 +301,32 @@
       </section>
     </section>
 
-    <button id="agenda-open-qrcode" class="profile-qr-trigger agenda-qr-trigger" type="button" aria-haspopup="dialog" aria-controls="agenda-qrcode-modal">
+    <button id="agenda-open-scanner" class="profile-qr-trigger agenda-qr-trigger" type="button" aria-haspopup="dialog" aria-controls="agenda-scanner-modal">
       <span class="profile-qr-mini" aria-hidden="true"></span>
       <span class="profile-qr-mini-label">check-in</span>
     </button>
+
+    <section id="agenda-scanner-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="agenda-scanner-title" hidden>
+      <button id="agenda-scanner-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar Scanner"></button>
+      <div class="profile-qrcode-panel">
+        <div class="profile-qrcode-header">
+          <div>
+            <p class="profile-section-kicker">Scanner de check-in</p>
+            <h2 id="agenda-scanner-title" class="profile-section-title">Escaneie o QR Code</h2>
+          </div>
+          <button id="agenda-close-scanner" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
+        </div>
+        <div id="agenda-scanner-preview" class="scanner-preview">
+          <div id="agenda-scanner-mount"></div>
+        </div>
+        <div id="agenda-scanner-status" class="form-message info-message">Aguardando inicialização...</div>
+        <div id="agenda-scanner-result" class="scanner-result">Nenhum QR Code lido ainda.</div>
+        <div class="profile-qrcode-actions">
+          <button id="agenda-start-scan-button" class="primary-button" type="button">Iniciar Scanner</button>
+          <button id="agenda-stop-scan-button" class="secondary-button" type="button" disabled>Parar Scanner</button>
+        </div>
+      </div>
+    </section>
 
     <section id="agenda-qrcode-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="agenda-qrcode-title" hidden>
       <button id="agenda-qrcode-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar QR Code"></button>
@@ -332,6 +354,7 @@
   <script src="../js/runtime-config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/pwa.js"></script>
+  <script src="../vendor/html5-qrcode.min.js"></script>
   <script src="../js/agenda.js"></script>
 </body>
 </html>

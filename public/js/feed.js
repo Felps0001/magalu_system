@@ -6,7 +6,6 @@ const feedList = document.getElementById('feed-list');
 const feedForm = document.getElementById('feed-form');
 const feedMessageInput = document.getElementById('feed-message');
 const feedImageFileInput = document.getElementById('feed-image-file');
-const feedImageUrlInput = document.getElementById('feed-image-url');
 const feedFormMessage = document.getElementById('feed-form-message');
 const feedSubmitButton = document.getElementById('feed-submit-button');
 const feedRefreshButton = document.getElementById('feed-refresh-button');
@@ -20,6 +19,21 @@ const composerModal = document.getElementById('feed-composer-modal');
 const closeComposerButton = document.getElementById('feed-close-composer');
 const cancelComposerButton = document.getElementById('feed-cancel-button');
 const modalBackdrop = document.getElementById('feed-modal-backdrop');
+const openQrCodeMenuButton = document.getElementById('feed-open-qrcode-menu');
+const qrCodeModal = document.getElementById('feed-qrcode-modal');
+const qrCodeBackdrop = document.getElementById('feed-qrcode-backdrop');
+const closeQrCodeButton = document.getElementById('feed-close-qrcode');
+const closeQrCodeSecondaryButton = document.getElementById('feed-close-qrcode-secondary');
+const generateQrCodeButton = document.getElementById('feed-generate-qrcode-button');
+const qrCodePreview = document.getElementById('feed-qrcode-preview');
+const imageModal = document.getElementById('feed-image-modal');
+const imageBackdrop = document.getElementById('feed-image-backdrop');
+const closeImageButton = document.getElementById('feed-close-image');
+const imagePreview = document.getElementById('feed-image-preview');
+const imageCaption = document.getElementById('feed-image-caption');
+
+let currentUser = null;
+let qrCodeLoaded = false;
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
@@ -39,12 +53,12 @@ function setDrawerState(isOpen) {
   drawerBackdrop.hidden = !isOpen;
   drawer.setAttribute('aria-hidden', String(!isOpen));
   menuButton.setAttribute('aria-expanded', String(isOpen));
-  document.body.classList.toggle('feed-ui-lock', isOpen || !composerModal.hidden);
+  document.body.classList.toggle('feed-ui-lock', isOpen || !composerModal.hidden || !qrCodeModal.hidden || !imageModal.hidden);
 }
 
 function setComposerState(isOpen) {
   composerModal.hidden = !isOpen;
-  document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden);
+  document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden || !qrCodeModal.hidden || !imageModal.hidden);
 
   if (isOpen) {
     setFormMessage('', '');
@@ -52,8 +66,115 @@ function setComposerState(isOpen) {
   }
 }
 
+function setQrModalState(isOpen) {
+  qrCodeModal.hidden = !isOpen;
+  document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden || !composerModal.hidden || !imageModal.hidden);
+}
+
+function setImageModalState(isOpen) {
+  imageModal.hidden = !isOpen;
+  document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden || !composerModal.hidden || !qrCodeModal.hidden);
+}
+
 setDrawerState(false);
 setComposerState(false);
+setQrModalState(false);
+setImageModalState(false);
+
+function openImageModal(imageUrl, captionText) {
+  imagePreview.src = imageUrl;
+  if (imageCaption) {
+    imageCaption.textContent = '';
+  }
+  setImageModalState(true);
+}
+
+function closeImageModal() {
+  setImageModalState(false);
+  imagePreview.removeAttribute('src');
+  if (imageCaption) {
+    imageCaption.textContent = '';
+  }
+}
+
+function renderQrCode(responseData) {
+  qrCodePreview.innerHTML = responseData.qrCodeSvg;
+  qrCodeLoaded = true;
+}
+
+function renderQrPlaceholder(message) {
+  qrCodePreview.innerHTML = `<p class="muted">${message}</p>`;
+  qrCodeLoaded = false;
+}
+
+function getQrCodeRequestError(data) {
+  if (data && typeof data.error === 'string' && !data.error.includes('<!DOCTYPE')) {
+    return data.error;
+  }
+
+  const rawText = data && typeof data.rawText === 'string' ? data.rawText : '';
+
+  if (rawText.includes('Cannot GET') && rawText.includes('/qrcode')) {
+    return 'O backend em uso ainda nao possui a rota de QR Code. Reinicie o servidor local ou publique a versao nova do backend.';
+  }
+
+  return 'O backend retornou uma resposta invalida ao gerar o QR Code.';
+}
+
+async function loadUserQrCode(options = {}) {
+  const {
+    buttonLoadingLabel = 'Gerando...',
+    loadingMessage = 'Carregando QR Code do usuario...',
+  } = options;
+
+  if (!currentUser || !currentUser._id) {
+    renderQrPlaceholder('Usuario nao encontrado para gerar o QR Code.');
+    return;
+  }
+
+  generateQrCodeButton.disabled = true;
+  generateQrCodeButton.textContent = buttonLoadingLabel;
+  renderQrPlaceholder(loadingMessage);
+
+  try {
+    const response = await fetch(
+      window.magaluApi.buildApiUrl(`/api/users/${encodeURIComponent(currentUser._id)}/qrcode`),
+      window.magaluApi.withApiDefaults({ method: 'GET' })
+    );
+    const data = await window.magaluApi.parseApiResponse(response);
+
+    if (!response.ok) {
+      throw new Error(getQrCodeRequestError(data));
+    }
+
+    renderQrCode(data);
+    currentUser = {
+      ...currentUser,
+      qrCodeGeneratedAt: data.qrCodeGeneratedAt,
+      qrCodePayload: data.qrCodePayload,
+    };
+    window.magaluApi.storeUser(currentUser);
+  } catch (error) {
+    renderQrPlaceholder('O QR Code nao foi carregado.');
+  } finally {
+    generateQrCodeButton.disabled = false;
+    generateQrCodeButton.textContent = 'Atualizar QR Code';
+  }
+}
+
+async function openQrCodeModal() {
+  setDrawerState(false);
+  setQrModalState(true);
+
+  if (qrCodeLoaded) {
+    return;
+  }
+
+  await loadUserQrCode({
+    buttonLoadingLabel: 'Carregando...',
+    loadingMessage: 'Carregando o QR Code do seu perfil...',
+  });
+}
 
 function normalizeApiError(data, fallbackMessage) {
   if (data && typeof data.error === 'string' && data.error.trim()) {
@@ -120,6 +241,18 @@ function createFeedCard(item) {
     image.src = item.imagemUrl;
     image.alt = `Imagem publicada por ${authorName.textContent}`;
     image.loading = 'lazy';
+    image.tabIndex = 0;
+    image.role = 'button';
+    image.setAttribute('aria-label', 'Abrir imagem em destaque');
+    image.addEventListener('click', () => {
+      openImageModal(item.imagemUrl, `Publicada por ${authorName.textContent}`);
+    });
+    image.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openImageModal(item.imagemUrl, `Publicada por ${authorName.textContent}`);
+      }
+    });
     article.appendChild(image);
 
     const imageLink = document.createElement('a');
@@ -218,7 +351,7 @@ async function uploadFileToCloudflare(file, uploadConfig) {
 }
 
 async function createPost(user) {
-  let imageUrl = feedImageUrlInput.value.trim();
+  let imageUrl = '';
 
   if (feedImageFileInput.files && feedImageFileInput.files[0]) {
     setFormMessage('Enviando imagem para o Cloudflare...', 'info');
@@ -258,6 +391,7 @@ if (!user) {
 } else if (window.magaluApi.requiresFirstAccess(user)) {
   redirectToFirstAccess();
 } else {
+  currentUser = user;
   const userName = user.nome || 'Usuario autenticado';
   const userRole = `${user.cargo || 'Sem cargo'} · ${user.loja || 'Sem loja'} · ${user.turma || 'Sem turma'}`;
   feedUserName.textContent = userName;
@@ -316,6 +450,36 @@ drawerBackdrop.addEventListener('click', () => {
   setDrawerState(false);
 });
 
+openQrCodeMenuButton.addEventListener('click', () => {
+  openQrCodeModal();
+});
+
+generateQrCodeButton.addEventListener('click', () => {
+  loadUserQrCode();
+});
+
+qrCodeBackdrop.addEventListener('click', () => {
+  setQrModalState(false);
+});
+
+closeQrCodeButton.addEventListener('click', () => {
+  setQrModalState(false);
+});
+
+closeQrCodeSecondaryButton.addEventListener('click', () => {
+  setQrModalState(false);
+});
+
+imageBackdrop.addEventListener('click', () => {
+  closeImageModal();
+});
+
+if (closeImageButton) {
+  closeImageButton.addEventListener('click', () => {
+    closeImageModal();
+  });
+}
+
 openComposerButton.addEventListener('click', () => {
   setComposerState(true);
 });
@@ -339,6 +503,14 @@ document.addEventListener('keydown', (event) => {
 
   if (!composerModal.hidden) {
     setComposerState(false);
+  }
+
+  if (!qrCodeModal.hidden) {
+    setQrModalState(false);
+  }
+
+  if (!imageModal.hidden) {
+    closeImageModal();
   }
 
   if (!drawer.hidden) {
