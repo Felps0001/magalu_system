@@ -7,6 +7,8 @@ function createUser({
   loja,
   cargo,
   turma,
+  hospedagem,
+  aereo,
   transfer,
 }) {
   if (!id_magalu) {
@@ -22,6 +24,8 @@ function createUser({
     loja,
     cargo,
     turma,
+    hospedagem,
+    aereo,
     transfer: Boolean(transfer),
     firstAccessCompleted: false,
     kit: false, // campo kit default false
@@ -47,6 +51,8 @@ function buildUserQrData(user, generatedAt = new Date().toISOString()) {
       loja: user.loja || '',
       cargo: user.cargo || '',
       turma: user.turma || '',
+      hospedagem: user.hospedagem || '',
+      aereo: user.aereo || '',
       transfer: Boolean(user.transfer),
       kit: typeof user.kit === 'boolean' ? user.kit : false,
     },

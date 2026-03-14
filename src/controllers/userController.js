@@ -51,7 +51,7 @@ async function findUserWithAccessData(usersCollection, matchStage) {
 }
 
 function normalizeEditableUserFields(payload = {}) {
-  const editableFields = ['nome', 'regiao', 'cidade', 'loja', 'cargo', 'turma'];
+  const editableFields = ['nome', 'regiao', 'cidade', 'loja', 'cargo', 'turma', 'hospedagem', 'aereo'];
   const normalizedPayload = {};
 
   editableFields.forEach((fieldName) => {

@@ -984,6 +984,78 @@ button:hover {
   background: rgba(255, 255, 255, 0.2);
 }
 
+.feed-drawer-group {
+  display: grid;
+  gap: 10px;
+}
+
+.feed-drawer-group--animating {
+  pointer-events: none;
+}
+
+.feed-drawer-group summary {
+  list-style: none;
+  cursor: pointer;
+  justify-content: space-between;
+}
+
+.feed-drawer-group summary::-webkit-details-marker {
+  display: none;
+}
+
+.feed-drawer-group summary::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid rgba(255, 255, 255, 0.88);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.88);
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 160ms ease;
+  flex: 0 0 auto;
+}
+
+.feed-drawer-group[open] > .feed-drawer-link {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.feed-drawer-group[open] summary::after {
+  transform: rotate(225deg) translateY(-1px);
+}
+
+.feed-drawer-subnav {
+  margin-top: -2px;
+  padding: 8px 0 8px 0px;
+  display: grid;
+  gap: 8px;
+  overflow: hidden;
+  will-change: height, opacity;
+}
+
+.feed-drawer-subtitle {
+  margin: 6px 0 2px;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.feed-drawer-sublink {
+  min-height: 44px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  border-radius: 14px;
+  color: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.08);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.feed-drawer-sublink--current {
+  background: rgba(255, 255, 255, 0.18);
+}
+
 .feed-drawer-button {
   justify-content: center;
   color: #0d2142;
@@ -1345,6 +1417,41 @@ button:hover {
   padding: 22px 22px calc(112px + env(safe-area-inset-bottom));
   display: grid;
   gap: 18px;
+}
+
+.logistica-mobile-panel {
+  padding-bottom: calc(42px + env(safe-area-inset-bottom));
+}
+
+.logistica-anchor-nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.logistica-anchor-link {
+  min-height: 42px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: var(--accent-dark);
+  background: rgba(0, 134, 255, 0.1);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.logistica-section-card {
+  scroll-margin-top: 18px;
+}
+
+.logistica-detail-value {
+  margin: 0;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
 }
 
 .profile-mobile-update {

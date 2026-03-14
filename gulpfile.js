@@ -73,6 +73,7 @@ function writePagesRoutes(done) {
   writeRouteIndex('login', 'index.html');
   writeRouteIndex('primeiro-acesso', 'first-access.html');
   writeRouteIndex('perfil', 'perfil.html');
+  writeRouteIndex('logistica', 'logistica.html');
   writeRouteIndex('teste', 'perfil.html');
   writeRouteIndex('agenda', 'agenda.html');
   writeRouteIndex('feed', 'feed.html');

@@ -21,6 +21,10 @@ router.get('/perfil', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'perfil.html'));
 });
 
+router.get('/logistica', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'logistica.html'));
+});
+
 router.get('/teste', (req, res) => {
   res.redirect('/perfil/');
 });

@@ -7,6 +7,8 @@ const profileCargo = document.getElementById('profile-cargo');
 const profileRegiao = document.getElementById('profile-regiao');
 const profileCidade = document.getElementById('profile-cidade');
 const profileLoja = document.getElementById('profile-loja');
+const profileHospedagem = document.getElementById('profile-hospedagem');
+const profileAereo = document.getElementById('profile-aereo');
 const profileIdMagalu = document.getElementById('profile-id-magalu');
 const profileCpf = document.getElementById('profile-cpf');
 
@@ -29,6 +31,8 @@ function populateForm(user) {
   profileRegiao.value = user.regiao || '';
   profileCidade.value = user.cidade || '';
   profileLoja.value = user.loja || '';
+  profileHospedagem.value = user.hospedagem || '';
+  profileAereo.value = user.aereo || '';
   profileIdMagalu.value = user.id_magalu || '';
   profileCpf.textContent = user.cpf || '-';
 }
@@ -40,6 +44,8 @@ function getPayload() {
     regiao: profileRegiao.value,
     cidade: profileCidade.value,
     loja: profileLoja.value,
+    hospedagem: profileHospedagem.value,
+    aereo: profileAereo.value,
   };
 }
 

@@ -12,6 +12,8 @@ const userRegiao = document.getElementById('user-regiao');
 const userCidade = document.getElementById('user-cidade');
 const userLoja = document.getElementById('user-loja');
 const userTurma = document.getElementById('user-turma');
+const userHospedagem = document.getElementById('user-hospedagem');
+const userAereo = document.getElementById('user-aereo');
 const userTransfer = document.getElementById('user-transfer');
 const estandesList = document.getElementById('estandes-list');
 const generateQrCodeButton = document.getElementById('generate-qrcode-button');
@@ -315,6 +317,8 @@ if (!user) {
   userCidade.textContent = user.cidade || '-';
   userLoja.textContent = user.loja || '-';
   userTurma.textContent = user.turma || '-';
+  userHospedagem.textContent = user.hospedagem || '-';
+  userAereo.textContent = user.aereo || '-';
   userTransfer.textContent = user.transfer ? 'Sim' : 'Nao';
   renderVisitedStands(visitedStands);
 }

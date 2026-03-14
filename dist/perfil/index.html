@@ -30,7 +30,16 @@
       </div>
 
       <nav class="feed-drawer-nav" aria-label="Navegacao principal">
-        <a class="feed-drawer-link feed-drawer-link--current" href="../perfil/" aria-current="page">Perfil</a>
+        <details class="feed-drawer-group">
+          <summary class="feed-drawer-link feed-drawer-link--current">Perfil</summary>
+          <div class="feed-drawer-subnav">
+            <a class="feed-drawer-sublink feed-drawer-sublink--current" href="../perfil/" aria-current="page">Dados</a>
+            <p class="feed-drawer-subtitle">Logistica</p>
+            <a class="feed-drawer-sublink" href="../logistica/#transfer">Transfer</a>
+            <a class="feed-drawer-sublink" href="../logistica/#hospedagem">Hospedagem</a>
+            <a class="feed-drawer-sublink" href="../logistica/#aereo">Aereo</a>
+          </div>
+        </details>
         <a class="feed-drawer-link" href="../agenda/">Agenda</a>
         <button class="feed-drawer-link" id="open-qrcode-menu" type="button">Checkin</button>
         <a class="feed-drawer-link" href="../feed/">Feed</a>
@@ -97,6 +106,8 @@
           <div><dt>Cidade</dt><dd id="user-cidade">-</dd></div>
           <div><dt>Loja</dt><dd id="user-loja">-</dd></div>
           <div><dt>Turma</dt><dd id="user-turma">-</dd></div>
+          <div><dt>Hospedagem</dt><dd id="user-hospedagem">-</dd></div>
+          <div><dt>Aereo</dt><dd id="user-aereo">-</dd></div>
           <div><dt>Transfer</dt><dd id="user-transfer">-</dd></div>
         </dl>
       </article>
@@ -165,6 +176,7 @@
   <script src="../js/runtime-config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/pwa.js"></script>
+  <script src="../js/drawer-dropdown.js"></script>
   <script src="../vendor/html5-qrcode.min.js"></script>
   <script src="../js/perfil.js"></script>
 </body>

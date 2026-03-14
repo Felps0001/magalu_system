@@ -30,7 +30,16 @@
       </div>
 
       <nav class="feed-drawer-nav" aria-label="Navegacao principal">
-        <a class="feed-drawer-link" href="../perfil/">Perfil</a>
+        <details class="feed-drawer-group">
+          <summary class="feed-drawer-link">Perfil</summary>
+          <div class="feed-drawer-subnav">
+            <a class="feed-drawer-sublink" href="../perfil/">Dados</a>
+            <p class="feed-drawer-subtitle">Logistica</p>
+            <a class="feed-drawer-sublink" href="../logistica/#transfer">Transfer</a>
+            <a class="feed-drawer-sublink" href="../logistica/#hospedagem">Hospedagem</a>
+            <a class="feed-drawer-sublink" href="../logistica/#aereo">Aereo</a>
+          </div>
+        </details>
         <a class="feed-drawer-link" href="../agenda/">Agenda</a>
         <button class="feed-drawer-link" id="feed-open-qrcode-menu" type="button">Checkin</button>
         <a class="feed-drawer-link feed-drawer-link--current" href="../feed/" aria-current="page">Feed</a>
@@ -139,6 +148,7 @@
   <script src="../js/runtime-config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/pwa.js"></script>
+  <script src="../js/drawer-dropdown.js"></script>
   <script src="../js/feed.js"></script>
 </body>
 </html>
