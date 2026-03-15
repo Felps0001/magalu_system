@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perguntas aprovadas</title>
+  <meta name="theme-color" content="#0086ff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Magalu System">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../icons/icon-192.png?v=2" type="image/png">
+  <link rel="icon" href="../icons/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../icons/icon-192.png?v=2">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="questions-board-body">
+  <main class="questions-board-shell">
+    <section class="questions-board-hero questions-approved-hero" aria-label="Exibicao de perguntas aprovadas">
+      <div>
+        <p class="profile-section-kicker">Exibicao</p>
+        <h1 id="approved-questions-hero-title" class="questions-board-title">Perguntas aprovadas</h1>
+        <p id="approved-questions-hero-copy" class="questions-board-copy">Exibicao consolidada com todas as perguntas ja aprovadas para as palestras do evento.</p>
+      </div>
+
+      <div class="questions-board-toolbar">
+        <label class="questions-filter" for="approved-questions-filter-palestra">
+          <span class="questions-filter-label">Palestra</span>
+          <select id="approved-questions-filter-palestra" class="questions-filter-select"></select>
+        </label>
+
+        <button id="approved-questions-refresh-button" class="secondary-button questions-refresh-button" type="button">Atualizar</button>
+      </div>
+
+      <div class="questions-board-meta">
+        <p id="approved-questions-status" class="form-message info-message">Carregando perguntas aprovadas...</p>
+        <p id="approved-questions-updated-at" class="questions-board-updated-at">Aguardando sincronizacao...</p>
+      </div>
+
+      <div class="questions-session-summary-panel">
+        <p class="questions-session-summary-label">Sessao exibida</p>
+        <p id="approved-questions-session-summary" class="questions-session-summary">Exibindo apenas as perguntas aprovadas da sessao ativa.</p>
+      </div>
+    </section>
+
+    <section class="questions-approved-panel" aria-label="Lista de perguntas aprovadas">
+      <div id="approved-questions-list" class="questions-approved-list"></div>
+    </section>
+  </main>
+
+  <script src="../js/runtime-config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/questions-config.js"></script>
+  <script src="../js/questions-approved.js"></script>
+</body>
+</html>

@@ -20,7 +20,7 @@ function buildApiUrl(path) {
 }
 
 function getAppRootUrl() {
-  const routeNames = new Set(['login', 'primeiro-acesso', 'perfil', 'logistica', 'teste', 'agenda', 'feed', 'scanner', 'scanner-kit', 'quiz']);
+  const routeNames = new Set(['login', 'primeiro-acesso', 'perfil', 'linktree', 'logistica', 'perguntas-palestra-1', 'perguntas-palestra-2', 'perguntas-palestra-3', 'moderacao-perguntas', 'questions-moderation', 'question-moderation', 'perguntas-aprovadas', 'questions-approved', 'teste', 'agenda', 'feed', 'scanner', 'scanner-kit', 'quiz']);
   const currentUrl = new URL(window.location.href);
   const segments = currentUrl.pathname.split('/').filter(Boolean);
 

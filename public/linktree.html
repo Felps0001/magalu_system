@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linktree</title>
+  <meta name="theme-color" content="#0086ff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Magalu System">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../icons/icon-192.png?v=2" type="image/png">
+  <link rel="icon" href="../icons/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../icons/icon-192.png?v=2">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="feed-mobile-body">
+  <main class="feed-mobile-shell">
+    <button id="linktree-drawer-backdrop" class="feed-backdrop" type="button" hidden aria-label="Fechar menu"></button>
+
+    <aside id="linktree-drawer" class="feed-drawer" aria-hidden="true" hidden>
+      <div class="feed-drawer-header">
+        <img class="feed-drawer-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
+        <button id="linktree-close-drawer" class="feed-drawer-close" type="button" aria-label="Fechar menu">×</button>
+      </div>
+
+      <div class="feed-drawer-user">
+        <strong id="linktree-drawer-user-name">Magalu System</strong>
+        <p id="linktree-drawer-user-role">Atalhos rapidos para todas as telas disponiveis.</p>
+      </div>
+
+      <nav class="feed-drawer-nav" aria-label="Navegacao principal">
+        <details class="feed-drawer-group">
+          <summary class="feed-drawer-link">Perfil</summary>
+          <div class="feed-drawer-subnav">
+            <a class="feed-drawer-sublink" href="../perfil/">Dados</a>
+            <p class="feed-drawer-subtitle">Logistica</p>
+            <a class="feed-drawer-sublink" href="../logistica/#transfer">Transfer</a>
+            <a class="feed-drawer-sublink" href="../logistica/#hospedagem">Hospedagem</a>
+            <a class="feed-drawer-sublink" href="../logistica/#aereo">Aereo</a>
+          </div>
+        </details>
+        <a class="feed-drawer-link" href="../agenda/">Agenda</a>
+        <button class="feed-drawer-link" id="linktree-open-qrcode-menu" type="button">Checkin</button>
+        <a class="feed-drawer-link" href="../feed/">Feed</a>
+        <a class="feed-drawer-link feed-drawer-link--current" href="../linktree/" aria-current="page">Linktree</a>
+      </nav>
+    </aside>
+
+    <section class="feed-top-panel" aria-label="Linktree do projeto">
+      <img class="feed-top-image" src="../assets/img/layer-topo.png" alt="Linktree Magalu">
+      <div class="feed-top-content">
+        <div class="feed-top-bar">
+          <img class="feed-top-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
+          <button id="linktree-menu-button" class="feed-top-menu" type="button" aria-controls="linktree-drawer" aria-expanded="false" aria-label="Abrir menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+
+        <div class="feed-top-copy">
+          <h1 class="feed-top-title">Linktree</h1>
+          <p class="feed-top-subtitle">Um hub com todas as paginas disponiveis no projeto.</p>
+          <div class="feed-top-user">
+            <strong id="linktree-user-name">Magalu System</strong>
+            <p id="linktree-user-role">Acesse rapidamente cada tela, fluxo e utilitario.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="feed-mobile-panel linktree-mobile-panel">
+      <section class="linktree-section" aria-labelledby="linktree-menu-title">
+        <div class="linktree-section-header">
+          <p class="profile-section-kicker">Menu</p>
+          <h2 id="linktree-menu-title" class="profile-section-title">Os mesmos atalhos do menu</h2>
+        </div>
+        <div class="linktree-list">
+          <a class="feed-mobile-card linktree-card" href="../perfil/">
+            <span class="linktree-card-tag">Perfil</span>
+            <strong class="linktree-card-title">Dados</strong>
+            <p class="linktree-card-copy">Acesse os dados completos do seu perfil.</p>
+          </a>
+          <a class="feed-mobile-card linktree-card" href="../logistica/#transfer">
+            <span class="linktree-card-tag">Logistica</span>
+            <strong class="linktree-card-title">Transfer</strong>
+            <p class="linktree-card-copy">Atalho direto para a secao de transfer.</p>
+          </a>
+          <a class="feed-mobile-card linktree-card" href="../logistica/#hospedagem">
+            <span class="linktree-card-tag">Logistica</span>
+            <strong class="linktree-card-title">Hospedagem</strong>
+            <p class="linktree-card-copy">Atalho direto para a secao de hospedagem.</p>
+          </a>
+          <a class="feed-mobile-card linktree-card" href="../logistica/#aereo">
+            <span class="linktree-card-tag">Logistica</span>
+            <strong class="linktree-card-title">Aereo</strong>
+            <p class="linktree-card-copy">Atalho direto para a secao de aereo.</p>
+          </a>
+          <a class="feed-mobile-card linktree-card" href="../agenda/">
+            <span class="linktree-card-tag">Evento</span>
+            <strong class="linktree-card-title">Agenda</strong>
+            <p class="linktree-card-copy">Veja a agenda do evento conforme a sua turma.</p>
+          </a>
+          <button id="linktree-open-qrcode-card" class="feed-mobile-card linktree-card linktree-card-button" type="button">
+            <span class="linktree-card-tag">Acesso</span>
+            <strong class="linktree-card-title">Checkin</strong>
+            <p class="linktree-card-copy">Abra o QR Code do usuario pelo mesmo fluxo do menu.</p>
+          </button>
+          <a class="feed-mobile-card linktree-card" href="../feed/">
+            <span class="linktree-card-tag">Social</span>
+            <strong class="linktree-card-title">Feed</strong>
+            <p class="linktree-card-copy">Acesse as publicacoes internas do evento.</p>
+          </a>
+        </div>
+      </section>
+    </section>
+
+    <section id="linktree-qrcode-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="linktree-qrcode-title" hidden>
+      <button id="linktree-qrcode-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar QR Code"></button>
+      <div class="profile-qrcode-panel">
+        <div class="profile-qrcode-header">
+          <div>
+            <p class="profile-section-kicker">QRCode do perfil</p>
+            <h2 id="linktree-qrcode-title" class="profile-section-title">Seu acesso rapido</h2>
+          </div>
+          <button id="linktree-close-qrcode" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
+        </div>
+        <div id="linktree-qrcode-preview" class="profile-qrcode-preview" aria-live="polite"></div>
+        <div class="profile-qrcode-actions">
+          <button id="linktree-generate-qrcode-button" class="primary-button" type="button">Atualizar QR Code</button>
+          <button id="linktree-close-qrcode-secondary" class="secondary-button" type="button">Fechar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../js/runtime-config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/pwa.js"></script>
+  <script src="../js/drawer-dropdown.js"></script>
+  <script src="../js/linktree.js"></script>
+</body>
+</html>

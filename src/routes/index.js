@@ -6,6 +6,7 @@ const estandeRoutes = require('./estandeRoutes');
 const checkinRoutes = require('./checkinRoutes');
 const authRoutes = require('./authRoutes');
 const feedRoutes = require('./feedRoutes');
+const questionRoutes = require('./questionRoutes');
 
 const router = express.Router();
 
@@ -15,5 +16,6 @@ router.use('/users', userRoutes);
 router.use('/estandes', estandeRoutes);
 router.use('/checkins', checkinRoutes);
 router.use('/feed', feedRoutes);
+router.use('/questions', questionRoutes);
 
 module.exports = router;
