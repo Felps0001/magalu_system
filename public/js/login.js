@@ -14,6 +14,24 @@ function setMessage(message, type) {
   loginMessage.className = `form-message ${type}`;
 }
 
+function setLoginButtonState({ disabled, label, busy = false }) {
+  loginButton.disabled = disabled;
+
+  if (busy) {
+    loginButton.setAttribute('aria-busy', 'true');
+  } else {
+    loginButton.removeAttribute('aria-busy');
+  }
+
+  const labelElement = loginButton.querySelector('.auth-mobile-primary-label');
+
+  if (labelElement) {
+    labelElement.textContent = label;
+  } else {
+    loginButton.textContent = label;
+  }
+}
+
 loginForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
@@ -24,8 +42,7 @@ loginForm.addEventListener('submit', async (event) => {
     return;
   }
 
-  loginButton.disabled = true;
-  loginButton.setAttribute('aria-busy', 'true');
+  setLoginButtonState({ disabled: true, label: 'Entrando...', busy: true });
   setMessage('', '');
 
   try {
@@ -37,7 +54,7 @@ loginForm.addEventListener('submit', async (event) => {
       body: JSON.stringify({ id_magalu: idMagalu }),
     }));
 
-    const data = await response.json();
+    const data = await window.magaluApi.parseApiResponse(response);
 
     if (!response.ok) {
       throw new Error(data.error || 'Nao foi possivel efetuar o login.');
@@ -51,8 +68,6 @@ loginForm.addEventListener('submit', async (event) => {
     }, 400);
   } catch (error) {
     setMessage(error.message, 'error');
-  } finally {
-    loginButton.disabled = false;
-    loginButton.removeAttribute('aria-busy');
+    setLoginButtonState({ disabled: false, label: 'Acessar', busy: false });
   }
 });

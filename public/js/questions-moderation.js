@@ -5,6 +5,7 @@ const moderationUpdatedAt = document.getElementById('questions-board-updated-at'
 const moderationBoard = document.getElementById('questions-board');
 const moderationSessionSummary = document.getElementById('questions-session-summary');
 const moderationStartSessionButton = document.getElementById('questions-start-session-button');
+const moderationEndSessionButton = document.getElementById('questions-end-session-button');
 
 const { palestraLabels, palestraOrder, statusLabels, statusOrder } = window.magaluQuestions;
 const columnBodies = new Map();
@@ -51,18 +52,21 @@ function renderSessionSummary() {
   const currentSession = findActiveSessionForSelection();
 
   if (selectedPalestraId === 'all') {
-    moderationSessionSummary.textContent = 'Mostrando apenas as perguntas das sessoes ativas de cada palestra. Para iniciar nova sessao, selecione uma palestra especifica.';
+    moderationSessionSummary.textContent = 'Mostrando apenas as perguntas das sessoes ativas de cada palestra. Para encerrar uma sessao, selecione uma palestra especifica.';
     moderationStartSessionButton.disabled = true;
+    moderationEndSessionButton.disabled = true;
     return;
   }
-
-  moderationStartSessionButton.disabled = false;
 
   if (!currentSession) {
-    moderationSessionSummary.textContent = `Nenhuma sessao ativa carregada para ${palestraLabels[selectedPalestraId]}.`;
+    moderationSessionSummary.textContent = `${palestraLabels[selectedPalestraId]} esta sem sessao ativa. Clique em iniciar sessao para liberar novas perguntas.`;
+    moderationStartSessionButton.disabled = false;
+    moderationEndSessionButton.disabled = true;
     return;
   }
 
+  moderationStartSessionButton.disabled = true;
+  moderationEndSessionButton.disabled = false;
   moderationSessionSummary.textContent = `${palestraLabels[selectedPalestraId]} · ${currentSession.label} iniciada em ${formatDateTime(currentSession.startedAt)}.`;
 }
 
@@ -340,7 +344,7 @@ async function startNewSession() {
     return;
   }
 
-  const confirmed = window.confirm(`Abrir uma nova sessao para ${palestraLabels[selectedPalestraId]}? As perguntas atuais saem do quadro ativo, mas continuam salvas no historico.`);
+  const confirmed = window.confirm(`Iniciar uma nova sessao para ${palestraLabels[selectedPalestraId]}? Novas perguntas passarao a entrar a partir desta abertura.`);
 
   if (!confirmed) {
     return;
@@ -348,7 +352,8 @@ async function startNewSession() {
 
   isSyncing = true;
   moderationStartSessionButton.disabled = true;
-  setBoardStatus('Abrindo nova sessao...', 'info-message');
+  moderationEndSessionButton.disabled = true;
+  setBoardStatus('Iniciando sessao...', 'info-message');
 
   try {
     const response = await fetch(
@@ -369,7 +374,53 @@ async function startNewSession() {
 
     await loadBoardData();
     moderationUpdatedAt.textContent = `Atualizado em ${formatDateTime(data.startedAt)}`;
-    setBoardStatus(`Nova ${data.label.toLowerCase()} iniciada com sucesso.`, 'success');
+    setBoardStatus(`${data.label} iniciada com sucesso.`, 'success');
+  } catch (error) {
+    setBoardStatus(error.message, 'error');
+  } finally {
+    isSyncing = false;
+    renderSessionSummary();
+  }
+}
+
+async function endCurrentSession() {
+  const selectedPalestraId = getSelectedPalestraId();
+
+  if (selectedPalestraId === 'all' || isSyncing) {
+    return;
+  }
+
+  const confirmed = window.confirm(`Encerrar a sessao ativa de ${palestraLabels[selectedPalestraId]}? As perguntas atuais saem do quadro ativo e a palestra ficara sem receber novas perguntas ate voce iniciar outra sessao.`);
+
+  if (!confirmed) {
+    return;
+  }
+
+  isSyncing = true;
+  moderationStartSessionButton.disabled = true;
+  moderationEndSessionButton.disabled = true;
+  setBoardStatus('Encerrando sessao...', 'info-message');
+
+  try {
+    const response = await fetch(
+      window.magaluApi.buildApiUrl('/api/questions/sessions/end'),
+      window.magaluApi.withApiDefaults({
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ palestraId: selectedPalestraId }),
+      })
+    );
+    const data = await window.magaluApi.parseApiResponse(response);
+
+    if (!response.ok) {
+      throw new Error(data && data.error ? data.error : 'Nao foi possivel encerrar a sessao atual.');
+    }
+
+    await loadBoardData();
+    moderationUpdatedAt.textContent = `Atualizado em ${formatDateTime(data.endedAt)}`;
+    setBoardStatus('Sessao encerrada com sucesso.', 'success');
   } catch (error) {
     setBoardStatus(error.message, 'error');
   } finally {
@@ -393,6 +444,10 @@ moderationRefreshButton.addEventListener('click', () => {
 
 moderationStartSessionButton.addEventListener('click', () => {
   startNewSession();
+});
+
+moderationEndSessionButton.addEventListener('click', () => {
+  endCurrentSession();
 });
 
 window.setInterval(() => {

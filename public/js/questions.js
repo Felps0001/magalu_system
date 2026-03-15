@@ -18,6 +18,7 @@ const currentPalestraId = questionPageRoot ? questionPageRoot.dataset.palestraId
 const currentPalestraLabel = palestraLabels[currentPalestraId] || 'Palestra';
 const currentUser = window.magaluApi.readStoredUser();
 const MAX_QUESTION_LENGTH = 500;
+let currentSession = null;
 
 function setFormMessage(message, type) {
   questionFormMessage.textContent = message;
@@ -33,7 +34,42 @@ function renderStageMeta() {
   document.title = `${currentPalestraLabel} | Perguntas`;
   questionStageBadge.textContent = currentPalestraLabel;
   questionStageTitle.textContent = `Envie sua pergunta para ${currentPalestraLabel}`;
-  questionStageDescription.textContent = 'Sua mensagem entra como pendente e aparece na moderacao para aprovacao ou reprovacao.';
+  questionStageDescription.textContent = currentSession
+    ? `${currentSession.label} ativa. Sua mensagem entra como pendente e aparece na moderacao para aprovacao ou reprovacao.`
+    : 'No momento esta palestra esta sem sessao ativa. Aguarde o moderador iniciar a proxima rodada de perguntas.';
+}
+
+function setSubmissionAvailability(isAvailable) {
+  questionAuthorNameInput.disabled = !isAvailable && questionAuthorNameInput.readOnly !== true;
+  questionTextInput.disabled = !isAvailable;
+  questionSubmitButton.disabled = !isAvailable;
+}
+
+async function loadActiveSession() {
+  try {
+    const response = await fetch(
+      window.magaluApi.buildApiUrl(`/api/questions/sessions/active?palestraId=${encodeURIComponent(currentPalestraId)}`),
+      window.magaluApi.withApiDefaults()
+    );
+    const data = await window.magaluApi.parseApiResponse(response);
+
+    if (!response.ok) {
+      throw new Error(data && data.error ? data.error : 'Nao foi possivel consultar a sessao ativa desta palestra.');
+    }
+
+    currentSession = Array.isArray(data) && data.length > 0 ? data[0] : null;
+    renderStageMeta();
+    setSubmissionAvailability(Boolean(currentSession));
+
+    if (!currentSession) {
+      setFormMessage('As perguntas desta palestra estao encerradas por enquanto. Aguarde a abertura de uma nova sessao.', 'info-message');
+    }
+  } catch (error) {
+    currentSession = null;
+    renderStageMeta();
+    setSubmissionAvailability(false);
+    setFormMessage(error.message, 'error');
+  }
 }
 
 function renderUserContext() {
@@ -73,6 +109,11 @@ function renderSwitchLinks() {
 
 async function submitQuestion(event) {
   event.preventDefault();
+
+  if (!currentSession) {
+    setFormMessage('Esta palestra esta sem sessao ativa. Aguarde o moderador iniciar a proxima sessao.', 'error');
+    return;
+  }
 
   const payload = {
     palestraId: currentPalestraId,
@@ -119,6 +160,7 @@ renderStageMeta();
 renderUserContext();
 renderSwitchLinks();
 updateCounter();
+loadActiveSession();
 
 questionTextInput.addEventListener('input', updateCounter);
 questionForm.addEventListener('submit', submitQuestion);

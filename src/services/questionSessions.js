@@ -39,7 +39,7 @@ async function findLatestSession(questionSessionsCollection, palestraId) {
   return questionSessionsCollection.find({ palestraId }).sort({ sequence: -1, startedAt: -1 }).limit(1).next();
 }
 
-async function ensureActiveSessionForPalestra(palestraId) {
+async function getActiveSessionForPalestra(palestraId) {
   const normalizedPalestraId = normalizePalestraId(palestraId);
 
   if (!normalizedPalestraId) {
@@ -55,18 +55,7 @@ async function ensureActiveSessionForPalestra(palestraId) {
   });
 
   if (!session) {
-    const latestSession = await findLatestSession(questionSessionsCollection, normalizedPalestraId);
-    const nextSequence = latestSession ? latestSession.sequence + 1 : 1;
-    const newSession = createQuestionSession({
-      palestraId: normalizedPalestraId,
-      sequence: nextSequence,
-    });
-    const insertResult = await questionSessionsCollection.insertOne(newSession);
-
-    session = {
-      _id: insertResult.insertedId,
-      ...newSession,
-    };
+    return null;
   }
 
   await attachLegacyQuestionsToSession({
@@ -80,15 +69,13 @@ async function ensureActiveSessionForPalestra(palestraId) {
 
 async function listActiveSessions({ palestraId } = {}) {
   if (palestraId) {
-    const session = await ensureActiveSessionForPalestra(palestraId);
-    return [session];
+    const session = await getActiveSessionForPalestra(palestraId);
+    return session ? [session] : [];
   }
 
-  const sessions = await Promise.all(
-    PALESTRA_IDS.map((currentPalestraId) => ensureActiveSessionForPalestra(currentPalestraId))
-  );
+  const sessions = await Promise.all(PALESTRA_IDS.map((currentPalestraId) => getActiveSessionForPalestra(currentPalestraId)));
 
-  return sessions;
+  return sessions.filter(Boolean);
 }
 
 async function startNewSessionForPalestra(palestraId) {
@@ -99,15 +86,61 @@ async function startNewSessionForPalestra(palestraId) {
   }
 
   const questionSessionsCollection = await getQuestionSessionsCollection();
-  const timestamp = new Date().toISOString();
+  const currentActiveSession = await questionSessionsCollection.findOne({
+    palestraId: normalizedPalestraId,
+    isActive: true,
+  });
+
+  if (currentActiveSession) {
+    throw new Error('Ja existe uma sessao ativa para esta palestra. Encerre a sessao atual antes de iniciar outra.');
+  }
+
   const latestSession = await findLatestSession(questionSessionsCollection, normalizedPalestraId);
   const nextSequence = latestSession ? latestSession.sequence + 1 : 1;
 
-  await questionSessionsCollection.updateMany(
-    {
-      palestraId: normalizedPalestraId,
-      isActive: true,
+  const newSession = createQuestionSession({
+    palestraId: normalizedPalestraId,
+    sequence: nextSequence,
+  });
+  const insertResult = await questionSessionsCollection.insertOne(newSession);
+
+  const questionsCollection = await getQuestionsCollection();
+  await attachLegacyQuestionsToSession({
+    questionsCollection,
+    palestraId: normalizedPalestraId,
+    session: {
+      _id: insertResult.insertedId,
+      ...newSession,
     },
+  });
+
+  return normalizeSessionDocument({
+    _id: insertResult.insertedId,
+    ...newSession,
+  });
+}
+
+async function endActiveSessionForPalestra(palestraId) {
+  const normalizedPalestraId = normalizePalestraId(palestraId);
+
+  if (!normalizedPalestraId) {
+    throw new Error('A palestra informada para encerrar a sessao e invalida.');
+  }
+
+  const questionSessionsCollection = await getQuestionSessionsCollection();
+  const activeSession = await questionSessionsCollection.findOne({
+    palestraId: normalizedPalestraId,
+    isActive: true,
+  });
+
+  if (!activeSession) {
+    throw new Error('Nao existe sessao ativa para esta palestra.');
+  }
+
+  const timestamp = new Date().toISOString();
+
+  await questionSessionsCollection.updateOne(
+    { _id: activeSession._id },
     {
       $set: {
         isActive: false,
@@ -117,20 +150,17 @@ async function startNewSessionForPalestra(palestraId) {
     }
   );
 
-  const newSession = createQuestionSession({
-    palestraId: normalizedPalestraId,
-    sequence: nextSequence,
-  });
-  const insertResult = await questionSessionsCollection.insertOne(newSession);
-
   return normalizeSessionDocument({
-    _id: insertResult.insertedId,
-    ...newSession,
+    ...activeSession,
+    isActive: false,
+    endedAt: timestamp,
+    updatedAt: timestamp,
   });
 }
 
 module.exports = {
-  ensureActiveSessionForPalestra,
+  endActiveSessionForPalestra,
+  getActiveSessionForPalestra,
   listActiveSessions,
   normalizeSessionDocument,
   startNewSessionForPalestra,

@@ -7,7 +7,7 @@ const {
   normalizeQuestionStatus,
 } = require('../models/question');
 const {
-  ensureActiveSessionForPalestra,
+  getActiveSessionForPalestra,
   listActiveSessions,
 } = require('../services/questionSessions');
 
@@ -44,8 +44,8 @@ async function buildQuestionFilters(query = {}) {
 
   if (isTrueQueryValue(query.activeSessionOnly)) {
     if (filters.palestraId) {
-      const activeSession = await ensureActiveSessionForPalestra(filters.palestraId);
-      filters.sessionId = activeSession._id;
+      const activeSession = await getActiveSessionForPalestra(filters.palestraId);
+      filters.sessionId = activeSession ? activeSession._id : '__no_active_session__';
     } else {
       const activeSessions = await listActiveSessions();
       filters.sessionId = {
@@ -60,7 +60,13 @@ async function buildQuestionFilters(query = {}) {
 async function createQuestionHandler(req, res) {
   try {
     const questionsCollection = await getQuestionsCollection();
-    const activeSession = await ensureActiveSessionForPalestra(req.body.palestraId);
+    const activeSession = await getActiveSessionForPalestra(req.body.palestraId);
+
+    if (!activeSession) {
+      res.status(409).json({ error: 'Esta palestra esta sem sessao ativa no momento. Aguarde o moderador iniciar a proxima sessao.' });
+      return;
+    }
+
     const question = createQuestion({
       ...req.body,
       sessionId: activeSession._id,

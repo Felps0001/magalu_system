@@ -46,7 +46,6 @@
       </nav>
 
       <div class="feed-drawer-actions">
-        <button id="update-button" class="feed-drawer-button" type="button">Atualizar app</button>
         <button id="install-button" class="feed-drawer-button" type="button" hidden>Instalar app</button>
         <button id="logout-button" class="feed-drawer-button feed-drawer-button--ghost" type="button">Sair</button>
       </div>
@@ -57,11 +56,17 @@
       <div class="feed-top-content">
         <div class="feed-top-bar">
           <img class="feed-top-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
-          <button id="profile-menu-button" class="feed-top-menu" type="button" aria-controls="profile-drawer" aria-expanded="false" aria-label="Abrir menu">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
+          <div class="feed-top-actions">
+            <button id="update-button" class="feed-top-icon-button" type="button" aria-label="Atualizar app" title="Atualizar app" data-update-icon-only="true">
+              <span class="sr-only update-button-label">Atualizar app</span>
+              <span class="feed-top-icon feed-top-icon--update" aria-hidden="true"></span>
+            </button>
+            <button id="profile-menu-button" class="feed-top-menu" type="button" aria-controls="profile-drawer" aria-expanded="false" aria-label="Abrir menu">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
         </div>
 
         <div class="feed-top-copy">

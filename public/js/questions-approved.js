@@ -59,7 +59,7 @@ function updateHeroCopy() {
   approvedHeroCopy.textContent = `Exibicao filtrada apenas com as perguntas aprovadas de ${palestraLabels[selectedPalestraId]}.`;
   approvedSessionSummary.textContent = currentSession
     ? `${currentSession.label} iniciada em ${formatApprovedDateTime(currentSession.startedAt)}.`
-    : 'Exibindo a sessao ativa da palestra selecionada.';
+    : 'Esta palestra esta sem sessao ativa no momento.';
 }
 
 function createApprovedEmptyState() {

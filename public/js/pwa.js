@@ -62,7 +62,18 @@ function setUpdateButtonState({ disabled, label }) {
   updateButton.disabled = disabled;
 
   if (label) {
-    updateButton.textContent = label;
+    if (updateButton.dataset.updateIconOnly === 'true') {
+      updateButton.setAttribute('aria-label', label);
+      updateButton.setAttribute('title', label);
+
+      const labelElement = updateButton.querySelector('.update-button-label');
+
+      if (labelElement) {
+        labelElement.textContent = label;
+      }
+    } else {
+      updateButton.textContent = label;
+    }
   }
 }
 
@@ -183,8 +194,14 @@ window.addEventListener('appinstalled', () => {
 document.addEventListener('click', async (event) => {
   const updateButton = getUpdateButton();
   const installButton = getInstallButton();
+  const updateButtonTarget = updateButton && event.target instanceof Element
+    ? event.target.closest('#update-button')
+    : null;
+  const installButtonTarget = installButton && event.target instanceof Element
+    ? event.target.closest('#install-button')
+    : null;
 
-  if (updateButton && event.target === updateButton) {
+  if (updateButton && updateButtonTarget === updateButton) {
     // Força reload do service worker e recarrega a página
     if (activeRegistration && activeRegistration.waiting) {
       activeRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
@@ -194,7 +211,7 @@ document.addEventListener('click', async (event) => {
     return;
   }
 
-  if (!installButton || event.target !== installButton) {
+  if (!installButton || installButtonTarget !== installButton) {
     return;
   }
 
