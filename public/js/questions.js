@@ -35,8 +35,8 @@ function renderStageMeta() {
   questionStageBadge.textContent = currentPalestraLabel;
   questionStageTitle.textContent = `Envie sua pergunta para ${currentPalestraLabel}`;
   questionStageDescription.textContent = currentSession
-    ? `${currentSession.label} ativa. Sua mensagem entra como pendente e aparece na moderacao para aprovacao ou reprovacao.`
-    : 'No momento esta palestra esta sem sessao ativa. Aguarde o moderador iniciar a proxima rodada de perguntas.';
+    ? `${currentSession.label} ativa.`
+    : 'Sessão ainda não foi iniciada';
 }
 
 function setSubmissionAvailability(isAvailable) {
@@ -79,7 +79,7 @@ function renderUserContext() {
     questionAuthorNameInput.value = currentUser.nome;
     questionAuthorNameInput.readOnly = true;
     questionAuthorNameInput.setAttribute('aria-readonly', 'true');
-    questionAuthorHint.textContent = 'Nome preenchido com base no usuario autenticado.';
+    questionAuthorHint.textContent = '';
     return;
   }
 

@@ -33,11 +33,23 @@ router.get('/perguntas-palestra-1', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'questions-palestra-1.html'));
 });
 
+router.get('/questions-palestra-1', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'questions-palestra-1.html'));
+});
+
 router.get('/perguntas-palestra-2', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'questions-palestra-2.html'));
 });
 
+router.get('/questions-palestra-2', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'questions-palestra-2.html'));
+});
+
 router.get('/perguntas-palestra-3', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'questions-palestra-3.html'));
+});
+
+router.get('/questions-palestra-3', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'questions-palestra-3.html'));
 });
 
