@@ -2,6 +2,12 @@ let deferredInstallPrompt;
 let refreshing;
 let activeRegistration;
 
+function wait(duration) {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, duration);
+  });
+}
+
 function getInstallButton() {
   return document.getElementById('install-button');
 }
@@ -75,6 +81,21 @@ function setUpdateButtonState({ disabled, label }) {
       updateButton.textContent = label;
     }
   }
+}
+
+async function animateUpdateButton() {
+  const updateButton = getUpdateButton();
+
+  if (!updateButton) {
+    return;
+  }
+
+  updateButton.classList.remove('is-spinning');
+  void updateButton.offsetWidth;
+  updateButton.classList.add('is-spinning');
+
+  await wait(520);
+  updateButton.classList.remove('is-spinning');
 }
 
 function activateWaitingWorker(registration) {
@@ -202,6 +223,8 @@ document.addEventListener('click', async (event) => {
     : null;
 
   if (updateButton && updateButtonTarget === updateButton) {
+    await animateUpdateButton();
+
     // Força reload do service worker e recarrega a página
     if (activeRegistration && activeRegistration.waiting) {
       activeRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });

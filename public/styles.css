@@ -1144,42 +1144,65 @@ button:hover {
 }
 
 .feed-top-menu span {
-  display: block;
-  width: 18px;
-  height: 2px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.96);
+  display: none;
 }
 
 .feed-top-icon {
-  position: relative;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   display: block;
+  background-color: #ffffff;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
 }
 
 .feed-top-icon--update::before,
 .feed-top-icon--update::after {
+  content: none;
+}
+
+.feed-top-icon--update {
+  mask-image: url('./assets/img/reload.png');
+  -webkit-mask-image: url('./assets/img/reload.png');
+  transform-origin: center;
+}
+
+.feed-top-icon-button.is-spinning .feed-top-icon--update {
+  animation: feed-top-reload-spin 520ms ease-in-out;
+}
+
+@keyframes feed-top-reload-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.feed-top-menu {
+  position: relative;
+}
+
+.feed-top-menu::before {
   content: '';
-  position: absolute;
-  box-sizing: border-box;
-}
-
-.feed-top-icon--update::before {
-  inset: 2px;
-  border: 2px solid rgba(255, 255, 255, 0.96);
-  border-right-color: transparent;
-  border-radius: 50%;
-}
-
-.feed-top-icon--update::after {
-  top: 1px;
-  right: 1px;
-  width: 7px;
-  height: 7px;
-  border-top: 2px solid rgba(255, 255, 255, 0.96);
-  border-right: 2px solid rgba(255, 255, 255, 0.96);
-  transform: rotate(19deg);
+  width: 22px;
+  height: 22px;
+  display: block;
+  background-color: #ffffff;
+  mask-image: url('./assets/img/more.png');
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-image: url('./assets/img/more.png');
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
 }
 
 .feed-top-copy {

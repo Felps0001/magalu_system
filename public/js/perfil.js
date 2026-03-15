@@ -1,5 +1,4 @@
-const userName = document.getElementById('user-name');
-const userRole = document.getElementById('user-role');
+const profilePageTitle = document.getElementById('profile-page-title');
 const drawerUserName = document.getElementById('profile-drawer-user-name');
 const drawerUserRole = document.getElementById('profile-drawer-user-role');
 const userIdMagalu = document.getElementById('user-id-magalu');
@@ -303,8 +302,8 @@ if (!user) {
   const userRoleText = `${user.cargo || 'Sem cargo'} · ${user.loja || 'Sem loja'}`;
   const visitedStands = Array.isArray(user.estandesVisitados) ? user.estandesVisitados : [];
 
-  userName.textContent = userNameText;
-  userRole.textContent = userRoleText;
+  profilePageTitle.textContent = userNameText;
+  document.title = userNameText;
   drawerUserName.textContent = userNameText;
   drawerUserRole.textContent = userRoleText;
   userIdMagalu.textContent = user.id_magalu || '-';
