@@ -2139,6 +2139,7 @@ button:hover {
   font-size: 1.9rem;
   line-height: 1.08;
   letter-spacing: -0.05em;
+  margin-bottom: 15px;
 }
 
 .quiz-description {
