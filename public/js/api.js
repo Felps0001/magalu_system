@@ -46,6 +46,73 @@ function getAppRootUrl() {
   return `${currentUrl.origin}${basePath}`;
 }
 
+function buildQrNavigationCandidate(path) {
+  if (typeof path !== 'string') {
+    return null;
+  }
+
+  const trimmedPath = path.trim();
+
+  if (!trimmedPath) {
+    return null;
+  }
+
+  if (/^https?:\/\//i.test(trimmedPath)) {
+    try {
+      const parsedUrl = new URL(trimmedPath);
+
+      if (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {
+        return parsedUrl.toString();
+      }
+    } catch (error) {
+      return null;
+    }
+
+    return null;
+  }
+
+  if (trimmedPath.startsWith('/') || trimmedPath.startsWith('./') || trimmedPath.startsWith('../')) {
+    return buildAppUrl(trimmedPath);
+  }
+
+  if (/^[a-z0-9/_-]+$/i.test(trimmedPath)) {
+    return buildAppUrl(trimmedPath);
+  }
+
+  return null;
+}
+
+function resolveQrNavigationUrl(rawValue) {
+  const directCandidate = buildQrNavigationCandidate(rawValue);
+
+  if (directCandidate) {
+    return directCandidate;
+  }
+
+  if (typeof rawValue !== 'string') {
+    return null;
+  }
+
+  try {
+    const parsedPayload = JSON.parse(rawValue);
+    const candidateKeys = ['url', 'href', 'path', 'route', 'redirectTo', 'redirectUrl', 'deepLink', 'destination'];
+
+    for (const key of candidateKeys) {
+      if (typeof parsedPayload[key] === 'string') {
+        const candidateUrl = buildQrNavigationCandidate(parsedPayload[key]);
+
+        if (candidateUrl) {
+          return candidateUrl;
+        }
+      }
+    }
+  } catch (error) {
+    return null;
+  }
+
+  return null;
+}
+
 function buildAppUrl(path = '/') {
   const rootUrl = getAppRootUrl();
   const normalizedPath = path.startsWith('/') ? path.slice(1) : path;
@@ -117,6 +184,7 @@ window.magaluApi = {
   getAppRootUrl,
   parseApiResponse,
   readStoredUser,
+  resolveQrNavigationUrl,
   requiresFirstAccess,
   storeUser,
   withApiDefaults,
