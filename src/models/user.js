@@ -41,6 +41,7 @@ function buildUserQrData(user, generatedAt = new Date().toISOString()) {
     type: 'magalu-user',
     version: 1,
     generatedAt,
+    path: '/perfil/',
     user: {
       userId: user._id ? String(user._id) : '',
       id_magalu: user.id_magalu,

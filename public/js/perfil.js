@@ -42,6 +42,7 @@ let currentUser = null;
 let qrCodeLoaded = false;
 let html5QrCode = null;
 let lastDecodedValue = '';
+let isHandlingScan = false;
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
@@ -192,6 +193,8 @@ async function openQrCodeModal() {
 }
 
 async function stopScanner() {
+  isHandlingScan = false;
+
   if (!html5QrCode) {
     startScanButton.disabled = false;
     stopScanButton.disabled = true;
@@ -236,6 +239,7 @@ async function startScanner() {
 
     startScanButton.disabled = true;
     stopScanButton.disabled = false;
+    isHandlingScan = false;
     lastDecodedValue = '';
     updateScannerResult('Nenhum QR Code lido ainda.');
     setScannerStatus('Abrindo camera traseira...', 'info-message');
@@ -250,18 +254,29 @@ async function startScanner() {
         showTorchButtonIfSupported: true,
         showZoomSliderIfSupported: true,
       },
-      (decodedText) => {
-        if (!decodedText || decodedText === lastDecodedValue) {
+      async (decodedText) => {
+        if (!decodedText || decodedText === lastDecodedValue || isHandlingScan) {
           return;
         }
 
         lastDecodedValue = decodedText;
         updateScannerResult(decodedText);
-        setScannerStatus('QR Code lido com sucesso.', 'success');
+        const destinationUrl = window.magaluApi.resolveQrNavigationUrl(decodedText);
+
+        if (!destinationUrl) {
+          setScannerStatus('QR Code lido, mas sem uma rota valida para redirecionamento.', 'error');
+          return;
+        }
+
+        isHandlingScan = true;
+        setScannerStatus('QR Code lido com sucesso. Redirecionando...', 'success');
 
         if (navigator.vibrate) {
           navigator.vibrate(120);
         }
+
+        await closeScannerModal();
+        window.location.assign(destinationUrl);
       },
       () => {
         // Ignora erros por frame para manter a leitura contínua.

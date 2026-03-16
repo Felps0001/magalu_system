@@ -106,6 +106,10 @@ function resolveQrNavigationUrl(rawValue) {
         }
       }
     }
+
+    if (parsedPayload && parsedPayload.type === 'magalu-user' && parsedPayload.user) {
+      return buildAppUrl('/perfil/');
+    }
   } catch (error) {
     return null;
   }
