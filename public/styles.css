@@ -2988,6 +2988,68 @@ button:hover {
   transform: translate(-50%, -62%) rotate(40deg);
 }
 
+.global-event-popup-open {
+  overflow: hidden;
+}
+
+.global-event-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+}
+
+.global-event-popup-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(5, 16, 31, 0.56);
+}
+
+.global-event-popup-dialog {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(calc(100% - 28px), 440px);
+  padding: 0;
+  border-radius: 28px;
+  background: transparent;
+  box-shadow: none;
+  transform: translate(-50%, -50%);
+}
+
+.global-event-popup-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(5, 16, 31, 0.56);
+  color: #ffffff;
+  font-size: 1.35rem;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.global-event-popup-media {
+  display: block;
+  border-radius: 28px;
+  overflow: hidden;
+  text-decoration: none;
+  box-shadow: 0 26px 60px rgba(6, 36, 74, 0.24);
+}
+
+.global-event-popup-image {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  display: block;
+}
+
 @media (max-width: 1080px) {
   .questions-board-body {
     padding: 20px;
