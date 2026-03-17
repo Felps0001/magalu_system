@@ -6,7 +6,7 @@
   const appRootUrl = new URL('../', scriptUrl);
 
   window.MAGALU_POPUP_CONFIG = {
-    enabled: true,
+    enabled: false,
     id: 'evento-demo-v1',
     imageUrl: new URL('assets/img/check.png', appRootUrl).toString(),
     imageAlt: 'Imagem de exemplo do comunicado',
