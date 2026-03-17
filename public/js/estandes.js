@@ -1,9 +1,7 @@
 const estandesUserName = document.getElementById('estandes-user-name');
-const estandesUserRole = document.getElementById('estandes-user-role');
 const drawerUserName = document.getElementById('estandes-drawer-user-name');
 const drawerUserRole = document.getElementById('estandes-drawer-user-role');
 const visitedCount = document.getElementById('estandes-visited-count');
-const summaryCopy = document.getElementById('estandes-summary-copy');
 const statusMessage = document.getElementById('estandes-status');
 const estandesList = document.getElementById('estandes-list');
 const menuButton = document.getElementById('estandes-menu-button');
@@ -172,6 +170,16 @@ function createEmptyState(message) {
   return emptyCard;
 }
 
+function getCompactMetric(estande) {
+  const totalCheckins = Number(estande && estande.totalCheckins);
+
+  if (Number.isFinite(totalCheckins) && totalCheckins > 0) {
+    return `★ ${totalCheckins}`;
+  }
+
+  return '★ 0';
+}
+
 function renderEstandes(estandes, visitedIds) {
   estandesList.innerHTML = '';
 
@@ -190,42 +198,29 @@ function renderEstandes(estandes, visitedIds) {
     const isVisited = visitedIds.has(String(estande._id));
     const card = document.createElement('article');
     card.className = `estande-card${isVisited ? ' estande-card--checked' : ''}`;
+    card.setAttribute('aria-label', `${estande.nome || 'Estande sem nome'}${isVisited ? ', visitado' : ', pendente'}`);
 
-    const media = document.createElement('div');
-    media.className = 'estande-card-media';
-
-    const image = document.createElement('img');
-    image.className = `estande-card-image${isVisited ? ' estande-card-image--checked' : ''}`;
-    image.src = '../assets/img/checkin-magalu.png';
-    image.alt = isVisited
-      ? `Check-in realizado no estande ${estande.nome || 'Magalu'}`
-      : `Check-in pendente no estande ${estande.nome || 'Magalu'}`;
-
-    media.appendChild(image);
-
-    const body = document.createElement('div');
-    body.className = 'estande-card-body';
-
-    const badge = document.createElement('span');
-    badge.className = `estande-card-badge${isVisited ? ' estande-card-badge--checked' : ''}`;
-    badge.textContent = isVisited ? 'Check-in realizado' : 'Aguardando check-in';
+    const accent = document.createElement('span');
+    accent.className = 'estande-card-accent';
+    accent.setAttribute('aria-hidden', 'true');
 
     const title = document.createElement('strong');
     title.className = 'estande-card-title';
     title.textContent = estande.nome || 'Estande sem nome';
 
-    const copy = document.createElement('p');
-    copy.className = 'estande-card-copy';
-    copy.textContent = isVisited
-      ? 'Seu acesso neste estande ja foi registrado e o card foi liberado em cor.'
-      : 'Quando o check-in for registrado, este card sai do preto e branco automaticamente.';
+    const metric = document.createElement('span');
+    metric.className = 'estande-card-metric';
+    metric.textContent = getCompactMetric(estande);
 
-    body.appendChild(badge);
-    body.appendChild(title);
-    body.appendChild(copy);
+    const status = document.createElement('span');
+    status.className = `estande-card-status${isVisited ? ' estande-card-status--checked' : ''}`;
+    status.setAttribute('role', 'img');
+    status.setAttribute('aria-label', isVisited ? 'Check-in realizado' : 'Check-in pendente');
 
-    card.appendChild(media);
-    card.appendChild(body);
+    card.appendChild(accent);
+    card.appendChild(title);
+    card.appendChild(metric);
+    card.appendChild(status);
     estandesList.appendChild(card);
   });
 }
@@ -248,10 +243,7 @@ async function loadEstandes(user) {
     const visitedIds = getVisitedEstandeIds(user);
     const visitedCountValue = visitedIds.size;
 
-    visitedCount.textContent = `${visitedCountValue} visitados`;
-    summaryCopy.textContent = visitedCountValue > 0
-      ? `Voce ja registrou check-in em ${visitedCountValue} ${visitedCountValue === 1 ? 'estande' : 'estandes'}.`
-      : 'Voce ainda nao registrou check-in em nenhum estande.';
+    visitedCount.textContent = String(visitedCountValue);
     statusMessage.className = 'form-message feed-mobile-message';
     statusMessage.textContent = '';
     renderEstandes(estandes, visitedIds);
@@ -287,7 +279,6 @@ async function initializeEstandesPage() {
   const userRoleText = `${currentUser.cargo || 'Sem cargo'} · ${currentUser.loja || 'Sem loja'}`;
 
   estandesUserName.textContent = userNameText;
-  estandesUserRole.textContent = 'Seus estandes com check-in aparecem em destaque nesta lista.';
   drawerUserName.textContent = userNameText;
   drawerUserRole.textContent = userRoleText;
 
