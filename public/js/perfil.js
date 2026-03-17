@@ -4,7 +4,6 @@ const drawerUserRole = document.getElementById('profile-drawer-user-role');
 const userIdMagalu = document.getElementById('user-id-magalu');
 const userPontos = document.getElementById('user-pontos');
 const userCheckins = document.getElementById('user-checkins');
-const userEstandesCount = document.getElementById('user-estandes-count');
 const userCpf = document.getElementById('user-cpf');
 const userCargo = document.getElementById('user-cargo');
 const userRegiao = document.getElementById('user-regiao');
@@ -14,7 +13,6 @@ const userTurma = document.getElementById('user-turma');
 const userHospedagem = document.getElementById('user-hospedagem');
 const userAereo = document.getElementById('user-aereo');
 const userTransfer = document.getElementById('user-transfer');
-const estandesList = document.getElementById('estandes-list');
 const generateQrCodeButton = document.getElementById('generate-qrcode-button');
 const qrCodeModal = document.getElementById('profile-qrcode-modal');
 const qrCodeBackdrop = document.getElementById('profile-qrcode-backdrop');
@@ -148,33 +146,6 @@ async function loadUserQrCode(options = {}) {
     generateQrCodeButton.disabled = false;
     generateQrCodeButton.textContent = 'Atualizar QR Code';
   }
-}
-
-function renderVisitedStands(estandesVisitados) {
-  estandesList.innerHTML = '';
-
-  if (!Array.isArray(estandesVisitados) || estandesVisitados.length === 0) {
-    const emptyItem = document.createElement('li');
-    emptyItem.className = 'profile-estandes-empty';
-    emptyItem.textContent = 'Nenhum estande visitado ainda.';
-    estandesList.appendChild(emptyItem);
-    return;
-  }
-
-  estandesVisitados.forEach((estande) => {
-    const item = document.createElement('li');
-    item.className = 'profile-estandes-item';
-
-    const standName = document.createElement('strong');
-    standName.textContent = estande.nome || 'Estande sem nome';
-
-    const standMeta = document.createElement('span');
-    standMeta.textContent = estande.codigo ? `Codigo ${estande.codigo}` : 'Check-in registrado';
-
-    item.appendChild(standName);
-    item.appendChild(standMeta);
-    estandesList.appendChild(item);
-  });
 }
 
 async function openQrCodeModal() {
@@ -315,7 +286,6 @@ if (!user) {
   currentUser = user;
   const userNameText = user.nome || 'Usuario';
   const userRoleText = `${user.cargo || 'Sem cargo'} · ${user.loja || 'Sem loja'}`;
-  const visitedStands = Array.isArray(user.estandesVisitados) ? user.estandesVisitados : [];
 
   profilePageTitle.textContent = userNameText;
   document.title = userNameText;
@@ -324,7 +294,6 @@ if (!user) {
   userIdMagalu.textContent = user.id_magalu || '-';
   userPontos.textContent = String(user.pontos || 0);
   userCheckins.textContent = String(user.totalCheckins || 0);
-  userEstandesCount.textContent = String(visitedStands.length);
   userCpf.textContent = user.cpf || '-';
   userCargo.textContent = user.cargo || '-';
   userRegiao.textContent = user.regiao || '-';
@@ -334,7 +303,6 @@ if (!user) {
   userHospedagem.textContent = user.hospedagem || '-';
   userAereo.textContent = user.aereo || '-';
   userTransfer.textContent = user.transfer ? 'Sim' : 'Nao';
-  renderVisitedStands(visitedStands);
 }
 
 generateQrCodeButton.addEventListener('click', () => {
