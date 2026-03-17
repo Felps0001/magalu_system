@@ -55,12 +55,12 @@
 
   .estande-card {
     gap: 12px;
-    min-height: 84px;
+    min-height: 62px;
     padding: 8px 10px 8px 16px;
   }
 
   .estande-card-title {
-    font-size: 1.1rem;
+    font-size: .78rem;
   }
 
   .estande-card-metric {
@@ -68,9 +68,9 @@
   }
 
   .estande-card-status {
-    flex-basis: 58px;
-    width: 58px;
-    height: 58px;
+    flex-basis: 46px;
+    width: 46px;
+    height: 46px;
   }
 
   .estande-card-status--checked::before {

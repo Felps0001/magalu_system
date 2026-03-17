@@ -33,6 +33,7 @@ let quizStartedAt = null;
 let totalTimeInSeconds = 0;
 let hasCompletedCurrentQuiz = false;
 let isAnswering = false;
+let drawerCloseTimer = null;
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
@@ -43,8 +44,26 @@ function redirectToFirstAccess() {
 }
 
 function setDrawerState(isOpen) {
-  quizDrawer.hidden = !isOpen;
-  quizDrawerBackdrop.hidden = !isOpen;
+  if (drawerCloseTimer) {
+    clearTimeout(drawerCloseTimer);
+    drawerCloseTimer = null;
+  }
+
+  if (isOpen) {
+    quizDrawer.hidden = false;
+    quizDrawerBackdrop.hidden = false;
+    quizDrawer.classList.remove('feed-drawer--closing');
+    void quizDrawer.offsetWidth;
+  } else {
+    quizDrawer.classList.add('feed-drawer--closing');
+    drawerCloseTimer = setTimeout(() => {
+      quizDrawer.hidden = true;
+      quizDrawerBackdrop.hidden = true;
+      quizDrawer.classList.remove('feed-drawer--closing');
+      drawerCloseTimer = null;
+    }, 280);
+  }
+
   quizDrawer.setAttribute('aria-hidden', String(!isOpen));
   quizMenuButton.setAttribute('aria-expanded', String(isOpen));
   document.body.classList.toggle('feed-ui-lock', isOpen);

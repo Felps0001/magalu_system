@@ -34,6 +34,7 @@ const imageCaption = document.getElementById('feed-image-caption');
 
 let currentUser = null;
 let qrCodeLoaded = false;
+let drawerCloseTimer = null;
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
@@ -49,8 +50,26 @@ function setFormMessage(message, type) {
 }
 
 function setDrawerState(isOpen) {
-  drawer.hidden = !isOpen;
-  drawerBackdrop.hidden = !isOpen;
+  if (drawerCloseTimer) {
+    clearTimeout(drawerCloseTimer);
+    drawerCloseTimer = null;
+  }
+
+  if (isOpen) {
+    drawer.hidden = false;
+    drawerBackdrop.hidden = false;
+    drawer.classList.remove('feed-drawer--closing');
+    void drawer.offsetWidth;
+  } else {
+    drawer.classList.add('feed-drawer--closing');
+    drawerCloseTimer = setTimeout(() => {
+      drawer.hidden = true;
+      drawerBackdrop.hidden = true;
+      drawer.classList.remove('feed-drawer--closing');
+      drawerCloseTimer = null;
+    }, 280);
+  }
+
   drawer.setAttribute('aria-hidden', String(!isOpen));
   menuButton.setAttribute('aria-expanded', String(isOpen));
   document.body.classList.toggle('feed-ui-lock', isOpen || !composerModal.hidden || !qrCodeModal.hidden || !imageModal.hidden);

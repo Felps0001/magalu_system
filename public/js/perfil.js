@@ -20,17 +20,18 @@ const closeQrCodeButton = document.getElementById('profile-close-qrcode');
 const closeQrCodeSecondaryButton = document.getElementById('profile-close-qrcode-secondary');
 const qrCodePreview = document.getElementById('qrcode-preview');
 const menuButton = document.getElementById('profile-menu-button');
-const openQrCodeMenuButton = document.getElementById('open-qrcode-menu');
+const openScannerMenuButton = document.getElementById('profile-open-scanner-menu');
+const openQrCodeMenuButton = document.getElementById('profile-open-qrcode-menu');
 const openScannerButton = document.getElementById('profile-open-scanner');
 const scannerModal = document.getElementById('profile-scanner-modal');
 const scannerBackdrop = document.getElementById('profile-scanner-backdrop');
 const closeScannerButton = document.getElementById('profile-close-scanner');
-const startScanButton = document.getElementById('start-scan-button');
-const stopScanButton = document.getElementById('stop-scan-button');
-const scannerPreview = document.getElementById('scanner-preview');
-const scannerMount = document.getElementById('scanner-mount');
-const scannerStatus = document.getElementById('scanner-status');
-const scannerResult = document.getElementById('scanner-result');
+const startScanButton = document.getElementById('profile-start-scan-button');
+const stopScanButton = document.getElementById('profile-stop-scan-button');
+const scannerPreview = document.getElementById('profile-scanner-preview');
+const scannerMount = document.getElementById('profile-scanner-mount');
+const scannerStatus = document.getElementById('profile-scanner-status');
+const scannerResult = document.getElementById('profile-scanner-result');
 const drawer = document.getElementById('profile-drawer');
 const drawerBackdrop = document.getElementById('profile-drawer-backdrop');
 const closeDrawerButton = document.getElementById('profile-close-drawer');
@@ -41,6 +42,7 @@ let qrCodeLoaded = false;
 let html5QrCode = null;
 let lastDecodedValue = '';
 let isHandlingScan = false;
+let drawerCloseTimer = null;
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
@@ -51,8 +53,26 @@ function redirectToFirstAccess() {
 }
 
 function setDrawerState(isOpen) {
-  drawer.hidden = !isOpen;
-  drawerBackdrop.hidden = !isOpen;
+  if (drawerCloseTimer) {
+    clearTimeout(drawerCloseTimer);
+    drawerCloseTimer = null;
+  }
+
+  if (isOpen) {
+    drawer.hidden = false;
+    drawerBackdrop.hidden = false;
+    drawer.classList.remove('feed-drawer--closing');
+    void drawer.offsetWidth;
+  } else {
+    drawer.classList.add('feed-drawer--closing');
+    drawerCloseTimer = setTimeout(() => {
+      drawer.hidden = true;
+      drawerBackdrop.hidden = true;
+      drawer.classList.remove('feed-drawer--closing');
+      drawerCloseTimer = null;
+    }, 280);
+  }
+
   drawer.setAttribute('aria-hidden', String(!isOpen));
   menuButton.setAttribute('aria-expanded', String(isOpen));
   document.body.classList.toggle('feed-ui-lock', isOpen || !qrCodeModal.hidden || !scannerModal.hidden);
@@ -205,7 +225,7 @@ async function startScanner() {
 
   try {
     if (!html5QrCode) {
-      html5QrCode = new Html5Qrcode('scanner-mount');
+      html5QrCode = new Html5Qrcode('profile-scanner-mount');
     }
 
     startScanButton.disabled = true;
@@ -310,6 +330,13 @@ generateQrCodeButton.addEventListener('click', () => {
 });
 
 openScannerButton.addEventListener('click', () => {
+  setScannerModalState(true);
+  setScannerStatus('Aguardando inicialização...', 'info-message');
+  updateScannerResult('Nenhum QR Code lido ainda.');
+});
+
+openScannerMenuButton.addEventListener('click', () => {
+  setDrawerState(false);
   setScannerModalState(true);
   setScannerStatus('Aguardando inicialização...', 'info-message');
   updateScannerResult('Nenhum QR Code lido ainda.');

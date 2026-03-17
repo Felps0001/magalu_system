@@ -8,6 +8,7 @@ const menuButton = document.getElementById('agenda-menu-button');
 const drawer = document.getElementById('agenda-drawer');
 const drawerBackdrop = document.getElementById('agenda-drawer-backdrop');
 const closeDrawerButton = document.getElementById('agenda-close-drawer');
+const openScannerMenuButton = document.getElementById('agenda-open-scanner-menu');
 const openQrCodeMenuButton = document.getElementById('agenda-open-qrcode-menu');
 const openScannerButton = document.getElementById('agenda-open-scanner');
 const scannerModal = document.getElementById('agenda-scanner-modal');
@@ -30,6 +31,7 @@ let qrCodeLoaded = false;
 let html5QrCode = null;
 let lastDecodedValue = '';
 let isHandlingScan = false;
+let drawerCloseTimer = null;
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
@@ -40,8 +42,26 @@ function redirectToFirstAccess() {
 }
 
 function setDrawerState(isOpen) {
-  drawer.hidden = !isOpen;
-  drawerBackdrop.hidden = !isOpen;
+  if (drawerCloseTimer) {
+    clearTimeout(drawerCloseTimer);
+    drawerCloseTimer = null;
+  }
+
+  if (isOpen) {
+    drawer.hidden = false;
+    drawerBackdrop.hidden = false;
+    drawer.classList.remove('feed-drawer--closing');
+    void drawer.offsetWidth;
+  } else {
+    drawer.classList.add('feed-drawer--closing');
+    drawerCloseTimer = setTimeout(() => {
+      drawer.hidden = true;
+      drawerBackdrop.hidden = true;
+      drawer.classList.remove('feed-drawer--closing');
+      drawerCloseTimer = null;
+    }, 280);
+  }
+
   drawer.setAttribute('aria-hidden', String(!isOpen));
   menuButton.setAttribute('aria-expanded', String(isOpen));
   document.body.classList.toggle('feed-ui-lock', isOpen || !qrCodeModal.hidden || !scannerModal.hidden);
@@ -325,6 +345,13 @@ if (!user) {
 
 generateQrCodeButton.addEventListener('click', () => {
   loadUserQrCode();
+});
+
+openScannerMenuButton.addEventListener('click', () => {
+  setDrawerState(false);
+  setScannerModalState(true);
+  setScannerStatus('Aguardando inicialização...', 'info-message');
+  updateScannerResult('Nenhum QR Code lido ainda.');
 });
 
 openQrCodeMenuButton.addEventListener('click', () => {

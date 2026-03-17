@@ -8,8 +8,18 @@ const menuButton = document.getElementById('estandes-menu-button');
 const drawer = document.getElementById('estandes-drawer');
 const drawerBackdrop = document.getElementById('estandes-drawer-backdrop');
 const closeDrawerButton = document.getElementById('estandes-close-drawer');
+const openScannerMenuButton = document.getElementById('estandes-open-scanner-menu');
 const openQrCodeMenuButton = document.getElementById('estandes-open-qrcode-menu');
 const logoutButton = document.getElementById('logout-button');
+const openScannerButton = document.getElementById('estandes-open-scanner');
+const scannerModal = document.getElementById('estandes-scanner-modal');
+const scannerBackdrop = document.getElementById('estandes-scanner-backdrop');
+const closeScannerButton = document.getElementById('estandes-close-scanner');
+const startScanButton = document.getElementById('estandes-start-scan-button');
+const stopScanButton = document.getElementById('estandes-stop-scan-button');
+const scannerPreview = document.getElementById('estandes-scanner-preview');
+const scannerStatus = document.getElementById('estandes-scanner-status');
+const scannerResult = document.getElementById('estandes-scanner-result');
 const qrCodeModal = document.getElementById('estandes-qrcode-modal');
 const qrCodeBackdrop = document.getElementById('estandes-qrcode-backdrop');
 const closeQrCodeButton = document.getElementById('estandes-close-qrcode');
@@ -19,6 +29,10 @@ const qrCodePreview = document.getElementById('estandes-qrcode-preview');
 
 let currentUser = null;
 let qrCodeLoaded = false;
+let drawerCloseTimer = null;
+let html5QrCode = null;
+let lastDecodedValue = '';
+let isHandlingScan = false;
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
@@ -29,16 +43,48 @@ function redirectToFirstAccess() {
 }
 
 function setDrawerState(isOpen) {
-  drawer.hidden = !isOpen;
-  drawerBackdrop.hidden = !isOpen;
+  if (drawerCloseTimer) {
+    clearTimeout(drawerCloseTimer);
+    drawerCloseTimer = null;
+  }
+
+  if (isOpen) {
+    drawer.hidden = false;
+    drawerBackdrop.hidden = false;
+    drawer.classList.remove('feed-drawer--closing');
+    void drawer.offsetWidth;
+  } else {
+    drawer.classList.add('feed-drawer--closing');
+    drawerCloseTimer = setTimeout(() => {
+      drawer.hidden = true;
+      drawerBackdrop.hidden = true;
+      drawer.classList.remove('feed-drawer--closing');
+      drawerCloseTimer = null;
+    }, 280);
+  }
+
   drawer.setAttribute('aria-hidden', String(!isOpen));
   menuButton.setAttribute('aria-expanded', String(isOpen));
-  document.body.classList.toggle('feed-ui-lock', isOpen || !qrCodeModal.hidden);
+  document.body.classList.toggle('feed-ui-lock', isOpen || !qrCodeModal.hidden || !scannerModal.hidden);
 }
 
 function setQrModalState(isOpen) {
   qrCodeModal.hidden = !isOpen;
-  document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden);
+  document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden || !scannerModal.hidden);
+}
+
+function setScannerModalState(isOpen) {
+  scannerModal.hidden = !isOpen;
+  document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden || !qrCodeModal.hidden);
+}
+
+function setScannerStatus(message, type) {
+  scannerStatus.textContent = message;
+  scannerStatus.className = `form-message ${type}`;
+}
+
+function updateScannerResult(value) {
+  scannerResult.textContent = value || 'Nenhum QR Code lido ainda.';
 }
 
 function renderQrCode(responseData) {
@@ -142,6 +188,118 @@ async function openQrCodeModal() {
   });
 }
 
+async function stopScanner() {
+  isHandlingScan = false;
+
+  if (!html5QrCode) {
+    startScanButton.disabled = false;
+    stopScanButton.disabled = true;
+    scannerPreview.classList.remove('scanner-active');
+    return;
+  }
+
+  try {
+    if (html5QrCode.isScanning) {
+      await html5QrCode.stop();
+    }
+  } catch (error) {
+    console.error('Falha ao parar scanner:', error);
+  }
+
+  try {
+    await html5QrCode.clear();
+  } catch (error) {
+    console.error('Falha ao limpar scanner:', error);
+  }
+
+  startScanButton.disabled = false;
+  stopScanButton.disabled = true;
+  scannerPreview.classList.remove('scanner-active');
+}
+
+async function startScanner() {
+  if (!window.Html5Qrcode) {
+    setScannerStatus('A biblioteca do scanner nao foi carregada corretamente.', 'error');
+    return;
+  }
+
+  if (!window.isSecureContext && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    setScannerStatus('A camera so pode ser aberta em HTTPS ou localhost.', 'error');
+    return;
+  }
+
+  try {
+    if (!html5QrCode) {
+      html5QrCode = new Html5Qrcode('estandes-scanner-mount');
+    }
+
+    startScanButton.disabled = true;
+    stopScanButton.disabled = false;
+    isHandlingScan = false;
+    lastDecodedValue = '';
+    updateScannerResult('Nenhum QR Code lido ainda.');
+    setScannerStatus('Abrindo camera traseira...', 'info-message');
+
+    await html5QrCode.start(
+      { facingMode: 'environment' },
+      {
+        fps: 10,
+        qrbox: { width: 260, height: 260 },
+        aspectRatio: 1,
+        rememberLastUsedCamera: true,
+        showTorchButtonIfSupported: true,
+        showZoomSliderIfSupported: true,
+      },
+      async (decodedText) => {
+        if (!decodedText || decodedText === lastDecodedValue || isHandlingScan) {
+          return;
+        }
+
+        lastDecodedValue = decodedText;
+        updateScannerResult(decodedText);
+        const destinationUrl = window.magaluApi.resolveQrNavigationUrl(decodedText);
+
+        if (!destinationUrl) {
+          setScannerStatus('QR Code lido, mas sem uma rota valida para redirecionamento.', 'error');
+          return;
+        }
+
+        isHandlingScan = true;
+        setScannerStatus('QR Code lido com sucesso. Redirecionando...', 'success');
+
+        if (navigator.vibrate) {
+          navigator.vibrate(120);
+        }
+
+        await closeScannerModal();
+        window.location.assign(destinationUrl);
+      },
+      () => {
+      }
+    );
+
+    scannerPreview.classList.add('scanner-active');
+    setScannerStatus('Camera ativa. Aponte para um QR Code.', 'info-message');
+  } catch (error) {
+    startScanButton.disabled = false;
+    stopScanButton.disabled = true;
+    scannerPreview.classList.remove('scanner-active');
+
+    if (error && String(error).toLowerCase().includes('permission')) {
+      setScannerStatus('Permissao de camera negada. Libere o acesso e tente novamente.', 'error');
+      return;
+    }
+
+    setScannerStatus('Nao foi possivel abrir a camera neste aparelho.', 'error');
+    console.error(error);
+  }
+}
+
+async function closeScannerModal() {
+  await stopScanner();
+  setScannerModalState(false);
+}
+
 function getVisitedEstandeIds(user) {
   const visitedStands = Array.isArray(user && user.estandesVisitados) ? user.estandesVisitados : [];
 
@@ -215,7 +373,7 @@ function renderEstandes(estandes, visitedIds) {
     const status = document.createElement('span');
     status.className = `estande-card-status${isVisited ? ' estande-card-status--checked' : ''}`;
     status.setAttribute('role', 'img');
-    status.setAttribute('aria-label', isVisited ? 'Check-in realizado' : 'Check-in pendente');
+    status.setAttribute('aria-label', isVisited ? 'Visita registrada' : 'Visita pendente');
 
     card.appendChild(accent);
     card.appendChild(title);
@@ -257,6 +415,7 @@ async function loadEstandes(user) {
 
 setDrawerState(false);
 setQrModalState(false);
+setScannerModalState(false);
 
 async function initializeEstandesPage() {
   const storedUser = window.magaluApi.readStoredUser();
@@ -289,8 +448,38 @@ generateQrCodeButton.addEventListener('click', () => {
   loadUserQrCode();
 });
 
+openScannerMenuButton.addEventListener('click', () => {
+  setDrawerState(false);
+  setScannerModalState(true);
+  setScannerStatus('Aguardando inicialização...', 'info-message');
+  updateScannerResult('Nenhum QR Code lido ainda.');
+});
+
+openScannerButton.addEventListener('click', () => {
+  setScannerModalState(true);
+  setScannerStatus('Aguardando inicialização...', 'info-message');
+  updateScannerResult('Nenhum QR Code lido ainda.');
+});
+
 openQrCodeMenuButton.addEventListener('click', () => {
   openQrCodeModal();
+});
+
+scannerBackdrop.addEventListener('click', async () => {
+  await closeScannerModal();
+});
+
+closeScannerButton.addEventListener('click', async () => {
+  await closeScannerModal();
+});
+
+startScanButton.addEventListener('click', () => {
+  startScanner();
+});
+
+stopScanButton.addEventListener('click', async () => {
+  await stopScanner();
+  setScannerStatus('Camera encerrada.', 'info-message');
 });
 
 qrCodeBackdrop.addEventListener('click', () => {
@@ -322,9 +511,23 @@ logoutButton.addEventListener('click', () => {
   redirectToLogin();
 });
 
+window.addEventListener('beforeunload', () => {
+  stopScanner();
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') {
+    stopScanner();
+  }
+});
+
 document.addEventListener('keydown', (event) => {
   if (event.key !== 'Escape') {
     return;
+  }
+
+  if (!scannerModal.hidden) {
+    closeScannerModal();
   }
 
   if (!qrCodeModal.hidden) {
