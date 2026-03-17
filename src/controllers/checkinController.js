@@ -9,6 +9,21 @@ async function createCheckinHandler(req, res) {
   try {
     const checkinsCollection = await getCheckinsCollection();
     const checkin = createCheckin(req.body);
+
+    const existingCheckin = await checkinsCollection.findOne({
+      userId: checkin.userId,
+      estandeId: checkin.estandeId,
+    });
+
+    if (existingCheckin) {
+      res.status(409).json({
+        error: 'Este usuario ja respondeu o quiz deste estande.',
+        code: 'CHECKIN_ALREADY_EXISTS',
+        checkin: existingCheckin,
+      });
+      return;
+    }
+
     const result = await checkinsCollection.insertOne(checkin);
     const usersCollection = await getUsersCollection();
     const user = await usersCollection.findOne(
@@ -28,6 +43,14 @@ async function createCheckinHandler(req, res) {
       ...checkin,
     });
   } catch (error) {
+    if (error.code === 11000) {
+      res.status(409).json({
+        error: 'Este usuario ja respondeu o quiz deste estande.',
+        code: 'CHECKIN_ALREADY_EXISTS',
+      });
+      return;
+    }
+
     res.status(500).json({ error: error.message });
   }
 }

@@ -30,6 +30,29 @@ async function getQuestionSessionsCollection() {
   return database.collection('question_sessions');
 }
 
+async function findDuplicateCheckinsByUserAndEstande() {
+  const checkinsCollection = await getCheckinsCollection();
+
+  return checkinsCollection.aggregate([
+    {
+      $group: {
+        _id: {
+          userId: '$userId',
+          estandeId: '$estandeId',
+        },
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $match: {
+        '_id.userId': { $ne: null },
+        '_id.estandeId': { $ne: null },
+        count: { $gt: 1 },
+      },
+    },
+  ]).toArray();
+}
+
 async function findDuplicateUserIds() {
   const usersCollection = await getUsersCollection();
 
@@ -51,10 +74,12 @@ async function findDuplicateUserIds() {
 
 async function ensureDatabaseIndexes() {
   const usersCollection = await getUsersCollection();
+  const checkinsCollection = await getCheckinsCollection();
   const feedCollection = await getFeedCollection();
   const questionsCollection = await getQuestionsCollection();
   const questionSessionsCollection = await getQuestionSessionsCollection();
   const duplicateUserIds = await findDuplicateUserIds();
+  const duplicateCheckins = await findDuplicateCheckinsByUserAndEstande();
 
   const warnings = [];
 
@@ -67,6 +92,21 @@ async function ensureDatabaseIndexes() {
       {
         unique: true,
         name: 'users_id_magalu_unique',
+      }
+    );
+  }
+
+  if (duplicateCheckins.length > 0) {
+    const duplicatedValues = duplicateCheckins
+      .map((item) => `${item._id.userId}/${item._id.estandeId}`)
+      .join(', ');
+    warnings.push(`Nao foi possivel criar o indice unico de check-in por usuario e estande porque existem registros duplicados na collection checkins: ${duplicatedValues}. O POST /api/checkins continua bloqueando novas duplicidades, mas voce deve limpar os registros repetidos para ativar a protecao no banco.`);
+  } else {
+    await checkinsCollection.createIndex(
+      { userId: 1, estandeId: 1 },
+      {
+        unique: true,
+        name: 'checkins_user_estande_unique',
       }
     );
   }

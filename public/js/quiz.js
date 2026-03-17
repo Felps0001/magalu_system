@@ -31,6 +31,8 @@ let currentStep = 0;
 let score = 0;
 let quizStartedAt = null;
 let totalTimeInSeconds = 0;
+let hasCompletedCurrentQuiz = false;
+let isAnswering = false;
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
@@ -64,6 +66,35 @@ function setStepVisibility(stepName) {
   quizWelcomeStep.hidden = stepName !== 'welcome';
   quizQuestionStep.hidden = stepName !== 'question';
   quizResultStep.hidden = stepName !== 'result';
+}
+
+function hasUserCompletedCurrentQuiz(user) {
+  if (!user || !resolvedEstandeId) {
+    return false;
+  }
+
+  const visitedStands = Array.isArray(user.estandesVisitados) ? user.estandesVisitados : [];
+
+  return visitedStands.some((estande) => {
+    if (!estande) {
+      return false;
+    }
+
+    const estandeId = typeof estande === 'string'
+      ? estande
+      : (estande._id || estande.id || estande.estandeId);
+
+    return String(estandeId) === String(resolvedEstandeId);
+  });
+}
+
+function applyCompletedQuizState() {
+  hasCompletedCurrentQuiz = true;
+  quizWelcomeTitle.textContent = quizConfig.completedTitle || 'Quiz ja respondido';
+  quizWelcomeDescription.textContent = quizConfig.completedDescription || 'Este usuario ja respondeu este quiz e nao pode registrar nova pontuacao neste estande.';
+  quizStartButton.disabled = true;
+  quizStartButton.textContent = 'Quiz concluido';
+  setStepVisibility('welcome');
 }
 
 function applyQuizConfig() {
@@ -136,13 +167,13 @@ async function refreshStoredUser(userId) {
   const response = await fetch(window.magaluApi.buildApiUrl('/api/users'), window.magaluApi.withApiDefaults());
 
   if (!response.ok) {
-    return;
+    return null;
   }
 
   const users = await window.magaluApi.parseApiResponse(response);
 
   if (!Array.isArray(users)) {
-    return;
+    return null;
   }
 
   const updatedUser = users.find((item) => item && item._id === userId);
@@ -150,11 +181,16 @@ async function refreshStoredUser(userId) {
   if (updatedUser) {
     window.magaluApi.storeUser(updatedUser);
   }
+
+  return updatedUser || null;
 }
 
 async function doCheckin(user) {
   if (!resolvedEstandeId) {
-    return false;
+    return {
+      ok: false,
+      message: 'Seu quiz foi concluido. Para registrar pontos, configure o estandeId desta pagina.',
+    };
   }
 
   const response = await fetch(
@@ -174,20 +210,50 @@ async function doCheckin(user) {
     })
   );
 
+  const responseData = await window.magaluApi.parseApiResponse(response);
+
   if (response.ok) {
     await refreshStoredUser(user._id);
-    return true;
+    return {
+      ok: true,
+      message: quizConfig.resultDescription || 'Seu check-in foi registrado.',
+    };
   }
 
-  return false;
+  if (response.status === 409) {
+    await refreshStoredUser(user._id);
+    return {
+      ok: false,
+      alreadyCompleted: true,
+      message: responseData && responseData.error
+        ? responseData.error
+        : 'Este usuario ja respondeu o quiz deste estande.',
+    };
+  }
+
+  return {
+    ok: false,
+    message: responseData && responseData.error
+      ? responseData.error
+      : 'Nao foi possivel registrar o resultado do quiz.',
+  };
 }
 
 async function answer(index) {
+  if (isAnswering || hasCompletedCurrentQuiz) {
+    return;
+  }
+
   const currentQuestion = quizQuestions[currentStep - 1];
 
   if (!currentQuestion || !currentQuestion.options[index]) {
     return;
   }
+
+  isAnswering = true;
+  quizOptionButtons.forEach((button) => {
+    button.disabled = true;
+  });
 
   score += currentQuestion.options[index].points;
   currentStep += 1;
@@ -198,37 +264,64 @@ async function answer(index) {
     totalTimeInSeconds = Math.round((Date.now() - (quizStartedAt || Date.now())) / 1000);
 
     if (user && user._id) {
-      const didCheckin = await doCheckin(user);
+      const checkinResult = await doCheckin(user);
 
-      if (didCheckin) {
-        quizResultDescription.textContent = quizConfig.resultDescription || 'Seu check-in foi registrado.';
+      if (checkinResult.ok) {
+        quizResultDescription.textContent = checkinResult.message;
+      } else if (checkinResult.alreadyCompleted) {
+        quizResultTitle.textContent = quizConfig.completedTitle || 'Quiz ja respondido';
+        quizResultDescription.textContent = checkinResult.message;
+        hasCompletedCurrentQuiz = true;
       } else {
-        quizResultDescription.textContent = 'Seu quiz foi concluido. Para registrar pontos, configure o estandeId desta pagina.';
+        quizResultDescription.textContent = checkinResult.message;
       }
     }
   }
 
   renderQuiz();
+  isAnswering = false;
 }
-
-const currentUser = window.magaluApi.readStoredUser();
 
 applyQuizConfig();
 setDrawerState(false);
 
-if (!currentUser) {
-  redirectToLogin();
-} else if (window.magaluApi.requiresFirstAccess(currentUser)) {
-  redirectToFirstAccess();
-} else {
-  const userNameText = currentUser.nome || 'Usuario';
-  const userRoleText = `${currentUser.cargo || 'Sem cargo'} · ${currentUser.loja || 'Sem loja'}`;
+async function initializeQuiz() {
+  const currentUser = window.magaluApi.readStoredUser();
+
+  if (!currentUser) {
+    redirectToLogin();
+    return;
+  }
+
+  if (window.magaluApi.requiresFirstAccess(currentUser)) {
+    redirectToFirstAccess();
+    return;
+  }
+
+  const refreshedUser = currentUser._id
+    ? (await refreshStoredUser(currentUser._id)) || currentUser
+    : currentUser;
+  const userNameText = refreshedUser.nome || 'Usuario';
+  const userRoleText = `${refreshedUser.cargo || 'Sem cargo'} · ${refreshedUser.loja || 'Sem loja'}`;
+
   quizDrawerUserName.textContent = userNameText;
   quizDrawerUserRole.textContent = userRoleText;
+
+  if (hasUserCompletedCurrentQuiz(refreshedUser)) {
+    applyCompletedQuizState();
+    return;
+  }
+
+  quizStartButton.disabled = false;
+  quizStartButton.textContent = 'Iniciar';
   renderQuiz();
 }
 
 quizStartButton.addEventListener('click', () => {
+  if (hasCompletedCurrentQuiz) {
+    return;
+  }
+
   nextStep();
 });
 
@@ -260,3 +353,5 @@ document.addEventListener('keydown', (event) => {
     setDrawerState(false);
   }
 });
+
+initializeQuiz();

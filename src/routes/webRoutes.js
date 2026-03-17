@@ -85,6 +85,10 @@ router.get('/feed', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'feed.html'));
 });
 
+router.get('/estandes', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'estandes.html'));
+});
+
 router.get('/scanner', (req, res) => {
   res.redirect('/perfil/');
 });

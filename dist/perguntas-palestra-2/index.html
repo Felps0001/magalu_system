@@ -4,6 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Perguntas | Palestra 2</title>
+  <script>
+    (function ensureQuestionRouteTrailingSlash() {
+      var pathname = window.location.pathname;
+      var search = window.location.search;
+      var hash = window.location.hash;
+      var lastSegment = pathname.split('/').filter(Boolean).pop() || '';
+      var supportedRoutes = {
+        'perguntas-palestra-1': true,
+        'questions-palestra-1': true,
+        'perguntas-palestra-2': true,
+        'questions-palestra-2': true,
+        'perguntas-palestra-3': true,
+        'questions-palestra-3': true
+      };
+
+      if (!lastSegment || pathname.endsWith('/') || lastSegment.indexOf('.') !== -1 || !supportedRoutes[lastSegment]) {
+        return;
+      }
+
+      window.location.replace(pathname + '/' + search + hash);
+    }());
+  </script>
   <meta name="theme-color" content="#0086ff">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">

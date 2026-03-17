@@ -75,6 +75,7 @@ function writePagesRoutes(done) {
   writeRouteIndex('perfil', 'perfil.html');
   writeRouteIndex('linktree', 'linktree.html');
   writeRouteIndex('logistica', 'logistica.html');
+  writeRouteIndex('estandes', 'estandes.html');
   writeRouteIndex('perguntas-palestra-1', 'questions-palestra-1.html');
   writeRouteIndex('questions-palestra-1', 'questions-palestra-1.html');
   writeRouteIndex('perguntas-palestra-2', 'questions-palestra-2.html');

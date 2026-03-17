@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estandes</title>
+  <meta name="theme-color" content="#0086ff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Magalu System">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../icons/icon-192.png?v=2" type="image/png">
+  <link rel="icon" href="../icons/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../icons/icon-192.png?v=2">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="feed-mobile-body">
+  <main class="feed-mobile-shell estandes-page-shell">
+    <button id="estandes-drawer-backdrop" class="feed-backdrop" type="button" hidden aria-label="Fechar menu"></button>
+
+    <aside id="estandes-drawer" class="feed-drawer" aria-hidden="true" hidden>
+      <div class="feed-drawer-header">
+        <img class="feed-drawer-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
+        <button id="estandes-close-drawer" class="feed-drawer-close" type="button" aria-label="Fechar menu">×</button>
+      </div>
+
+      <div class="feed-drawer-user">
+        <strong id="estandes-drawer-user-name">Carregando perfil...</strong>
+        <p id="estandes-drawer-user-role">Seus check-ins de estandes aparecem destacados nesta tela.</p>
+      </div>
+
+      <nav class="feed-drawer-nav" aria-label="Navegacao principal">
+        <details class="feed-drawer-group">
+          <summary class="feed-drawer-link">Perfil</summary>
+          <div class="feed-drawer-subnav">
+            <a class="feed-drawer-sublink" href="../perfil/">Dados</a>
+            <p class="feed-drawer-subtitle">Logistica</p>
+            <a class="feed-drawer-sublink" href="../logistica/#transfer">Transfer</a>
+            <a class="feed-drawer-sublink" href="../logistica/#hospedagem">Hospedagem</a>
+            <a class="feed-drawer-sublink" href="../logistica/#aereo">Aereo</a>
+          </div>
+        </details>
+        <a class="feed-drawer-link" href="../agenda/">Agenda</a>
+        <a class="feed-drawer-link feed-drawer-link--current" href="../estandes/" aria-current="page">Estandes</a>
+        <button class="feed-drawer-link" id="estandes-open-qrcode-menu" type="button">Checkin</button>
+        <a class="feed-drawer-link" href="../feed/">Feed</a>
+      </nav>
+
+      <div class="feed-drawer-actions">
+        <button id="logout-button" class="feed-drawer-button feed-drawer-button--ghost" type="button">Sair</button>
+      </div>
+    </aside>
+
+    <section class="feed-top-panel" aria-label="Estandes do evento">
+      <img class="feed-top-image" src="../assets/img/layer-topo.png" alt="Estandes Magalu">
+      <div class="feed-top-content">
+        <div class="feed-top-bar">
+          <img class="feed-top-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
+          <button id="estandes-menu-button" class="feed-top-menu" type="button" aria-controls="estandes-drawer" aria-expanded="false" aria-label="Abrir menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+
+        <div class="feed-top-copy">
+          <h1 class="feed-top-title">Estandes</h1>
+          <p class="feed-top-subtitle">Confira quais marcas ja receberam seu check-in durante o evento.</p>
+          <div class="feed-top-user">
+            <strong id="estandes-user-name">Carregando perfil...</strong>
+            <p id="estandes-user-role">Estandes com check-in ficam coloridos automaticamente.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="feed-mobile-panel estandes-mobile-panel">
+      <section class="feed-mobile-card estandes-summary-card" aria-labelledby="estandes-summary-title">
+        <div class="profile-section-header estandes-summary-header">
+          <div>
+            <p class="profile-section-kicker">Mapa de visita</p>
+            <h2 id="estandes-summary-title" class="profile-section-title">Seus estandes</h2>
+          </div>
+          <span id="estandes-visited-count" class="profile-id-badge">0 visitados</span>
+        </div>
+        <p id="estandes-summary-copy" class="question-copy">Os cards abaixo mostram quais estandes ja registraram seu check-in.</p>
+      </section>
+
+      <p id="estandes-status" class="form-message feed-mobile-message" aria-live="polite">Carregando estandes...</p>
+
+      <section id="estandes-list" class="estandes-grid" aria-live="polite"></section>
+    </section>
+
+    <section id="estandes-qrcode-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="estandes-qrcode-title" hidden>
+      <button id="estandes-qrcode-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar QR Code"></button>
+      <div class="profile-qrcode-panel">
+        <div class="profile-qrcode-header">
+          <div>
+            <p class="profile-section-kicker">QRCode do perfil</p>
+            <h2 id="estandes-qrcode-title" class="profile-section-title">Seu acesso rapido</h2>
+          </div>
+          <button id="estandes-close-qrcode" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
+        </div>
+        <div id="estandes-qrcode-preview" class="profile-qrcode-preview" aria-live="polite"></div>
+        <div class="profile-qrcode-actions">
+          <button id="estandes-generate-qrcode-button" class="primary-button" type="button">Atualizar QR Code</button>
+          <button id="estandes-close-qrcode-secondary" class="secondary-button" type="button">Fechar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../js/runtime-config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/pwa.js"></script>
+  <script src="../js/estandes.js"></script>
+</body>
+</html>
