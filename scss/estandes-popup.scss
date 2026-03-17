@@ -1,0 +1,209 @@
+.estandes-page-shell {
+  background: linear-gradient(180deg, #ffffff 0%, #f4f9ff 100%);
+}
+
+.estandes-mobile-panel {
+  display: grid;
+  gap: 10px;
+  padding-bottom: calc(44px + env(safe-area-inset-bottom));
+}
+
+.estandes-summary-card {
+  padding: 4px 4px 0;
+}
+
+.estandes-summary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0;
+}
+
+.estandes-summary-title {
+  margin: 0;
+  color: #50545d;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+}
+
+.estandes-summary-count {
+  min-width: 42px;
+  height: 42px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  color: #6a717d;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.estandes-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.estande-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 68px;
+  padding: 7px 8px 7px 14px;
+  border-radius: 999px;
+  border: 0;
+  background: linear-gradient(180deg, #f2f2ef 0%, #ebebe8 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.estande-card--checked {
+  background: linear-gradient(180deg, #1a94eb 0%, #1188e4 100%);
+  box-shadow: 0 10px 18px rgba(0, 110, 197, 0.2);
+}
+
+.estande-card-accent {
+  position: relative;
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: rgba(149, 153, 158, 0.44);
+}
+
+.estande-card-accent::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-top: 2px solid rgba(255, 255, 255, 0.86);
+  border-right: 2px solid rgba(255, 255, 255, 0.86);
+  transform: translate(-60%, -50%) rotate(45deg);
+}
+
+.estande-card--checked .estande-card-accent {
+  background: rgba(0, 116, 201, 0.34);
+}
+
+.estande-card-title {
+  min-width: 0;
+  margin: 0;
+  flex: 1 1 auto;
+  color: #7a8088;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.estande-card--checked .estande-card-title {
+  color: #ffffff;
+}
+
+.estande-card-metric {
+  flex: 0 0 auto;
+  color: #8b9097;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.estande-card--checked .estande-card-metric {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.estande-card-status {
+  position: relative;
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: inset 0 0 0 1px rgba(233, 233, 228, 0.9);
+}
+
+.estande-card-status--checked {
+  background: #61be3d;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.16);
+}
+
+.estande-card-status--checked::before {
+  content: '';
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  width: 10px;
+  height: 20px;
+  border-right: 4px solid #ffffff;
+  border-bottom: 4px solid #ffffff;
+  transform: translate(-50%, -62%) rotate(40deg);
+}
+
+.global-event-popup-open {
+  overflow: hidden;
+}
+
+.global-event-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+}
+
+.global-event-popup-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(5, 16, 31, 0.56);
+}
+
+.global-event-popup-dialog {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(calc(100% - 28px), 440px);
+  padding: 0;
+  border-radius: 28px;
+  background: transparent;
+  box-shadow: none;
+  transform: translate(-50%, -50%);
+}
+
+.global-event-popup-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(5, 16, 31, 0.56);
+  color: #ffffff;
+  font-size: 1.35rem;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.global-event-popup-media {
+  display: block;
+  border-radius: 28px;
+  overflow: hidden;
+  text-decoration: none;
+  box-shadow: 0 26px 60px rgba(6, 36, 74, 0.24);
+}
+
+.global-event-popup-image {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  display: block;
+}
+

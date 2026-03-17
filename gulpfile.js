@@ -3,6 +3,7 @@ const path = require('path');
 const { src, dest, series, watch } = require('gulp');
 const cleanCss = require('gulp-clean-css');
 const terser = require('gulp-terser');
+const sass = require('sass');
 
 const projectRoot = __dirname;
 const publicDir = path.join(projectRoot, 'public');
@@ -98,10 +99,18 @@ function writePagesRoutes(done) {
 }
 
 function watchPages() {
-  watch('public/**/*', { cwd: projectRoot }, series(buildPages));
+  watch(['public/**/*', 'scss/**/*'], { cwd: projectRoot }, series(buildPages));
 }
 
-const buildPages = series(cleanDist, copyPublic, minifyStyles, minifyScripts, writePagesRoutes);
+function compileScss() {
+  const scssPath = path.join(projectRoot, 'scss', 'styles.scss');
+  const cssPath = path.join(publicDir, 'styles.css');
+  const result = sass.compile(scssPath, { style: 'expanded' });
+  fs.writeFileSync(cssPath, result.css);
+  return Promise.resolve();
+}
+
+const buildPages = series(cleanDist, compileScss, copyPublic, minifyStyles, minifyScripts, writePagesRoutes);
 
 exports.clean = cleanDist;
 exports['build-pages'] = buildPages;

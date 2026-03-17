@@ -1,0 +1,83 @@
+@media (max-width: 1080px) {
+  .questions-board-body {
+    padding: 20px;
+  }
+
+  .questions-board-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .questions-column {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .questions-board-body {
+    padding: 14px;
+  }
+
+  .questions-board-hero {
+    padding: 20px;
+  }
+
+  .questions-board-toolbar,
+  .questions-board-meta,
+  .question-form-footer {
+    align-items: stretch;
+  }
+
+  .questions-filter,
+  .questions-filter-select,
+  .questions-board-toolbar-actions,
+  .questions-session-button,
+  .questions-refresh-button,
+  .question-form-footer .primary-button {
+    width: 100%;
+  }
+
+  .questions-board-toolbar-actions {
+    flex-direction: column;
+  }
+
+  .question-form-footer {
+    flex-direction: column;
+  }
+
+  .question-counter {
+    text-align: right;
+  }
+
+  .questions-approved-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .estande-card {
+    gap: 12px;
+    min-height: 84px;
+    padding: 8px 10px 8px 16px;
+  }
+
+  .estande-card-title {
+    font-size: 1.1rem;
+  }
+
+  .estande-card-metric {
+    font-size: 0.92rem;
+  }
+
+  .estande-card-status {
+    flex-basis: 58px;
+    width: 58px;
+    height: 58px;
+  }
+
+  .estande-card-status--checked::before {
+    width: 13px;
+    height: 24px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+  }
+}
+

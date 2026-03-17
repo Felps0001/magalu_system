@@ -1,0 +1,24 @@
+@media (min-width: 901px) {
+  .auth-body--magalu {
+    display: grid;
+    place-items: center;
+  }
+
+  .auth-mobile-shell {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04);
+  }
+
+  .feed-mobile-body {
+    display: grid;
+    place-items: center;
+  }
+
+  .feed-mobile-shell {
+    box-shadow: 0 0 0 1px rgba(0, 89, 214, 0.06);
+  }
+
+  .profile-mobile-body {
+    display: grid;
+    place-items: center;
+  }
+}

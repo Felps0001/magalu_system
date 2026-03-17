@@ -1,0 +1,106 @@
+@media (max-width: 900px) {
+  .auth-layout,
+  .details-grid,
+  .agenda-grid,
+  .agenda-grid--turma,
+  .feed-layout,
+  .brand-grid,
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feed-mobile-panel {
+    padding-inline: 18px;
+  }
+
+  .profile-mobile-panel {
+    padding-inline: 18px;
+  }
+
+  .feed-top-content {
+    padding-inline: 18px;
+  }
+
+  .feed-modal-panel {
+    padding-inline: 18px;
+  }
+
+  .profile-qrcode-panel {
+    padding-inline: 18px;
+  }
+
+  .profile-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-stat-card--wide {
+    grid-column: auto;
+  }
+
+  .profile-qr-trigger {
+    min-width: calc(100vw - 36px);
+  }
+
+  .agenda-track-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .dashboard-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .header-actions {
+    width: 100%;
+  }
+
+  .auth-body,
+  .dashboard-body {
+    padding: 18px;
+  }
+
+  .auth-body--magalu {
+    padding: 0;
+  }
+
+  .first-access-mobile-panel {
+    padding-inline: 18px;
+  }
+
+  .first-access-top-content {
+    gap: 28px;
+    padding-inline: 18px;
+    padding-bottom: 34px;
+  }
+
+  .first-access-top-logo {
+    width: min(42vw, 150px);
+  }
+
+  .first-access-mobile-input {
+    height: 72px;
+    padding-inline: 26px;
+  }
+
+  .first-access-mobile-submit {
+    width: 100%;
+  }
+
+  .brand-panel,
+  .auth-card,
+  .hero-card,
+  .detail-card,
+  .dashboard-header {
+    padding: 22px;
+  }
+
+  .qr-card-header {
+    flex-direction: column;
+  }
+
+  .qr-card-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
