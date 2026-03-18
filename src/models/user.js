@@ -10,6 +10,8 @@ function createUser({
   hospedagem,
   aereo,
   transfer,
+  kitExtra,
+  kitExtraRetirada,
 }) {
   if (!id_magalu) {
     throw new Error('O campo id_magalu e obrigatorio.');
@@ -29,6 +31,8 @@ function createUser({
     transfer: Boolean(transfer),
     firstAccessCompleted: false,
     kit: false, // campo kit default false
+    kitExtra: Boolean(kitExtra),
+    kitExtraRetirada: Boolean(kitExtra) && Boolean(kitExtraRetirada),
   };
 }
 
@@ -56,6 +60,8 @@ function buildUserQrData(user, generatedAt = new Date().toISOString()) {
       aereo: user.aereo || '',
       transfer: Boolean(user.transfer),
       kit: typeof user.kit === 'boolean' ? user.kit : false,
+      kitExtra: typeof user.kitExtra === 'boolean' ? user.kitExtra : false,
+      kitExtraRetirada: typeof user.kitExtraRetirada === 'boolean' ? user.kitExtraRetirada : false,
     },
   };
 }

@@ -78,7 +78,10 @@ async function marcarKit(userId) {
 
 async function processarKit(userId) {
   const user = await consultarKit(userId);
-  const meta = `ID Magalu: ${user.id_magalu || '-'}\nLoja: ${user.loja || '-'}\nCargo: ${user.cargo || '-'}\nTurma: ${user.turma || '-'}`;
+  const extraInfo = user.kitExtra
+    ? `\nKit extra: sim\nRetirada kit extra: ${user.kitExtraRetirada ? 'sim' : 'nao'}`
+    : '\nKit extra: nao';
+  const meta = `ID Magalu: ${user.id_magalu || '-'}\nLoja: ${user.loja || '-'}\nCargo: ${user.cargo || '-'}\nTurma: ${user.turma || '-'}${extraInfo}`;
 
   if (user.kit) {
     updateKitStatus(`Kit ja retirado por ${user.nome || 'usuario'}.`, meta);

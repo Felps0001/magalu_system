@@ -68,6 +68,26 @@ function normalizeEditableUserFields(payload = {}) {
     normalizedPayload.transfer = transfer === true || transfer === 'true' || transfer === '1' || transfer === 1;
   }
 
+  if (Object.prototype.hasOwnProperty.call(payload, 'kitExtra')) {
+    const { kitExtra } = payload;
+
+    normalizedPayload.kitExtra = kitExtra === true || kitExtra === 'true' || kitExtra === '1' || kitExtra === 1;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(payload, 'kitExtraRetirada')) {
+    const { kitExtraRetirada } = payload;
+
+    normalizedPayload.kitExtraRetirada = kitExtraRetirada === true || kitExtraRetirada === 'true' || kitExtraRetirada === '1' || kitExtraRetirada === 1;
+  }
+
+  if (normalizedPayload.kitExtra === false) {
+    normalizedPayload.kitExtraRetirada = false;
+  }
+
+  if (!Object.prototype.hasOwnProperty.call(normalizedPayload, 'kitExtra') && normalizedPayload.kitExtraRetirada === true) {
+    normalizedPayload.kitExtra = true;
+  }
+
   return normalizedPayload;
 }
 
@@ -280,6 +300,8 @@ async function getUserKitStatusHandler(req, res) {
             turma: 1,
             cargo: 1,
             kit: 1,
+            kitExtra: 1,
+            kitExtraRetirada: 1,
           },
         }
       ),
@@ -298,6 +320,8 @@ async function getUserKitStatusHandler(req, res) {
       turma: user.turma || '',
       cargo: user.cargo || '',
       kit: Boolean(user.kit),
+      kitExtra: Boolean(user.kitExtra),
+      kitExtraRetirada: Boolean(user.kitExtra) && Boolean(user.kitExtraRetirada),
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
