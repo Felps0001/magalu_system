@@ -78,7 +78,6 @@ body {
   display: grid;
   grid-template-rows: auto 1fr;
   gap: clamp(56px, 12vh, 144px);
-  background: linear-gradient(180deg, #1a90eb 0%, #0686ef 100%);
   border-bottom-right-radius: min(34vw, 138px);
   overflow: hidden;
 }
@@ -87,8 +86,7 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0)), url("./assets/img/bg-index.png") center top/cover no-repeat;
-  opacity: 0.32;
+  background: url("./assets/img/bg-index.png") center top/cover no-repeat;
   pointer-events: none;
 }
 
