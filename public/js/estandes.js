@@ -435,7 +435,7 @@ async function initializeEstandesPage() {
     : storedUser;
 
   const userNameText = currentUser.nome || 'Usuario';
-  const userRoleText = `${currentUser.cargo || 'Sem cargo'} · ${currentUser.loja || 'Sem loja'}`;
+  const userRoleText = `${currentUser.cargo || 'Sem cargo'} · ${currentUser.filial || currentUser.loja || 'Sem filial'}`;
 
   estandesUserName.textContent = userNameText;
   drawerUserName.textContent = userNameText;

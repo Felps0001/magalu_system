@@ -4,11 +4,8 @@ const firstAccessMessage = document.getElementById('first-access-message');
 const logoutButton = document.getElementById('logout-button');
 const profileNome = document.getElementById('profile-nome');
 const profileCargo = document.getElementById('profile-cargo');
-const profileRegiao = document.getElementById('profile-regiao');
-const profileCidade = document.getElementById('profile-cidade');
-const profileLoja = document.getElementById('profile-loja');
-const profileHospedagem = document.getElementById('profile-hospedagem');
-const profileAereo = document.getElementById('profile-aereo');
+const profileRegional = document.getElementById('profile-regional');
+const profileFilial = document.getElementById('profile-filial');
 const profileIdMagalu = document.getElementById('profile-id-magalu');
 const profileCpf = document.getElementById('profile-cpf');
 
@@ -28,11 +25,8 @@ function setFirstAccessMessage(message, type = '') {
 function populateForm(user) {
   profileNome.value = user.nome || '';
   profileCargo.value = user.cargo || '';
-  profileRegiao.value = user.regiao || '';
-  profileCidade.value = user.cidade || '';
-  profileLoja.value = user.loja || '';
-  profileHospedagem.value = user.hospedagem || '';
-  profileAereo.value = user.aereo || '';
+  profileRegional.value = user.regional || user.regiao || '';
+  profileFilial.value = user.filial || user.loja || '';
   profileIdMagalu.value = user.id_magalu || '';
   profileCpf.textContent = user.cpf || '-';
 }
@@ -41,11 +35,8 @@ function getPayload() {
   return {
     nome: profileNome.value,
     cargo: profileCargo.value,
-    regiao: profileRegiao.value,
-    cidade: profileCidade.value,
-    loja: profileLoja.value,
-    hospedagem: profileHospedagem.value,
-    aereo: profileAereo.value,
+    regional: profileRegional.value,
+    filial: profileFilial.value,
   };
 }
 

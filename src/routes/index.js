@@ -7,6 +7,7 @@ const checkinRoutes = require('./checkinRoutes');
 const authRoutes = require('./authRoutes');
 const feedRoutes = require('./feedRoutes');
 const questionRoutes = require('./questionRoutes');
+const adminRoutes = require('./adminRoutes');
 
 const router = express.Router();
 
@@ -17,5 +18,6 @@ router.use('/estandes', estandeRoutes);
 router.use('/checkins', checkinRoutes);
 router.use('/feed', feedRoutes);
 router.use('/questions', questionRoutes);
+router.use('/admin', adminRoutes);
 
 module.exports = router;

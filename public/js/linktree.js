@@ -141,7 +141,7 @@ const storedUser = window.magaluApi.readStoredUser();
 if (storedUser) {
   currentUser = storedUser;
   const userNameText = storedUser.nome || 'Usuario';
-  const userRoleText = `${storedUser.cargo || 'Sem cargo'} · ${storedUser.loja || 'Sem loja'}`;
+  const userRoleText = `${storedUser.cargo || 'Sem cargo'} · ${storedUser.filial || storedUser.loja || 'Sem filial'}`;
 
   linktreeUserName.textContent = userNameText;
   linktreeUserRole.textContent = 'Atalhos rapidos para navegar por todas as telas do projeto.';

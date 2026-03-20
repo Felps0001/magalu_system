@@ -321,7 +321,7 @@ async function initializeQuiz() {
     ? (await refreshStoredUser(currentUser._id)) || currentUser
     : currentUser;
   const userNameText = refreshedUser.nome || 'Usuario';
-  const userRoleText = `${refreshedUser.cargo || 'Sem cargo'} · ${refreshedUser.loja || 'Sem loja'}`;
+  const userRoleText = `${refreshedUser.cargo || 'Sem cargo'} · ${refreshedUser.filial || refreshedUser.loja || 'Sem filial'}`;
 
   quizDrawerUserName.textContent = userNameText;
   quizDrawerUserRole.textContent = userRoleText;

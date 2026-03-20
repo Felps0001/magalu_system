@@ -234,7 +234,7 @@ function createFeedCard(item) {
   authorName.textContent = item.author && item.author.nome ? item.author.nome : 'Usuario';
 
   const authorMeta = document.createElement('p');
-  authorMeta.textContent = item.author && item.author.loja ? item.author.loja : 'Publicacao interna';
+  authorMeta.textContent = item.author && (item.author.filial || item.author.loja) ? (item.author.filial || item.author.loja) : 'Publicacao interna';
 
   author.appendChild(authorName);
   author.appendChild(authorMeta);
@@ -412,7 +412,7 @@ if (!user) {
 } else {
   currentUser = user;
   const userName = user.nome || 'Usuario autenticado';
-  const userRole = `${user.cargo || 'Sem cargo'} · ${user.loja || 'Sem loja'} · ${user.turma || 'Sem turma'}`;
+  const userRole = `${user.cargo || 'Sem cargo'} · ${user.filial || user.loja || 'Sem filial'}`;
   feedUserName.textContent = userName;
   feedUserRole.textContent = userRole;
   feedDrawerUserName.textContent = userName;

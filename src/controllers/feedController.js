@@ -177,7 +177,7 @@ async function listFeedHandler(req, res) {
                 _id: '$author._id',
                 nome: { $ifNull: ['$author.nome', 'Usuario'] },
                 id_magalu: '$author.id_magalu',
-                loja: '$author.loja',
+                filial: { $ifNull: ['$author.filial', '$author.loja'] },
               },
             },
           },

@@ -299,7 +299,7 @@ function renderAgendaForTurma(turma) {
 
   turmaSections.forEach((section) => {
     const turmaDaSection = normalizeTurma(section.dataset.turma);
-    const deveMostrar = turmaDaSection === turmaNormalizada;
+    const deveMostrar = !turmaNormalizada || turmaDaSection === turmaNormalizada;
 
     setSectionVisibility(section, deveMostrar);
 
@@ -309,19 +309,19 @@ function renderAgendaForTurma(turma) {
   });
 
   if (!turmaNormalizada) {
-    agendaUserName.textContent = 'Turma nao encontrada';
-    agendaUserRole.textContent = 'Seu cadastro nao possui turma definida para liberar uma agenda especifica.';
+    agendaUserName.textContent = 'Agenda geral do evento';
+    agendaUserRole.textContent = 'Exibindo a agenda completa do evento.';
     return;
   }
 
   if (!encontrouTurma) {
     agendaUserName.textContent = 'Agenda indisponivel';
-    agendaUserRole.textContent = `Nenhuma agenda foi configurada para ${turma}.`;
+    agendaUserRole.textContent = 'Nenhum bloco de agenda foi configurado para este acesso.';
     return;
   }
 
-  agendaUserName.textContent = `Agenda liberada para ${turma}`;
-  agendaUserRole.textContent = 'A agenda geral aparece para todos, e abaixo voce visualiza apenas os compromissos da sua turma.';
+  agendaUserName.textContent = `Agenda segmentada ${turma}`;
+  agendaUserRole.textContent = 'Exibindo apenas o bloco de agenda correspondente a este acesso.';
 }
 
 const user = window.magaluApi.readStoredUser();
@@ -337,7 +337,7 @@ if (!user) {
 } else {
   currentUser = user;
   const userNameText = user.nome || 'Usuario';
-  const userRoleText = `${user.cargo || 'Sem cargo'} · ${user.loja || 'Sem loja'}`;
+  const userRoleText = `${user.cargo || 'Sem cargo'} · ${user.filial || user.loja || 'Sem filial'}`;
   drawerUserName.textContent = userNameText;
   drawerUserRole.textContent = userRoleText;
   renderAgendaForTurma(user.turma || user.Turma || '');

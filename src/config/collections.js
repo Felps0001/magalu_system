@@ -5,6 +5,16 @@ async function getUsersCollection() {
   return database.collection('users');
 }
 
+async function getRotasCollection() {
+  const database = await connectToMongoDB();
+  return database.collection('rotas');
+}
+
+async function getAereosCollection() {
+  const database = await connectToMongoDB();
+  return database.collection('aereos');
+}
+
 async function getEstandesCollection() {
   const database = await connectToMongoDB();
   return database.collection('estandes');
@@ -74,6 +84,8 @@ async function findDuplicateUserIds() {
 
 async function ensureDatabaseIndexes() {
   const usersCollection = await getUsersCollection();
+  const rotasCollection = await getRotasCollection();
+  const aereosCollection = await getAereosCollection();
   const checkinsCollection = await getCheckinsCollection();
   const feedCollection = await getFeedCollection();
   const questionsCollection = await getQuestionsCollection();
@@ -125,6 +137,22 @@ async function ensureDatabaseIndexes() {
     }
   );
 
+  await rotasCollection.createIndex(
+    { userId: 1 },
+    {
+      unique: true,
+      name: 'rotas_user_unique',
+    }
+  );
+
+  await aereosCollection.createIndex(
+    { userId: 1 },
+    {
+      unique: true,
+      name: 'aereos_user_unique',
+    }
+  );
+
   await questionsCollection.createIndex(
     { palestraId: 1, status: 1, updatedAt: -1 },
     {
@@ -166,7 +194,9 @@ async function ensureDatabaseIndexes() {
 }
 
 module.exports = {
+  getAereosCollection,
   getUsersCollection,
+  getRotasCollection,
   getEstandesCollection,
   getCheckinsCollection,
   getFeedCollection,

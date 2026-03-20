@@ -1,9 +1,12 @@
 const { ObjectId } = require('mongodb');
 const QRCode = require('qrcode');
 
-const { getUsersCollection } = require('../config/collections');
+const { getAereosCollection, getRotasCollection, getUsersCollection } = require('../config/collections');
+const { createAereo, normalizeAereoPayload } = require('../models/aereo');
+const { createRota, normalizeRotaPayload } = require('../models/rota');
 const { buildUserQrData, createUser, createUserQrPayload } = require('../models/user');
 const { buildCacheKey, deleteCacheByPrefix, deleteCacheKeys, getOrSetJsonCache } = require('../services/cache');
+const { buildUserAccessPipeline } = require('../services/userAccessPipeline');
 
 const USERS_CACHE_KEY = buildCacheKey(['users', 'list']);
 const USERS_AGENDA_CACHE_KEY = buildCacheKey(['users', 'agenda']);
@@ -12,60 +15,35 @@ const USERS_AGENDA_CACHE_TTL_SECONDS = Number(process.env.REDIS_TTL_AGENDA_SECON
 const USER_KIT_CACHE_TTL_SECONDS = Number(process.env.REDIS_TTL_USER_KIT_SECONDS || 45);
 const USER_QRCODE_CACHE_TTL_SECONDS = Number(process.env.REDIS_TTL_USER_QRCODE_SECONDS || 300);
 
-function buildUserAccessPipeline(matchStage) {
-  return [
-    {
-      $match: matchStage,
-    },
-    {
-      $lookup: {
-        from: 'checkins',
-        localField: '_id',
-        foreignField: 'userId',
-        as: 'checkins',
-      },
-    },
-    {
-      $addFields: {
-        pontos: { $sum: '$checkins.pontos' },
-        tempo: { $sum: '$checkins.tempo' },
-        totalCheckins: { $size: '$checkins' },
-      },
-    },
-    {
-      $lookup: {
-        from: 'estandes',
-        localField: 'checkins.estandeId',
-        foreignField: '_id',
-        as: 'estandesVisitados',
-      },
-    },
-    {
-      $limit: 1,
-    },
-  ];
-}
-
 async function findUserWithAccessData(usersCollection, matchStage) {
-  return usersCollection.aggregate(buildUserAccessPipeline(matchStage)).next();
+  return usersCollection.aggregate(buildUserAccessPipeline(matchStage, { limitOne: true })).next();
 }
 
 function normalizeEditableUserFields(payload = {}) {
-  const editableFields = ['nome', 'regiao', 'cidade', 'loja', 'cargo', 'turma', 'hospedagem', 'aereo'];
   const normalizedPayload = {};
 
-  editableFields.forEach((fieldName) => {
-    if (Object.prototype.hasOwnProperty.call(payload, fieldName)) {
-      normalizedPayload[fieldName] = typeof payload[fieldName] === 'string'
-        ? payload[fieldName].trim()
-        : '';
-    }
-  });
+  if (Object.prototype.hasOwnProperty.call(payload, 'nome')) {
+    normalizedPayload.nome = typeof payload.nome === 'string' ? payload.nome.trim() : '';
+  }
 
-  if (Object.prototype.hasOwnProperty.call(payload, 'transfer')) {
-    const { transfer } = payload;
+  if (Object.prototype.hasOwnProperty.call(payload, 'cargo')) {
+    normalizedPayload.cargo = typeof payload.cargo === 'string' ? payload.cargo.trim() : '';
+  }
 
-    normalizedPayload.transfer = transfer === true || transfer === 'true' || transfer === '1' || transfer === 1;
+  if (Object.prototype.hasOwnProperty.call(payload, 'regional') || Object.prototype.hasOwnProperty.call(payload, 'regiao')) {
+    const regionalValue = Object.prototype.hasOwnProperty.call(payload, 'regional')
+      ? payload.regional
+      : payload.regiao;
+
+    normalizedPayload.regional = typeof regionalValue === 'string' ? regionalValue.trim() : '';
+  }
+
+  if (Object.prototype.hasOwnProperty.call(payload, 'filial') || Object.prototype.hasOwnProperty.call(payload, 'loja')) {
+    const filialValue = Object.prototype.hasOwnProperty.call(payload, 'filial')
+      ? payload.filial
+      : payload.loja;
+
+    normalizedPayload.filial = typeof filialValue === 'string' ? filialValue.trim() : '';
   }
 
   if (Object.prototype.hasOwnProperty.call(payload, 'kitExtra')) {
@@ -113,6 +91,26 @@ async function ensureUserQrCode(usersCollection, user) {
     ...user,
     qrCodeGeneratedAt,
     qrCodePayload,
+  };
+}
+
+async function findExistingUserOrRespond(res, userId) {
+  if (!ObjectId.isValid(userId)) {
+    res.status(400).json({ error: 'O id do usuario informado e invalido.' });
+    return null;
+  }
+
+  const usersCollection = await getUsersCollection();
+  const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
+
+  if (!user) {
+    res.status(404).json({ error: 'Usuario nao encontrado.' });
+    return null;
+  }
+
+  return {
+    usersCollection,
+    user,
   };
 }
 
@@ -209,6 +207,16 @@ async function updateUserProfileHandler(req, res) {
           firstAccessCompleted: true,
           qrCodeGeneratedAt,
           qrCodePayload: createUserQrPayload(updatedUser, qrCodeGeneratedAt),
+          updatedAt: new Date().toISOString(),
+        },
+        $unset: {
+          aereo: '',
+          regiao: '',
+          loja: '',
+          turma: '',
+          cidade: '',
+          transfer: '',
+          hospedagem: '',
         },
       }
     );
@@ -277,6 +285,29 @@ async function getUserQrCodeHandler(req, res) {
   }
 }
 
+async function getUserByIdHandler(req, res) {
+  try {
+    const { userId } = req.params;
+
+    if (!ObjectId.isValid(userId)) {
+      res.status(400).json({ error: 'O id do usuario informado e invalido.' });
+      return;
+    }
+
+    const usersCollection = await getUsersCollection();
+    const user = await findUserWithAccessData(usersCollection, { _id: new ObjectId(userId) });
+
+    if (!user) {
+      res.status(404).json({ error: 'Usuario nao encontrado.' });
+      return;
+    }
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 async function getUserKitStatusHandler(req, res) {
   try {
     const { userId } = req.params;
@@ -296,8 +327,8 @@ async function getUserKitStatusHandler(req, res) {
           projection: {
             nome: 1,
             id_magalu: 1,
-            loja: 1,
-            turma: 1,
+            filial: 1,
+            regional: 1,
             cargo: 1,
             kit: 1,
             kitExtra: 1,
@@ -316,12 +347,148 @@ async function getUserKitStatusHandler(req, res) {
       userId: String(user._id),
       nome: user.nome || '',
       id_magalu: user.id_magalu || '',
-      loja: user.loja || '',
-      turma: user.turma || '',
+      filial: user.filial || user.loja || '',
+      regional: user.regional || user.regiao || '',
       cargo: user.cargo || '',
       kit: Boolean(user.kit),
       kitExtra: Boolean(user.kitExtra),
       kitExtraRetirada: Boolean(user.kitExtra) && Boolean(user.kitExtraRetirada),
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function getUserRotaHandler(req, res) {
+  try {
+    const { userId } = req.params;
+    const existingUser = await findExistingUserOrRespond(res, userId);
+
+    if (!existingUser) {
+      return;
+    }
+
+    const rotasCollection = await getRotasCollection();
+    const rota = await rotasCollection.findOne({ userId: existingUser.user._id });
+
+    if (!rota) {
+      res.status(404).json({ error: 'Rota nao encontrada para este usuario.' });
+      return;
+    }
+
+    res.json(rota);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function upsertUserRotaHandler(req, res) {
+  try {
+    const { userId } = req.params;
+    const existingUser = await findExistingUserOrRespond(res, userId);
+
+    if (!existingUser) {
+      return;
+    }
+
+    const normalizedPayload = normalizeRotaPayload(req.body);
+    const rotasCollection = await getRotasCollection();
+    const existingRota = await rotasCollection.findOne({ userId: existingUser.user._id });
+    const rotaPayload = createRota({ userId, ...normalizedPayload });
+
+    await rotasCollection.updateOne(
+      { userId: existingUser.user._id },
+      {
+        $set: {
+          ...normalizedPayload,
+          updatedAt: rotaPayload.updatedAt,
+        },
+        $setOnInsert: {
+          userId: rotaPayload.userId,
+          createdAt: rotaPayload.createdAt,
+        },
+      },
+      { upsert: true }
+    );
+
+    await invalidateUserCaches({
+      userId,
+      idMagalu: existingUser.user.id_magalu,
+    });
+
+    const refreshedUser = await findUserWithAccessData(existingUser.usersCollection, { _id: existingUser.user._id });
+    res.status(existingRota ? 200 : 201).json({
+      message: existingRota ? 'Rota atualizada com sucesso.' : 'Rota criada com sucesso.',
+      rota: refreshedUser ? refreshedUser.rota : null,
+      user: refreshedUser,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function getUserAereoHandler(req, res) {
+  try {
+    const { userId } = req.params;
+    const existingUser = await findExistingUserOrRespond(res, userId);
+
+    if (!existingUser) {
+      return;
+    }
+
+    const aereosCollection = await getAereosCollection();
+    const aereo = await aereosCollection.findOne({ userId: existingUser.user._id });
+
+    if (!aereo) {
+      res.status(404).json({ error: 'Aereo nao encontrado para este usuario.' });
+      return;
+    }
+
+    res.json(aereo);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function upsertUserAereoHandler(req, res) {
+  try {
+    const { userId } = req.params;
+    const existingUser = await findExistingUserOrRespond(res, userId);
+
+    if (!existingUser) {
+      return;
+    }
+
+    const normalizedPayload = normalizeAereoPayload(req.body);
+    const aereosCollection = await getAereosCollection();
+    const existingAereo = await aereosCollection.findOne({ userId: existingUser.user._id });
+    const aereoPayload = createAereo({ userId, ...normalizedPayload });
+
+    await aereosCollection.updateOne(
+      { userId: existingUser.user._id },
+      {
+        $set: {
+          ...normalizedPayload,
+          updatedAt: aereoPayload.updatedAt,
+        },
+        $setOnInsert: {
+          userId: aereoPayload.userId,
+          createdAt: aereoPayload.createdAt,
+        },
+      },
+      { upsert: true }
+    );
+
+    await invalidateUserCaches({
+      userId,
+      idMagalu: existingUser.user.id_magalu,
+    });
+
+    const refreshedUser = await findUserWithAccessData(existingUser.usersCollection, { _id: existingUser.user._id });
+    res.status(existingAereo ? 200 : 201).json({
+      message: existingAereo ? 'Aereo atualizado com sucesso.' : 'Aereo criado com sucesso.',
+      aereo: refreshedUser ? refreshedUser.aereoDetalhes : null,
+      user: refreshedUser,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -336,31 +503,7 @@ async function listUsersHandler(req, res) {
       loader: async () => {
         const usersCollection = await getUsersCollection();
 
-        return usersCollection.aggregate([
-          {
-            $lookup: {
-              from: 'checkins',
-              localField: '_id',
-              foreignField: 'userId',
-              as: 'checkins',
-            },
-          },
-          {
-            $addFields: {
-              pontos: { $sum: '$checkins.pontos' },
-              tempo: { $sum: '$checkins.tempo' },
-              totalCheckins: { $size: '$checkins' },
-            },
-          },
-          {
-            $lookup: {
-              from: 'estandes',
-              localField: 'checkins.estandeId',
-              foreignField: '_id',
-              as: 'estandesVisitados',
-            },
-          },
-        ]).toArray();
+        return usersCollection.aggregate(buildUserAccessPipeline()).toArray();
       },
     });
 
@@ -382,23 +525,19 @@ async function listAgendaByTurmaHandler(req, res) {
           {
             projection: {
               nome: 1,
-              turma: 1,
+              regional: 1,
               cargo: 1,
-              loja: 1,
-              regiao: 1,
+              filial: 1,
             },
           }
-        ).sort({ turma: 1, nome: 1 }).toArray();
+        ).sort({ regional: 1, nome: 1 }).toArray();
 
         const initialAgenda = {
-          'Turma A': [],
-          'Turma B': [],
-          'Turma C': [],
-          'Sem turma': [],
+          'Sem regional': [],
         };
 
         return users.reduce((groups, user) => {
-          const turmaName = user.turma || 'Sem turma';
+          const turmaName = user.regional || 'Sem regional';
 
           if (!groups[turmaName]) {
             groups[turmaName] = [];
@@ -467,10 +606,15 @@ async function marcarKitHandler(req, res) {
 
 module.exports = {
   createUserHandler,
+  getUserByIdHandler,
+  getUserAereoHandler,
   getUserKitStatusHandler,
   getUserQrCodeHandler,
+  getUserRotaHandler,
   listUsersHandler,
   listAgendaByTurmaHandler,
   marcarKitHandler,
+  upsertUserAereoHandler,
+  upsertUserRotaHandler,
   updateUserProfileHandler,
 };

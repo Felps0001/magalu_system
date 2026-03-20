@@ -7,12 +7,8 @@ const userCheckins = document.getElementById('user-checkins');
 const userCpf = document.getElementById('user-cpf');
 const userCargo = document.getElementById('user-cargo');
 const userRegiao = document.getElementById('user-regiao');
-const userCidade = document.getElementById('user-cidade');
 const userLoja = document.getElementById('user-loja');
-const userTurma = document.getElementById('user-turma');
-const userHospedagem = document.getElementById('user-hospedagem');
 const userAereo = document.getElementById('user-aereo');
-const userTransfer = document.getElementById('user-transfer');
 const generateQrCodeButton = document.getElementById('generate-qrcode-button');
 const qrCodeModal = document.getElementById('profile-qrcode-modal');
 const qrCodeBackdrop = document.getElementById('profile-qrcode-backdrop');
@@ -42,6 +38,51 @@ let qrCodeLoaded = false;
 let html5QrCode = null;
 let lastDecodedValue = '';
 let isHandlingScan = false;
+
+function formatRotaSummary(rota) {
+  if (!rota) {
+    return '';
+  }
+
+  const parts = [];
+
+  if (rota.nomeRota) {
+    parts.push(rota.nomeRota);
+  }
+
+  if (rota.horario) {
+    parts.push(`Horario: ${rota.horario}`);
+  }
+
+  return parts.join(' · ');
+}
+
+function formatAereoSummary(aereoDetalhes) {
+  if (!aereoDetalhes) {
+    return '';
+  }
+
+  const idaParts = [aereoDetalhes.companhiaIda, aereoDetalhes.vooIda, aereoDetalhes.origemIda && aereoDetalhes.destinoIda ? `${aereoDetalhes.origemIda} -> ${aereoDetalhes.destinoIda}` : '']
+    .filter(Boolean);
+  const voltaParts = [aereoDetalhes.companhiaVolta, aereoDetalhes.vooVolta, aereoDetalhes.origemVolta && aereoDetalhes.destinoVolta ? `${aereoDetalhes.origemVolta} -> ${aereoDetalhes.destinoVolta}` : '']
+    .filter(Boolean);
+
+  if (idaParts.length === 0 && voltaParts.length === 0) {
+    return '';
+  }
+
+  const summaryLines = [];
+
+  if (idaParts.length > 0) {
+    summaryLines.push(`Ida: ${idaParts.join(' · ')}`);
+  }
+
+  if (voltaParts.length > 0) {
+    summaryLines.push(`Volta: ${voltaParts.join(' · ')}`);
+  }
+
+  return summaryLines.join('\n');
+}
 let drawerCloseTimer = null;
 
 function redirectToLogin() {
@@ -305,7 +346,7 @@ if (!user) {
 } else {
   currentUser = user;
   const userNameText = user.nome || 'Usuario';
-  const userRoleText = `${user.cargo || 'Sem cargo'} · ${user.loja || 'Sem loja'}`;
+  const userRoleText = `${user.cargo || 'Sem cargo'} · ${user.filial || user.loja || 'Sem filial'}`;
 
   profilePageTitle.textContent = userNameText;
   document.title = userNameText;
@@ -316,13 +357,9 @@ if (!user) {
   userCheckins.textContent = String(user.totalCheckins || 0);
   userCpf.textContent = user.cpf || '-';
   userCargo.textContent = user.cargo || '-';
-  userRegiao.textContent = user.regiao || '-';
-  userCidade.textContent = user.cidade || '-';
-  userLoja.textContent = user.loja || '-';
-  userTurma.textContent = user.turma || '-';
-  userHospedagem.textContent = user.hospedagem || '-';
-  userAereo.textContent = user.aereo || '-';
-  userTransfer.textContent = user.transfer ? 'Sim' : 'Nao';
+  userRegiao.textContent = user.regional || user.regiao || '-';
+  userLoja.textContent = user.filial || user.loja || '-';
+  userAereo.textContent = formatAereoSummary(user.aereoDetalhes) || user.aereo || '-';
 }
 
 generateQrCodeButton.addEventListener('click', () => {

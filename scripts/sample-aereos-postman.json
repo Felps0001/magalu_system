@@ -1,0 +1,38 @@
+[
+  {
+    "_id": "71b7f0f1a1b2c3d4e5f67001",
+    "userId": "64b7f0f1a1b2c3d4e5f67805",
+    "companhiaIda": "GOL",
+    "dataSaidaIda": "2026-03-17",
+    "vooIda": "G3-1234",
+    "origemIda": "Manaus (MAO)",
+    "destinoIda": "Sao Paulo (GRU)",
+    "horarioIda": "06:00",
+    "horarioChegadaIda": "08:30",
+    "dataChegadaIda": "2026-03-17",
+    "companhiaVolta": "GOL",
+    "dataSaidaVolta": "2026-03-21",
+    "vooVolta": "G3-4321",
+    "origemVolta": "Sao Paulo (GRU)",
+    "destinoVolta": "Manaus (MAO)",
+    "horarioVolta": "18:00",
+    "horarioChegadaVolta": "20:30",
+    "dataChegadaVolta": "2026-03-21",
+    "createdAt": "2026-03-10T09:00:00.000Z",
+    "updatedAt": "2026-03-10T09:00:00.000Z"
+  },
+  {
+    "_id": "71b7f0f1a1b2c3d4e5f67002",
+    "userId": "64b7f0f1a1b2c3d4e5f67803",
+    "companhiaIda": "LATAM",
+    "dataSaidaIda": "2026-03-18",
+    "vooIda": "LA-555",
+    "origemIda": "Recife (REC)",
+    "destinoIda": "Sao Paulo (GRU)",
+    "horarioIda": "05:00",
+    "horarioChegadaIda": "07:30",
+    "dataChegadaIda": "2026-03-18",
+    "createdAt": "2026-03-11T10:00:00.000Z",
+    "updatedAt": "2026-03-11T10:00:00.000Z"
+  }
+]

@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
+    "import:users-csv": "node scripts/import-users-csv.js",
+    "migrate:users-schema": "node scripts/migrate-users-schema.js",
     "build:pages": "gulp build-pages",
     "watch:pages": "gulp watch"
   },

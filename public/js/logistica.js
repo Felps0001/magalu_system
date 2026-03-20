@@ -2,8 +2,7 @@ const logisticaUserName = document.getElementById('logistica-user-name');
 const logisticaUserRole = document.getElementById('logistica-user-role');
 const drawerUserName = document.getElementById('logistica-drawer-user-name');
 const drawerUserRole = document.getElementById('logistica-drawer-user-role');
-const transferValue = document.getElementById('logistica-transfer');
-const hospedagemValue = document.getElementById('logistica-hospedagem');
+const rotaValue = document.getElementById('logistica-transfer');
 const aereoValue = document.getElementById('logistica-aereo');
 const menuButton = document.getElementById('logistica-menu-button');
 const drawer = document.getElementById('logistica-drawer');
@@ -28,8 +27,7 @@ const generateQrCodeButton = document.getElementById('logistica-generate-qrcode-
 const qrCodePreview = document.getElementById('logistica-qrcode-preview');
 const logoutButton = document.getElementById('logout-button');
 const sectionLinks = {
-  transfer: document.getElementById('logistica-link-transfer'),
-  hospedagem: document.getElementById('logistica-link-hospedagem'),
+  rota: document.getElementById('logistica-link-rota'),
   aereo: document.getElementById('logistica-link-aereo'),
 };
 
@@ -39,6 +37,53 @@ let drawerCloseTimer = null;
 let html5QrCode = null;
 let lastDecodedValue = '';
 let isHandlingScan = false;
+
+function formatRotaDetails(rota) {
+  if (!rota) {
+    return '';
+  }
+
+  const lines = [];
+
+  if (rota.nomeRota) {
+    lines.push(`Rota: ${rota.nomeRota}`);
+  }
+
+  if (rota.horario) {
+    lines.push(`Horario: ${rota.horario}`);
+  }
+
+  return lines.join('\n');
+}
+
+function formatAereoDetails(aereoDetalhes) {
+  if (!aereoDetalhes) {
+    return '';
+  }
+
+  const idaLines = [
+    aereoDetalhes.companhiaIda ? `Companhia ida: ${aereoDetalhes.companhiaIda}` : '',
+    aereoDetalhes.dataSaidaIda ? `Data saida ida: ${aereoDetalhes.dataSaidaIda}` : '',
+    aereoDetalhes.vooIda ? `Voo ida: ${aereoDetalhes.vooIda}` : '',
+    aereoDetalhes.origemIda ? `Origem ida: ${aereoDetalhes.origemIda}` : '',
+    aereoDetalhes.destinoIda ? `Destino ida: ${aereoDetalhes.destinoIda}` : '',
+    aereoDetalhes.horarioIda ? `Horario ida: ${aereoDetalhes.horarioIda}` : '',
+    aereoDetalhes.horarioChegadaIda ? `Horario chegada ida: ${aereoDetalhes.horarioChegadaIda}` : '',
+    aereoDetalhes.dataChegadaIda ? `Data chegada ida: ${aereoDetalhes.dataChegadaIda}` : '',
+  ].filter(Boolean);
+  const voltaLines = [
+    aereoDetalhes.companhiaVolta ? `Companhia volta: ${aereoDetalhes.companhiaVolta}` : '',
+    aereoDetalhes.dataSaidaVolta ? `Data saida volta: ${aereoDetalhes.dataSaidaVolta}` : '',
+    aereoDetalhes.vooVolta ? `Voo volta: ${aereoDetalhes.vooVolta}` : '',
+    aereoDetalhes.origemVolta ? `Origem volta: ${aereoDetalhes.origemVolta}` : '',
+    aereoDetalhes.destinoVolta ? `Destino volta: ${aereoDetalhes.destinoVolta}` : '',
+    aereoDetalhes.horarioVolta ? `Horario volta: ${aereoDetalhes.horarioVolta}` : '',
+    aereoDetalhes.horarioChegadaVolta ? `Horario chegada volta: ${aereoDetalhes.horarioChegadaVolta}` : '',
+    aereoDetalhes.dataChegadaVolta ? `Data chegada volta: ${aereoDetalhes.dataChegadaVolta}` : '',
+  ].filter(Boolean);
+
+  return [idaLines.join('\n'), voltaLines.join('\n')].filter(Boolean).join('\n\n');
+}
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
@@ -285,7 +330,7 @@ async function closeScannerModal() {
 }
 
 function highlightCurrentSection() {
-  const activeHash = window.location.hash.replace('#', '') || 'transfer';
+  const activeHash = window.location.hash.replace('#', '') || 'rota';
 
   Object.entries(sectionLinks).forEach(([key, link]) => {
     if (!link) {
@@ -316,15 +361,14 @@ if (!user) {
 } else {
   currentUser = user;
   const userNameText = user.nome || 'Usuario';
-  const userRoleText = `${user.cargo || 'Sem cargo'} · ${user.loja || 'Sem loja'}`;
+  const userRoleText = `${user.cargo || 'Sem cargo'} · ${user.filial || user.loja || 'Sem filial'}`;
 
   logisticaUserName.textContent = userNameText;
-  logisticaUserRole.textContent = 'Informacoes da sua viagem e estadia no evento.';
+  logisticaUserRole.textContent = 'Informacoes da sua rota e do seu aereo no evento.';
   drawerUserName.textContent = userNameText;
   drawerUserRole.textContent = userRoleText;
-  transferValue.textContent = user.transfer ? 'Sim' : 'Nao';
-  hospedagemValue.textContent = user.hospedagem || 'Nao informado.';
-  aereoValue.textContent = user.aereo || 'Nao informado.';
+  rotaValue.textContent = formatRotaDetails(user.rota) || 'Nao informado.';
+  aereoValue.textContent = formatAereoDetails(user.aereoDetalhes) || user.aereo || 'Nao informado.';
 }
 
 highlightCurrentSection();
