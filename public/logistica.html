@@ -42,7 +42,7 @@
         <a class="feed-drawer-link" href="../agenda/">Agenda</a>
         <a class="feed-drawer-link" href="../estandes/">Estandes</a>
         <button class="feed-drawer-link" id="logistica-open-scanner-menu" type="button">Scanner</button>
-        <button class="feed-drawer-link" id="logistica-open-qrcode-menu" type="button">QR Code</button>
+        <button class="feed-drawer-link" id="logistica-open-kit-code-menu" type="button">Retirada Kit</button>
         <a class="feed-drawer-link" href="../feed/">Feed</a>
       </nav>
 
@@ -72,7 +72,7 @@
 
         <div class="feed-top-copy">
           <h1 class="feed-top-title">Logistica</h1>
-          <p class="feed-top-subtitle">Rota e aereo do evento.</p>
+          <p class="feed-top-subtitle">Rota e aereo.</p>
           <div class="feed-top-user">
             <strong id="logistica-user-name">Carregando...</strong>
             <p id="logistica-user-role">Dados de apoio para o seu deslocamento.</p>
@@ -119,7 +119,7 @@
         <div class="profile-qrcode-header">
           <div>
             <p class="profile-section-kicker">Scanner de check-in</p>
-            <h2 id="logistica-scanner-title" class="profile-section-title">Escaneie o QR Code</h2>
+            <h2 id="logistica-scanner-title" class="profile-section-title">Escaneie o codigo</h2>
           </div>
           <button id="logistica-close-scanner" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
         </div>
@@ -128,8 +128,8 @@
           <div id="logistica-scanner-mount"></div>
         </div>
 
-        <div id="logistica-scanner-status" class="form-message info-message">Aguardando inicialização...</div>
-        <div id="logistica-scanner-result" class="scanner-result">Nenhum QR Code lido ainda.</div>
+        <div id="logistica-scanner-status" class="form-message info-message">Pronto para escanear.</div>
+        <div id="logistica-scanner-result" class="scanner-result">Nenhum QR lido.</div>
 
         <div class="profile-qrcode-actions">
           <button id="logistica-start-scan-button" class="primary-button" type="button">Iniciar Scanner</button>
@@ -138,22 +138,22 @@
       </div>
     </section>
 
-    <section id="logistica-qrcode-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="logistica-qrcode-title" hidden>
-      <button id="logistica-qrcode-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar QR Code"></button>
+    <section id="logistica-kit-code-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="logistica-kit-code-title" hidden>
+      <button id="logistica-kit-code-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar retirada de kit"></button>
       <div class="profile-qrcode-panel">
         <div class="profile-qrcode-header">
           <div>
-            <p class="profile-section-kicker">QR Code do perfil</p>
-            <h2 id="logistica-qrcode-title" class="profile-section-title">Seu acesso rapido</h2>
+            <p class="profile-section-kicker">Retirada de kit</p>
+            <h2 id="logistica-kit-code-title" class="profile-section-title">Apresente este codigo</h2>
           </div>
-          <button id="logistica-close-qrcode" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
+          <button id="logistica-close-kit-code" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
         </div>
 
-        <div id="logistica-qrcode-preview" class="profile-qrcode-preview" aria-live="polite"></div>
+        <div id="logistica-kit-code-preview" class="profile-qrcode-preview" aria-live="polite"></div>
 
         <div class="profile-qrcode-actions">
-          <button id="logistica-generate-qrcode-button" class="primary-button" type="button">Atualizar QR Code</button>
-          <button id="logistica-close-qrcode-secondary" class="secondary-button" type="button">Fechar</button>
+          <button id="logistica-generate-kit-code-button" class="primary-button" type="button">Atualizar codigo</button>
+          <button id="logistica-close-kit-code-secondary" class="secondary-button" type="button">Fechar</button>
         </div>
       </div>
     </section>

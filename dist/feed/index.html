@@ -41,7 +41,7 @@
         </details>
         <a class="feed-drawer-link" href="../agenda/">Agenda</a>
         <a class="feed-drawer-link" href="../estandes/">Estandes</a>
-        <button class="feed-drawer-link" id="feed-open-qrcode-menu" type="button">QR Code</button>
+        <button class="feed-drawer-link" id="feed-open-kit-code-menu" type="button">Retirada Kit</button>
         <a class="feed-drawer-link feed-drawer-link--current" href="../feed/" aria-current="page">Feed</a>
       </nav>
 
@@ -72,7 +72,7 @@
 
         <div class="feed-top-copy">
           <h1 class="feed-top-title">Feed interno</h1>
-          <p class="feed-top-subtitle">Atualizacoes, fotos e avisos do evento.</p>
+          <p class="feed-top-subtitle">Atualizacoes do evento.</p>
           <div class="feed-top-user">
             <strong id="feed-user-name">Carregando perfil...</strong>
             <p id="feed-user-role">Somente usuarios autenticados podem publicar no feed.</p>
@@ -102,7 +102,7 @@
 
         <form id="feed-form" class="composer-form feed-modal-form" enctype="multipart/form-data">
           <label for="feed-message">Mensagem</label>
-          <textarea id="feed-message" name="mensagem" placeholder="Escreva um aviso, destaque ou atualizacao do evento."></textarea>
+          <textarea id="feed-message" name="mensagem" placeholder="Escreva uma atualizacao."></textarea>
 
           <label for="feed-image-file">Imagem</label>
           <input id="feed-image-file" name="imagem" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
@@ -115,24 +115,24 @@
       </div>
     </section>
 
-    <section id="feed-qrcode-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="feed-qrcode-title" hidden>
-      <button id="feed-qrcode-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar QR Code"></button>
+    <section id="feed-kit-code-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="feed-kit-code-title" hidden>
+      <button id="feed-kit-code-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar retirada de kit"></button>
       <div class="profile-qrcode-panel">
         <div class="profile-qrcode-header">
           <div>
-            <p class="profile-section-kicker">QR Code do perfil</p>
-            <h2 id="feed-qrcode-title" class="profile-section-title">Seu acesso rapido</h2>
+            <p class="profile-section-kicker">Retirada de kit</p>
+            <h2 id="feed-kit-code-title" class="profile-section-title">Apresente este codigo</h2>
           </div>
-          <button id="feed-close-qrcode" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
+          <button id="feed-close-kit-code" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
         </div>
 
-        <div id="feed-qrcode-preview" class="profile-qrcode-preview" aria-live="polite">
-          <!-- O QR Code sera renderizado aqui -->
+        <div id="feed-kit-code-preview" class="profile-qrcode-preview" aria-live="polite">
+          <!-- O codigo sera renderizado aqui -->
         </div>
 
         <div class="profile-qrcode-actions">
-          <button id="feed-generate-qrcode-button" class="primary-button" type="button">Atualizar QR Code</button>
-          <button id="feed-close-qrcode-secondary" class="secondary-button" type="button">Fechar</button>
+          <button id="feed-generate-kit-code-button" class="primary-button" type="button">Atualizar codigo</button>
+          <button id="feed-close-kit-code-secondary" class="secondary-button" type="button">Fechar</button>
         </div>
       </div>
     </section>

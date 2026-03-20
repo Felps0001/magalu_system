@@ -19,13 +19,13 @@ const composerModal = document.getElementById('feed-composer-modal');
 const closeComposerButton = document.getElementById('feed-close-composer');
 const cancelComposerButton = document.getElementById('feed-cancel-button');
 const modalBackdrop = document.getElementById('feed-modal-backdrop');
-const openQrCodeMenuButton = document.getElementById('feed-open-qrcode-menu');
-const qrCodeModal = document.getElementById('feed-qrcode-modal');
-const qrCodeBackdrop = document.getElementById('feed-qrcode-backdrop');
-const closeQrCodeButton = document.getElementById('feed-close-qrcode');
-const closeQrCodeSecondaryButton = document.getElementById('feed-close-qrcode-secondary');
-const generateQrCodeButton = document.getElementById('feed-generate-qrcode-button');
-const qrCodePreview = document.getElementById('feed-qrcode-preview');
+const openKitCodeMenuButton = document.getElementById('feed-open-kit-code-menu');
+const kitCodeModal = document.getElementById('feed-kit-code-modal');
+const kitCodeBackdrop = document.getElementById('feed-kit-code-backdrop');
+const closeKitCodeButton = document.getElementById('feed-close-kit-code');
+const closeKitCodeSecondaryButton = document.getElementById('feed-close-kit-code-secondary');
+const generateKitCodeButton = document.getElementById('feed-generate-kit-code-button');
+const kitCodePreview = document.getElementById('feed-kit-code-preview');
 const imageModal = document.getElementById('feed-image-modal');
 const imageBackdrop = document.getElementById('feed-image-backdrop');
 const closeImageButton = document.getElementById('feed-close-image');
@@ -33,7 +33,7 @@ const imagePreview = document.getElementById('feed-image-preview');
 const imageCaption = document.getElementById('feed-image-caption');
 
 let currentUser = null;
-let qrCodeLoaded = false;
+let kitCodeLoaded = false;
 let drawerCloseTimer = null;
 
 function redirectToLogin() {
@@ -72,12 +72,12 @@ function setDrawerState(isOpen) {
 
   drawer.setAttribute('aria-hidden', String(!isOpen));
   menuButton.setAttribute('aria-expanded', String(isOpen));
-  document.body.classList.toggle('feed-ui-lock', isOpen || !composerModal.hidden || !qrCodeModal.hidden || !imageModal.hidden);
+  document.body.classList.toggle('feed-ui-lock', isOpen || !composerModal.hidden || !kitCodeModal.hidden || !imageModal.hidden);
 }
 
 function setComposerState(isOpen) {
   composerModal.hidden = !isOpen;
-  document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden || !qrCodeModal.hidden || !imageModal.hidden);
+  document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden || !kitCodeModal.hidden || !imageModal.hidden);
 
   if (isOpen) {
     setFormMessage('', '');
@@ -85,19 +85,19 @@ function setComposerState(isOpen) {
   }
 }
 
-function setQrModalState(isOpen) {
-  qrCodeModal.hidden = !isOpen;
+function setKitCodeModalState(isOpen) {
+  kitCodeModal.hidden = !isOpen;
   document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden || !composerModal.hidden || !imageModal.hidden);
 }
 
 function setImageModalState(isOpen) {
   imageModal.hidden = !isOpen;
-  document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden || !composerModal.hidden || !qrCodeModal.hidden);
+  document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden || !composerModal.hidden || !kitCodeModal.hidden);
 }
 
 setDrawerState(false);
 setComposerState(false);
-setQrModalState(false);
+setKitCodeModalState(false);
 setImageModalState(false);
 
 function openImageModal(imageUrl, captionText) {
@@ -116,17 +116,43 @@ function closeImageModal() {
   }
 }
 
-function renderQrCode(responseData) {
-  qrCodePreview.innerHTML = responseData.qrCodeSvg;
-  qrCodeLoaded = true;
+function renderKitCode(responseData) {
+  kitCodePreview.innerHTML = responseData.qrCodeSvg;
+  kitCodeLoaded = true;
 }
 
-function renderQrPlaceholder(message) {
-  qrCodePreview.innerHTML = `<p class="muted">${message}</p>`;
-  qrCodeLoaded = false;
+function renderKitCodePlaceholder(message) {
+  kitCodePreview.innerHTML = `<p class="muted">${message}</p>`;
+  kitCodeLoaded = false;
 }
 
-function getQrCodeRequestError(data) {
+function setKitActionVisibility(isVisible) {
+  openKitCodeMenuButton.hidden = !isVisible;
+
+  if (!isVisible && !kitCodeModal.hidden) {
+    setKitCodeModalState(false);
+  }
+}
+
+async function syncKitActionVisibility() {
+  setKitActionVisibility(window.magaluApi.hasPendingKit(currentUser));
+
+  if (!currentUser || !currentUser._id) {
+    return;
+  }
+
+  const kitStatus = await window.magaluApi.fetchUserKitStatus(currentUser._id);
+
+  if (!kitStatus) {
+    return;
+  }
+
+  currentUser = window.magaluApi.mergeUserKitStatus(currentUser, kitStatus);
+  window.magaluApi.storeUser(currentUser);
+  setKitActionVisibility(window.magaluApi.hasPendingKit(currentUser));
+}
+
+function getKitCodeRequestError(data) {
   if (data && typeof data.error === 'string' && !data.error.includes('<!DOCTYPE')) {
     return data.error;
   }
@@ -134,26 +160,26 @@ function getQrCodeRequestError(data) {
   const rawText = data && typeof data.rawText === 'string' ? data.rawText : '';
 
   if (rawText.includes('Cannot GET') && rawText.includes('/qrcode')) {
-    return 'O backend em uso ainda nao possui a rota de QR Code. Reinicie o servidor local ou publique a versao nova do backend.';
+    return 'O backend em uso ainda nao possui a rota do codigo. Reinicie o servidor local ou publique a versao nova do backend.';
   }
 
-  return 'O backend retornou uma resposta invalida ao gerar o QR Code.';
+  return 'O backend retornou uma resposta invalida ao gerar o codigo.';
 }
 
-async function loadUserQrCode(options = {}) {
+async function loadUserKitCode(options = {}) {
   const {
     buttonLoadingLabel = 'Gerando...',
-    loadingMessage = 'Carregando QR Code do usuario...',
+    loadingMessage = 'Carregando QR...',
   } = options;
 
   if (!currentUser || !currentUser._id) {
-    renderQrPlaceholder('Usuario nao encontrado para gerar o QR Code.');
+    renderKitCodePlaceholder('Usuario nao encontrado para gerar o codigo.');
     return;
   }
 
-  generateQrCodeButton.disabled = true;
-  generateQrCodeButton.textContent = buttonLoadingLabel;
-  renderQrPlaceholder(loadingMessage);
+  generateKitCodeButton.disabled = true;
+  generateKitCodeButton.textContent = buttonLoadingLabel;
+  renderKitCodePlaceholder(loadingMessage);
 
   try {
     const response = await fetch(
@@ -163,10 +189,10 @@ async function loadUserQrCode(options = {}) {
     const data = await window.magaluApi.parseApiResponse(response);
 
     if (!response.ok) {
-      throw new Error(getQrCodeRequestError(data));
+      throw new Error(getKitCodeRequestError(data));
     }
 
-    renderQrCode(data);
+    renderKitCode(data);
     currentUser = {
       ...currentUser,
       qrCodeGeneratedAt: data.qrCodeGeneratedAt,
@@ -174,24 +200,24 @@ async function loadUserQrCode(options = {}) {
     };
     window.magaluApi.storeUser(currentUser);
   } catch (error) {
-    renderQrPlaceholder('O QR Code nao foi carregado.');
+    renderKitCodePlaceholder('O codigo nao foi carregado.');
   } finally {
-    generateQrCodeButton.disabled = false;
-    generateQrCodeButton.textContent = 'Atualizar QR Code';
+    generateKitCodeButton.disabled = false;
+    generateKitCodeButton.textContent = 'Atualizar codigo';
   }
 }
 
-async function openQrCodeModal() {
+async function openKitCodeModal() {
   setDrawerState(false);
-  setQrModalState(true);
+  setKitCodeModalState(true);
 
-  if (qrCodeLoaded) {
+  if (kitCodeLoaded) {
     return;
   }
 
-  await loadUserQrCode({
+  await loadUserKitCode({
     buttonLoadingLabel: 'Carregando...',
-    loadingMessage: 'Carregando o QR Code do seu perfil...',
+    loadingMessage: 'Carregando QR...',
   });
 }
 
@@ -234,7 +260,7 @@ function createFeedCard(item) {
   authorName.textContent = item.author && item.author.nome ? item.author.nome : 'Usuario';
 
   const authorMeta = document.createElement('p');
-  authorMeta.textContent = item.author && (item.author.filial || item.author.loja) ? (item.author.filial || item.author.loja) : 'Publicacao interna';
+  authorMeta.textContent = item.author && item.author.filial ? item.author.filial : 'Publicacao interna';
 
   author.appendChild(authorName);
   author.appendChild(authorMeta);
@@ -412,11 +438,12 @@ if (!user) {
 } else {
   currentUser = user;
   const userName = user.nome || 'Usuario autenticado';
-  const userRole = `${user.cargo || 'Sem cargo'} · ${user.filial || user.loja || 'Sem filial'}`;
+  const userRole = `${user.cargo || 'Sem cargo'} · ${user.filial || 'Sem filial'}`;
   feedUserName.textContent = userName;
   feedUserRole.textContent = userRole;
   feedDrawerUserName.textContent = userName;
   feedDrawerUserRole.textContent = userRole;
+  syncKitActionVisibility();
   loadFeed();
 }
 
@@ -469,24 +496,24 @@ drawerBackdrop.addEventListener('click', () => {
   setDrawerState(false);
 });
 
-openQrCodeMenuButton.addEventListener('click', () => {
-  openQrCodeModal();
+openKitCodeMenuButton.addEventListener('click', () => {
+  openKitCodeModal();
 });
 
-generateQrCodeButton.addEventListener('click', () => {
-  loadUserQrCode();
+generateKitCodeButton.addEventListener('click', () => {
+  loadUserKitCode();
 });
 
-qrCodeBackdrop.addEventListener('click', () => {
-  setQrModalState(false);
+kitCodeBackdrop.addEventListener('click', () => {
+  setKitCodeModalState(false);
 });
 
-closeQrCodeButton.addEventListener('click', () => {
-  setQrModalState(false);
+closeKitCodeButton.addEventListener('click', () => {
+  setKitCodeModalState(false);
 });
 
-closeQrCodeSecondaryButton.addEventListener('click', () => {
-  setQrModalState(false);
+closeKitCodeSecondaryButton.addEventListener('click', () => {
+  setKitCodeModalState(false);
 });
 
 imageBackdrop.addEventListener('click', () => {
@@ -524,8 +551,8 @@ document.addEventListener('keydown', (event) => {
     setComposerState(false);
   }
 
-  if (!qrCodeModal.hidden) {
-    setQrModalState(false);
+  if (!kitCodeModal.hidden) {
+    setKitCodeModalState(false);
   }
 
   if (!imageModal.hidden) {

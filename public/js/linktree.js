@@ -6,17 +6,17 @@ const menuButton = document.getElementById('linktree-menu-button');
 const drawer = document.getElementById('linktree-drawer');
 const drawerBackdrop = document.getElementById('linktree-drawer-backdrop');
 const closeDrawerButton = document.getElementById('linktree-close-drawer');
-const openQrCodeMenuButton = document.getElementById('linktree-open-qrcode-menu');
-const qrCodeModal = document.getElementById('linktree-qrcode-modal');
-const qrCodeBackdrop = document.getElementById('linktree-qrcode-backdrop');
-const closeQrCodeButton = document.getElementById('linktree-close-qrcode');
-const closeQrCodeSecondaryButton = document.getElementById('linktree-close-qrcode-secondary');
-const generateQrCodeButton = document.getElementById('linktree-generate-qrcode-button');
-const qrCodePreview = document.getElementById('linktree-qrcode-preview');
-const openQrCodeCardButton = document.getElementById('linktree-open-qrcode-card');
+const openKitCodeMenuButton = document.getElementById('linktree-open-kit-code-menu');
+const kitCodeModal = document.getElementById('linktree-kit-code-modal');
+const kitCodeBackdrop = document.getElementById('linktree-kit-code-backdrop');
+const closeKitCodeButton = document.getElementById('linktree-close-kit-code');
+const closeKitCodeSecondaryButton = document.getElementById('linktree-close-kit-code-secondary');
+const generateKitCodeButton = document.getElementById('linktree-generate-kit-code-button');
+const kitCodePreview = document.getElementById('linktree-kit-code-preview');
+const openKitCodeCardButton = document.getElementById('linktree-open-kit-code-card');
 
 let currentUser = null;
-let qrCodeLoaded = false;
+let kitCodeLoaded = false;
 let drawerCloseTimer = null;
 
 function redirectToLogin() {
@@ -46,25 +46,55 @@ function setDrawerState(isOpen) {
 
   drawer.setAttribute('aria-hidden', String(!isOpen));
   menuButton.setAttribute('aria-expanded', String(isOpen));
-  document.body.classList.toggle('feed-ui-lock', isOpen || !qrCodeModal.hidden);
+  document.body.classList.toggle('feed-ui-lock', isOpen || !kitCodeModal.hidden);
 }
 
-function setQrModalState(isOpen) {
-  qrCodeModal.hidden = !isOpen;
+function setKitCodeModalState(isOpen) {
+  kitCodeModal.hidden = !isOpen;
   document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden);
 }
 
-function renderQrCode(responseData) {
-  qrCodePreview.innerHTML = responseData.qrCodeSvg;
-  qrCodeLoaded = true;
+function renderKitCode(responseData) {
+  kitCodePreview.innerHTML = responseData.qrCodeSvg;
+  kitCodeLoaded = true;
 }
 
-function renderQrPlaceholder(message) {
-  qrCodePreview.innerHTML = `<p class="muted">${message}</p>`;
-  qrCodeLoaded = false;
+function renderKitCodePlaceholder(message) {
+  kitCodePreview.innerHTML = `<p class="muted">${message}</p>`;
+  kitCodeLoaded = false;
 }
 
-function getQrCodeRequestError(data) {
+function setKitActionVisibility(isVisible) {
+  openKitCodeMenuButton.hidden = !isVisible;
+
+  if (openKitCodeCardButton) {
+    openKitCodeCardButton.hidden = !isVisible;
+  }
+
+  if (!isVisible && !kitCodeModal.hidden) {
+    setKitCodeModalState(false);
+  }
+}
+
+async function syncKitActionVisibility() {
+  setKitActionVisibility(window.magaluApi.hasPendingKit(currentUser));
+
+  if (!currentUser || !currentUser._id) {
+    return;
+  }
+
+  const kitStatus = await window.magaluApi.fetchUserKitStatus(currentUser._id);
+
+  if (!kitStatus) {
+    return;
+  }
+
+  currentUser = window.magaluApi.mergeUserKitStatus(currentUser, kitStatus);
+  window.magaluApi.storeUser(currentUser);
+  setKitActionVisibility(window.magaluApi.hasPendingKit(currentUser));
+}
+
+function getKitCodeRequestError(data) {
   if (data && typeof data.error === 'string' && !data.error.includes('<!DOCTYPE')) {
     return data.error;
   }
@@ -72,26 +102,26 @@ function getQrCodeRequestError(data) {
   const rawText = data && typeof data.rawText === 'string' ? data.rawText : '';
 
   if (rawText.includes('Cannot GET') && rawText.includes('/qrcode')) {
-    return 'O backend em uso ainda nao possui a rota de QR Code. Reinicie o servidor local ou publique a versao nova do backend.';
+    return 'O backend em uso ainda nao possui a rota do codigo. Reinicie o servidor local ou publique a versao nova do backend.';
   }
 
-  return 'O backend retornou uma resposta invalida ao gerar o QR Code.';
+  return 'O backend retornou uma resposta invalida ao gerar o codigo.';
 }
 
-async function loadUserQrCode(options = {}) {
+async function loadUserKitCode(options = {}) {
   const {
     buttonLoadingLabel = 'Gerando...',
-    loadingMessage = 'Carregando QR Code do usuario...',
+    loadingMessage = 'Carregando QR...',
   } = options;
 
   if (!currentUser || !currentUser._id) {
-    renderQrPlaceholder('Usuario nao encontrado para gerar o QR Code.');
+    renderKitCodePlaceholder('Usuario nao encontrado para gerar o codigo.');
     return;
   }
 
-  generateQrCodeButton.disabled = true;
-  generateQrCodeButton.textContent = buttonLoadingLabel;
-  renderQrPlaceholder(loadingMessage);
+  generateKitCodeButton.disabled = true;
+  generateKitCodeButton.textContent = buttonLoadingLabel;
+  renderKitCodePlaceholder(loadingMessage);
 
   try {
     const response = await fetch(
@@ -101,10 +131,10 @@ async function loadUserQrCode(options = {}) {
     const data = await window.magaluApi.parseApiResponse(response);
 
     if (!response.ok) {
-      throw new Error(getQrCodeRequestError(data));
+      throw new Error(getKitCodeRequestError(data));
     }
 
-    renderQrCode(data);
+    renderKitCode(data);
     currentUser = {
       ...currentUser,
       qrCodeGeneratedAt: data.qrCodeGeneratedAt,
@@ -112,65 +142,66 @@ async function loadUserQrCode(options = {}) {
     };
     window.magaluApi.storeUser(currentUser);
   } catch (error) {
-    renderQrPlaceholder('O QR Code nao foi carregado.');
+    renderKitCodePlaceholder('O codigo nao foi carregado.');
   } finally {
-    generateQrCodeButton.disabled = false;
-    generateQrCodeButton.textContent = 'Atualizar QR Code';
+    generateKitCodeButton.disabled = false;
+    generateKitCodeButton.textContent = 'Atualizar codigo';
   }
 }
 
-async function openQrCodeModal() {
+async function openKitCodeModal() {
   setDrawerState(false);
-  setQrModalState(true);
+  setKitCodeModalState(true);
 
-  if (qrCodeLoaded) {
+  if (kitCodeLoaded) {
     return;
   }
 
-  await loadUserQrCode({
+  await loadUserKitCode({
     buttonLoadingLabel: 'Carregando...',
-    loadingMessage: 'Carregando o QR Code do seu perfil...',
+    loadingMessage: 'Carregando QR...',
   });
 }
 
 setDrawerState(false);
-setQrModalState(false);
+setKitCodeModalState(false);
 
 const storedUser = window.magaluApi.readStoredUser();
 
 if (storedUser) {
   currentUser = storedUser;
   const userNameText = storedUser.nome || 'Usuario';
-  const userRoleText = `${storedUser.cargo || 'Sem cargo'} · ${storedUser.filial || storedUser.loja || 'Sem filial'}`;
+  const userRoleText = `${storedUser.cargo || 'Sem cargo'} · ${storedUser.filial || 'Sem filial'}`;
 
   linktreeUserName.textContent = userNameText;
   linktreeUserRole.textContent = 'Atalhos rapidos para navegar por todas as telas do projeto.';
   drawerUserName.textContent = userNameText;
   drawerUserRole.textContent = userRoleText;
+  syncKitActionVisibility();
 }
 
-generateQrCodeButton.addEventListener('click', () => {
-  loadUserQrCode();
+generateKitCodeButton.addEventListener('click', () => {
+  loadUserKitCode();
 });
 
-openQrCodeMenuButton.addEventListener('click', () => {
-  openQrCodeModal();
+openKitCodeMenuButton.addEventListener('click', () => {
+  openKitCodeModal();
 });
 
-openQrCodeCardButton.addEventListener('click', () => {
-  openQrCodeModal();
+openKitCodeCardButton.addEventListener('click', () => {
+  openKitCodeModal();
 });
 
-qrCodeBackdrop.addEventListener('click', () => {
-  setQrModalState(false);
+kitCodeBackdrop.addEventListener('click', () => {
+  setKitCodeModalState(false);
 });
 
-closeQrCodeButton.addEventListener('click', () => {
-  setQrModalState(false);
+closeKitCodeButton.addEventListener('click', () => {
+  setKitCodeModalState(false);
 });
 
-closeQrCodeSecondaryButton.addEventListener('click', () => {
-  setQrModalState(false);
+closeKitCodeSecondaryButton.addEventListener('click', () => {
+  setKitCodeModalState(false);
 });
 
 menuButton.addEventListener('click', () => {
@@ -190,8 +221,8 @@ document.addEventListener('keydown', (event) => {
     return;
   }
 
-  if (!qrCodeModal.hidden) {
-    setQrModalState(false);
+  if (!kitCodeModal.hidden) {
+    setKitCodeModalState(false);
   }
 
   if (!drawer.hidden) {

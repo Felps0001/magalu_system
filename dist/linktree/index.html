@@ -41,7 +41,7 @@
         </details>
         <a class="feed-drawer-link" href="../agenda/">Agenda</a>
         <a class="feed-drawer-link" href="../estandes/">Estandes</a>
-        <button class="feed-drawer-link" id="linktree-open-qrcode-menu" type="button">QR Code</button>
+        <button class="feed-drawer-link" id="linktree-open-kit-code-menu" type="button">Retirada Kit</button>
         <a class="feed-drawer-link" href="../feed/">Feed</a>
         <a class="feed-drawer-link feed-drawer-link--current" href="../linktree/" aria-current="page">Linktree</a>
       </nav>
@@ -61,10 +61,10 @@
 
         <div class="feed-top-copy">
           <h1 class="feed-top-title">Linktree</h1>
-          <p class="feed-top-subtitle">Um hub com todas as paginas disponiveis no projeto.</p>
+          <p class="feed-top-subtitle">Acessos do app.</p>
           <div class="feed-top-user">
             <strong id="linktree-user-name">Magalu System</strong>
-            <p id="linktree-user-role">Acesse rapidamente cada tela, fluxo e utilitario.</p>
+            <p id="linktree-user-role">Acessos rapidos do app.</p>
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@
       <section class="linktree-section" aria-labelledby="linktree-menu-title">
         <div class="linktree-section-header">
           <p class="profile-section-kicker">Menu</p>
-          <h2 id="linktree-menu-title" class="profile-section-title">Os mesmos atalhos do menu</h2>
+          <h2 id="linktree-menu-title" class="profile-section-title">Atalhos do menu</h2>
         </div>
         <div class="linktree-list">
           <a class="feed-mobile-card linktree-card" href="../perfil/">
@@ -102,10 +102,10 @@
             <strong class="linktree-card-title">Estandes</strong>
             <p class="linktree-card-copy">Veja os estandes e identifique quais ja receberam seu check-in.</p>
           </a>
-          <button id="linktree-open-qrcode-card" class="feed-mobile-card linktree-card linktree-card-button" type="button">
+          <button id="linktree-open-kit-code-card" class="feed-mobile-card linktree-card linktree-card-button" type="button">
             <span class="linktree-card-tag">Acesso</span>
-            <strong class="linktree-card-title">QR Code</strong>
-            <p class="linktree-card-copy">Abra o QR Code do usuario pelo mesmo fluxo do menu.</p>
+            <strong class="linktree-card-title">Retirada Kit</strong>
+            <p class="linktree-card-copy">Abra o codigo para retirada pelo menu.</p>
           </button>
           <a class="feed-mobile-card linktree-card" href="../feed/">
             <span class="linktree-card-tag">Social</span>
@@ -116,20 +116,20 @@
       </section>
     </section>
 
-    <section id="linktree-qrcode-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="linktree-qrcode-title" hidden>
-      <button id="linktree-qrcode-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar QR Code"></button>
+    <section id="linktree-kit-code-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="linktree-kit-code-title" hidden>
+      <button id="linktree-kit-code-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar retirada de kit"></button>
       <div class="profile-qrcode-panel">
         <div class="profile-qrcode-header">
           <div>
-            <p class="profile-section-kicker">QR Code do perfil</p>
-            <h2 id="linktree-qrcode-title" class="profile-section-title">Seu acesso rapido</h2>
+            <p class="profile-section-kicker">Retirada de kit</p>
+            <h2 id="linktree-kit-code-title" class="profile-section-title">Apresente este codigo</h2>
           </div>
-          <button id="linktree-close-qrcode" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
+          <button id="linktree-close-kit-code" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
         </div>
-        <div id="linktree-qrcode-preview" class="profile-qrcode-preview" aria-live="polite"></div>
+        <div id="linktree-kit-code-preview" class="profile-qrcode-preview" aria-live="polite"></div>
         <div class="profile-qrcode-actions">
-          <button id="linktree-generate-qrcode-button" class="primary-button" type="button">Atualizar QR Code</button>
-          <button id="linktree-close-qrcode-secondary" class="secondary-button" type="button">Fechar</button>
+          <button id="linktree-generate-kit-code-button" class="primary-button" type="button">Atualizar codigo</button>
+          <button id="linktree-close-kit-code-secondary" class="secondary-button" type="button">Fechar</button>
         </div>
       </div>
     </section>

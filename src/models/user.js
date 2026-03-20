@@ -1,3 +1,41 @@
+function getNormalizedRegional(user = {}) {
+  if (typeof user.regional === 'string' && user.regional.trim()) {
+    return user.regional.trim();
+  }
+
+  if (typeof user.regiao === 'string') {
+    return user.regiao.trim();
+  }
+
+  return '';
+}
+
+function getNormalizedFilial(user = {}) {
+  if (typeof user.filial === 'string' && user.filial.trim()) {
+    return user.filial.trim();
+  }
+
+  if (typeof user.loja === 'string') {
+    return user.loja.trim();
+  }
+
+  return '';
+}
+
+function normalizeUserLegacyFields(user = {}) {
+  if (!user || typeof user !== 'object') {
+    return user;
+  }
+
+  const { regiao, loja, ...normalizedUser } = user;
+
+  return {
+    ...normalizedUser,
+    regional: getNormalizedRegional(user),
+    filial: getNormalizedFilial(user),
+  };
+}
+
 function createUser({
   nome,
   id_magalu,
@@ -14,12 +52,15 @@ function createUser({
     throw new Error('O campo id_magalu e obrigatorio.');
   }
 
+  const normalizedRegional = getNormalizedRegional({ regional, regiao });
+  const normalizedFilial = getNormalizedFilial({ filial, loja });
+
   return {
     nome,
     id_magalu,
     cpf,
-    regional: regional || regiao || '',
-    filial: filial || loja || '',
+    regional: normalizedRegional,
+    filial: normalizedFilial,
     cargo,
     firstAccessCompleted: false,
     kit: false, // campo kit default false
@@ -33,22 +74,24 @@ function buildUserQrData(user, generatedAt = new Date().toISOString()) {
     throw new Error('Nao foi possivel montar o payload do QR Code sem id_magalu.');
   }
 
+  const normalizedUser = normalizeUserLegacyFields(user);
+
   return {
     type: 'magalu-user',
     version: 1,
     generatedAt,
     path: '/perfil/',
     user: {
-      userId: user._id ? String(user._id) : '',
-      id_magalu: user.id_magalu,
-      nome: user.nome || '',
-      cpf: user.cpf || '',
-      regional: user.regional || user.regiao || '',
-      filial: user.filial || user.loja || '',
-      cargo: user.cargo || '',
-      kit: typeof user.kit === 'boolean' ? user.kit : false,
-      kitExtra: typeof user.kitExtra === 'boolean' ? user.kitExtra : false,
-      kitExtraRetirada: typeof user.kitExtraRetirada === 'boolean' ? user.kitExtraRetirada : false,
+      userId: normalizedUser._id ? String(normalizedUser._id) : '',
+      id_magalu: normalizedUser.id_magalu,
+      nome: normalizedUser.nome || '',
+      cpf: normalizedUser.cpf || '',
+      regional: normalizedUser.regional,
+      filial: normalizedUser.filial,
+      cargo: normalizedUser.cargo || '',
+      kit: typeof normalizedUser.kit === 'boolean' ? normalizedUser.kit : false,
+      kitExtra: typeof normalizedUser.kitExtra === 'boolean' ? normalizedUser.kitExtra : false,
+      kitExtraRetirada: typeof normalizedUser.kitExtraRetirada === 'boolean' ? normalizedUser.kitExtraRetirada : false,
     },
   };
 }
@@ -61,4 +104,7 @@ module.exports = {
   buildUserQrData,
   createUser,
   createUserQrPayload,
+  getNormalizedFilial,
+  getNormalizedRegional,
+  normalizeUserLegacyFields,
 };

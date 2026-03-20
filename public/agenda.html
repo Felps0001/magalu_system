@@ -42,7 +42,7 @@
         <a class="feed-drawer-link feed-drawer-link--current" href="../agenda/" aria-current="page">Agenda</a>
         <a class="feed-drawer-link" href="../estandes/">Estandes</a>
         <button class="feed-drawer-link" id="agenda-open-scanner-menu" type="button">Scanner</button>
-        <button class="feed-drawer-link" id="agenda-open-qrcode-menu" type="button">QR Code</button>
+        <button class="feed-drawer-link" id="agenda-open-kit-code-menu" type="button">Retirada Kit</button>
         <a class="feed-drawer-link" href="../feed/">Feed</a>
       </nav>
 
@@ -72,7 +72,7 @@
 
         <div class="feed-top-copy">
           <h1 class="feed-top-title">Agenda</h1>
-          <p class="feed-top-subtitle">Programacao completa do evento.</p>
+          <p class="feed-top-subtitle">Programacao do evento.</p>
           <div class="feed-top-user">
             <strong id="agenda-user-name">Carregando agenda...</strong>
             <p id="agenda-user-role">Os horarios abaixo mostram a agenda do evento.</p>
@@ -327,15 +327,15 @@
         <div class="profile-qrcode-header">
           <div>
             <p class="profile-section-kicker">Scanner de check-in</p>
-            <h2 id="agenda-scanner-title" class="profile-section-title">Escaneie o QR Code</h2>
+            <h2 id="agenda-scanner-title" class="profile-section-title">Escaneie o codigo</h2>
           </div>
           <button id="agenda-close-scanner" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
         </div>
         <div id="agenda-scanner-preview" class="scanner-preview">
           <div id="agenda-scanner-mount"></div>
         </div>
-        <div id="agenda-scanner-status" class="form-message info-message">Aguardando inicialização...</div>
-        <div id="agenda-scanner-result" class="scanner-result">Nenhum QR Code lido ainda.</div>
+        <div id="agenda-scanner-status" class="form-message info-message">Pronto para escanear.</div>
+        <div id="agenda-scanner-result" class="scanner-result">Nenhum QR lido.</div>
         <div class="profile-qrcode-actions">
           <button id="agenda-start-scan-button" class="primary-button" type="button">Iniciar Scanner</button>
           <button id="agenda-stop-scan-button" class="secondary-button" type="button" disabled>Parar Scanner</button>
@@ -343,24 +343,24 @@
       </div>
     </section>
 
-    <section id="agenda-qrcode-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="agenda-qrcode-title" hidden>
-      <button id="agenda-qrcode-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar QR Code"></button>
+    <section id="agenda-kit-code-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="agenda-kit-code-title" hidden>
+      <button id="agenda-kit-code-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar retirada de kit"></button>
       <div class="profile-qrcode-panel">
         <div class="profile-qrcode-header">
           <div>
-            <p class="profile-section-kicker">QR Code do perfil</p>
-            <h2 id="agenda-qrcode-title" class="profile-section-title">Seu acesso rapido</h2>
+            <p class="profile-section-kicker">Retirada de kit</p>
+            <h2 id="agenda-kit-code-title" class="profile-section-title">Apresente este codigo</h2>
           </div>
-          <button id="agenda-close-qrcode" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
+          <button id="agenda-close-kit-code" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
         </div>
 
-        <div id="agenda-qrcode-preview" class="profile-qrcode-preview" aria-live="polite">
-          <!-- O QR Code sera renderizado aqui -->
+        <div id="agenda-kit-code-preview" class="profile-qrcode-preview" aria-live="polite">
+          <!-- O codigo sera renderizado aqui -->
         </div>
 
         <div class="profile-qrcode-actions">
-          <button id="agenda-generate-qrcode-button" class="primary-button" type="button">Atualizar QR Code</button>
-          <button id="agenda-close-qrcode-secondary" class="secondary-button" type="button">Fechar</button>
+          <button id="agenda-generate-kit-code-button" class="primary-button" type="button">Atualizar codigo</button>
+          <button id="agenda-close-kit-code-secondary" class="secondary-button" type="button">Fechar</button>
         </div>
       </div>
     </section>

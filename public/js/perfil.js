@@ -6,18 +6,19 @@ const userPontos = document.getElementById('user-pontos');
 const userCheckins = document.getElementById('user-checkins');
 const userCpf = document.getElementById('user-cpf');
 const userCargo = document.getElementById('user-cargo');
-const userRegiao = document.getElementById('user-regiao');
-const userLoja = document.getElementById('user-loja');
+const userRegional = document.getElementById('user-regional');
+const userFilial = document.getElementById('user-filial');
+const userKitStatus = document.getElementById('user-kit-status');
 const userAereo = document.getElementById('user-aereo');
-const generateQrCodeButton = document.getElementById('generate-qrcode-button');
-const qrCodeModal = document.getElementById('profile-qrcode-modal');
-const qrCodeBackdrop = document.getElementById('profile-qrcode-backdrop');
-const closeQrCodeButton = document.getElementById('profile-close-qrcode');
-const closeQrCodeSecondaryButton = document.getElementById('profile-close-qrcode-secondary');
-const qrCodePreview = document.getElementById('qrcode-preview');
+const generateKitCodeButton = document.getElementById('generate-kit-code-button');
+const kitCodeModal = document.getElementById('profile-kit-code-modal');
+const kitCodeBackdrop = document.getElementById('profile-kit-code-backdrop');
+const closeKitCodeButton = document.getElementById('profile-close-kit-code');
+const closeKitCodeSecondaryButton = document.getElementById('profile-close-kit-code-secondary');
+const kitCodePreview = document.getElementById('profile-kit-code-preview');
 const menuButton = document.getElementById('profile-menu-button');
 const openScannerMenuButton = document.getElementById('profile-open-scanner-menu');
-const openQrCodeMenuButton = document.getElementById('profile-open-qrcode-menu');
+const openKitCodeMenuButton = document.getElementById('profile-open-kit-code-menu');
 const openScannerButton = document.getElementById('profile-open-scanner');
 const scannerModal = document.getElementById('profile-scanner-modal');
 const scannerBackdrop = document.getElementById('profile-scanner-backdrop');
@@ -34,7 +35,7 @@ const closeDrawerButton = document.getElementById('profile-close-drawer');
 const logoutButton = document.getElementById('logout-button');
 
 let currentUser = null;
-let qrCodeLoaded = false;
+let kitCodeLoaded = false;
 let html5QrCode = null;
 let lastDecodedValue = '';
 let isHandlingScan = false;
@@ -116,17 +117,17 @@ function setDrawerState(isOpen) {
 
   drawer.setAttribute('aria-hidden', String(!isOpen));
   menuButton.setAttribute('aria-expanded', String(isOpen));
-  document.body.classList.toggle('feed-ui-lock', isOpen || !qrCodeModal.hidden || !scannerModal.hidden);
+  document.body.classList.toggle('feed-ui-lock', isOpen || !kitCodeModal.hidden || !scannerModal.hidden);
 }
 
-function setQrModalState(isOpen) {
-  qrCodeModal.hidden = !isOpen;
+function setKitCodeModalState(isOpen) {
+  kitCodeModal.hidden = !isOpen;
   document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden || !scannerModal.hidden);
 }
 
 function setScannerModalState(isOpen) {
   scannerModal.hidden = !isOpen;
-  document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden || !qrCodeModal.hidden);
+  document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden || !kitCodeModal.hidden);
 }
 
 function setScannerStatus(message, type) {
@@ -135,24 +136,61 @@ function setScannerStatus(message, type) {
 }
 
 function updateScannerResult(value) {
-  scannerResult.textContent = value || 'Nenhum QR Code lido ainda.';
+  scannerResult.textContent = value || 'Nenhum codigo lido.';
+}
+
+function renderKitStatus(user) {
+  if (!userKitStatus) {
+    return;
+  }
+
+  userKitStatus.textContent = user && user.kit === true
+    ? 'Kit ja retirado'
+    : 'Retirada pendente';
+}
+
+function setKitActionVisibility(isVisible) {
+  openKitCodeMenuButton.hidden = !isVisible;
+
+  if (!isVisible && !kitCodeModal.hidden) {
+    setKitCodeModalState(false);
+  }
+}
+
+async function syncKitActionVisibility() {
+  setKitActionVisibility(window.magaluApi.hasPendingKit(currentUser));
+
+  if (!currentUser || !currentUser._id) {
+    return;
+  }
+
+  const kitStatus = await window.magaluApi.fetchUserKitStatus(currentUser._id);
+
+  if (!kitStatus) {
+    return;
+  }
+
+  currentUser = window.magaluApi.mergeUserKitStatus(currentUser, kitStatus);
+  window.magaluApi.storeUser(currentUser);
+  renderKitStatus(currentUser);
+  setKitActionVisibility(window.magaluApi.hasPendingKit(currentUser));
 }
 
 setDrawerState(false);
-setQrModalState(false);
+setKitCodeModalState(false);
 setScannerModalState(false);
 
-function renderQrCode(responseData) {
-  qrCodePreview.innerHTML = responseData.qrCodeSvg;
-  qrCodeLoaded = true;
+function renderKitCode(responseData) {
+  kitCodePreview.innerHTML = responseData.qrCodeSvg;
+  kitCodeLoaded = true;
 }
 
-function renderQrPlaceholder(message) {
-  qrCodePreview.innerHTML = `<p class="muted">${message}</p>`;
-  qrCodeLoaded = false;
+function renderKitCodePlaceholder(message) {
+  kitCodePreview.innerHTML = `<p class="muted">${message}</p>`;
+  kitCodeLoaded = false;
 }
 
-function getQrCodeRequestError(data) {
+function getKitCodeRequestError(data) {
   if (data && typeof data.error === 'string' && !data.error.includes('<!DOCTYPE')) {
     return data.error;
   }
@@ -160,27 +198,27 @@ function getQrCodeRequestError(data) {
   const rawText = data && typeof data.rawText === 'string' ? data.rawText : '';
 
   if (rawText.includes('Cannot GET') && rawText.includes('/qrcode')) {
-    return 'O backend em uso ainda nao possui a rota de QR Code. Reinicie o servidor local ou publique a versao nova do backend.';
+    return 'O backend em uso ainda nao possui a rota do codigo. Reinicie o servidor local ou publique a versao nova do backend.';
   }
 
-  return 'O backend retornou uma resposta invalida ao gerar o QR Code.';
+  return 'O backend retornou uma resposta invalida ao gerar o codigo.';
 }
 
-async function loadUserQrCode(options = {}) {
+async function loadUserKitCode(options = {}) {
   const {
     buttonLoadingLabel = 'Gerando...',
-    loadingMessage = 'Carregando QR Code do usuario...',
-    successMessage = 'QR Code carregado com sucesso.',
+    loadingMessage = 'Carregando QR...',
+    successMessage = 'Codigo carregado com sucesso.',
   } = options;
 
   if (!currentUser || !currentUser._id) {
-    renderQrPlaceholder('Usuario nao encontrado para gerar o QR Code.');
+    renderKitCodePlaceholder('Usuario nao encontrado para gerar o codigo.');
     return;
   }
 
-  generateQrCodeButton.disabled = true;
-  generateQrCodeButton.textContent = buttonLoadingLabel;
-  renderQrPlaceholder(loadingMessage);
+  generateKitCodeButton.disabled = true;
+  generateKitCodeButton.textContent = buttonLoadingLabel;
+  renderKitCodePlaceholder(loadingMessage);
 
   try {
     const response = await fetch(
@@ -190,37 +228,37 @@ async function loadUserQrCode(options = {}) {
     const data = await window.magaluApi.parseApiResponse(response);
 
     if (!response.ok) {
-      throw new Error(getQrCodeRequestError(data));
+      throw new Error(getKitCodeRequestError(data));
     }
 
-    renderQrCode(data);
+    renderKitCode(data);
     currentUser = {
       ...currentUser,
       qrCodeGeneratedAt: data.qrCodeGeneratedAt,
       qrCodePayload: data.qrCodePayload,
     };
     window.magaluApi.storeUser(currentUser);
-    generateQrCodeButton.textContent = 'QR Code carregado';
+    generateKitCodeButton.textContent = 'Codigo carregado';
   } catch (error) {
-    renderQrPlaceholder('O QR Code nao foi carregado.');
+    renderKitCodePlaceholder('O codigo nao foi carregado.');
   } finally {
-    generateQrCodeButton.disabled = false;
-    generateQrCodeButton.textContent = 'Atualizar QR Code';
+    generateKitCodeButton.disabled = false;
+    generateKitCodeButton.textContent = 'Atualizar codigo';
   }
 }
 
-async function openQrCodeModal() {
+async function openKitCodeModal() {
   setDrawerState(false);
-  setQrModalState(true);
+  setKitCodeModalState(true);
 
-  if (qrCodeLoaded) {
+  if (kitCodeLoaded) {
     return;
   }
 
-  await loadUserQrCode({
+  await loadUserKitCode({
     buttonLoadingLabel: 'Carregando...',
-    loadingMessage: 'Carregando o QR Code do seu perfil...',
-    successMessage: 'QR Code carregado com sucesso.',
+    loadingMessage: 'Carregando QR...',
+    successMessage: 'Codigo carregado com sucesso.',
   });
 }
 
@@ -260,7 +298,7 @@ async function startScanner() {
   }
 
   if (!window.isSecureContext && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    setScannerStatus('A camera so pode ser aberta em HTTPS ou localhost.', 'error');
+    setScannerStatus('Use HTTPS ou localhost.', 'error');
     return;
   }
 
@@ -273,8 +311,8 @@ async function startScanner() {
     stopScanButton.disabled = false;
     isHandlingScan = false;
     lastDecodedValue = '';
-    updateScannerResult('Nenhum QR Code lido ainda.');
-    setScannerStatus('Abrindo camera traseira...', 'info-message');
+    updateScannerResult('Nenhum QR lido.');
+    setScannerStatus('Abrindo camera...', 'info-message');
 
     await html5QrCode.start(
       { facingMode: 'environment' },
@@ -296,12 +334,12 @@ async function startScanner() {
         const destinationUrl = window.magaluApi.resolveQrNavigationUrl(decodedText);
 
         if (!destinationUrl) {
-          setScannerStatus('QR Code lido, mas sem uma rota valida para redirecionamento.', 'error');
+          setScannerStatus('QR lido sem rota valida.', 'error');
           return;
         }
 
         isHandlingScan = true;
-        setScannerStatus('QR Code lido com sucesso. Redirecionando...', 'success');
+        setScannerStatus('QR lido. Redirecionando...', 'success');
 
         if (navigator.vibrate) {
           navigator.vibrate(120);
@@ -316,18 +354,18 @@ async function startScanner() {
     );
 
     scannerPreview.classList.add('scanner-active');
-    setScannerStatus('Camera ativa. Aponte para um QR Code.', 'info-message');
+    setScannerStatus('Camera ativa. Aponte para o QR.', 'info-message');
   } catch (error) {
     startScanButton.disabled = false;
     stopScanButton.disabled = true;
     scannerPreview.classList.remove('scanner-active');
 
     if (error && String(error).toLowerCase().includes('permission')) {
-      setScannerStatus('Permissao de camera negada. Libere o acesso e tente novamente.', 'error');
+      setScannerStatus('Acesso a camera negado.', 'error');
       return;
     }
 
-    setScannerStatus('Nao foi possivel abrir a camera neste aparelho.', 'error');
+    setScannerStatus('Camera indisponivel neste aparelho.', 'error');
     console.error(error);
   }
 }
@@ -346,7 +384,7 @@ if (!user) {
 } else {
   currentUser = user;
   const userNameText = user.nome || 'Usuario';
-  const userRoleText = `${user.cargo || 'Sem cargo'} · ${user.filial || user.loja || 'Sem filial'}`;
+  const userRoleText = `${user.cargo || 'Sem cargo'} · ${user.filial || 'Sem filial'}`;
 
   profilePageTitle.textContent = userNameText;
   document.title = userNameText;
@@ -357,42 +395,44 @@ if (!user) {
   userCheckins.textContent = String(user.totalCheckins || 0);
   userCpf.textContent = user.cpf || '-';
   userCargo.textContent = user.cargo || '-';
-  userRegiao.textContent = user.regional || user.regiao || '-';
-  userLoja.textContent = user.filial || user.loja || '-';
+  userRegional.textContent = user.regional || '-';
+  userFilial.textContent = user.filial || '-';
+  renderKitStatus(user);
   userAereo.textContent = formatAereoSummary(user.aereoDetalhes) || user.aereo || '-';
+  syncKitActionVisibility();
 }
 
-generateQrCodeButton.addEventListener('click', () => {
-  loadUserQrCode();
+generateKitCodeButton.addEventListener('click', () => {
+  loadUserKitCode();
 });
 
 openScannerButton.addEventListener('click', () => {
   setScannerModalState(true);
-  setScannerStatus('Aguardando inicialização...', 'info-message');
-  updateScannerResult('Nenhum QR Code lido ainda.');
+  setScannerStatus('Pronto para escanear.', 'info-message');
+  updateScannerResult('Nenhum QR lido.');
 });
 
 openScannerMenuButton.addEventListener('click', () => {
   setDrawerState(false);
   setScannerModalState(true);
-  setScannerStatus('Aguardando inicialização...', 'info-message');
-  updateScannerResult('Nenhum QR Code lido ainda.');
+  setScannerStatus('Pronto para escanear.', 'info-message');
+  updateScannerResult('Nenhum QR lido.');
 });
 
-openQrCodeMenuButton.addEventListener('click', () => {
-  openQrCodeModal();
+openKitCodeMenuButton.addEventListener('click', () => {
+  openKitCodeModal();
 });
 
-qrCodeBackdrop.addEventListener('click', () => {
-  setQrModalState(false);
+kitCodeBackdrop.addEventListener('click', () => {
+  setKitCodeModalState(false);
 });
 
-closeQrCodeButton.addEventListener('click', () => {
-  setQrModalState(false);
+closeKitCodeButton.addEventListener('click', () => {
+  setKitCodeModalState(false);
 });
 
-closeQrCodeSecondaryButton.addEventListener('click', () => {
-  setQrModalState(false);
+closeKitCodeSecondaryButton.addEventListener('click', () => {
+  setKitCodeModalState(false);
 });
 
 scannerBackdrop.addEventListener('click', async () => {
@@ -448,8 +488,8 @@ document.addEventListener('keydown', (event) => {
     closeScannerModal();
   }
 
-  if (!qrCodeModal.hidden) {
-    setQrModalState(false);
+  if (!kitCodeModal.hidden) {
+    setKitCodeModalState(false);
   }
 
   if (!drawer.hidden) {

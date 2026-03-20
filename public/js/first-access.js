@@ -25,8 +25,8 @@ function setFirstAccessMessage(message, type = '') {
 function populateForm(user) {
   profileNome.value = user.nome || '';
   profileCargo.value = user.cargo || '';
-  profileRegional.value = user.regional || user.regiao || '';
-  profileFilial.value = user.filial || user.loja || '';
+  profileRegional.value = user.regional || '';
+  profileFilial.value = user.filial || '';
   profileIdMagalu.value = user.id_magalu || '';
   profileCpf.textContent = user.cpf || '-';
 }

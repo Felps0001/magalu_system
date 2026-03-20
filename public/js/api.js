@@ -124,6 +124,52 @@ function buildAppUrl(path = '/') {
   return new URL(normalizedPath, rootUrl).toString();
 }
 
+function normalizeStoredUser(user) {
+  if (!user || typeof user !== 'object') {
+    return user;
+  }
+
+  const { regiao, loja, ...normalizedUser } = user;
+
+  return {
+    ...normalizedUser,
+    regional: typeof user.regional === 'string' && user.regional.trim()
+      ? user.regional.trim()
+      : typeof user.regiao === 'string'
+        ? user.regiao.trim()
+        : '',
+    filial: typeof user.filial === 'string' && user.filial.trim()
+      ? user.filial.trim()
+      : typeof user.loja === 'string'
+        ? user.loja.trim()
+        : '',
+    kit: Boolean(user.kit),
+    kitExtra: Boolean(user.kitExtra),
+    kitExtraRetirada: Boolean(user.kitExtraRetirada),
+  };
+}
+
+function mergeUserKitStatus(user, kitStatus) {
+  if (!user || typeof user !== 'object') {
+    return user;
+  }
+
+  if (!kitStatus || typeof kitStatus !== 'object') {
+    return normalizeStoredUser(user);
+  }
+
+  return normalizeStoredUser({
+    ...user,
+    kit: Boolean(kitStatus.kit),
+    kitExtra: Boolean(kitStatus.kitExtra),
+    kitExtraRetirada: Boolean(kitStatus.kitExtraRetirada),
+  });
+}
+
+function hasPendingKit(user) {
+  return Boolean(user) && user.kit !== true;
+}
+
 function readStoredUser() {
   const rawUser = localStorage.getItem('magalu_system_user');
 
@@ -132,14 +178,14 @@ function readStoredUser() {
   }
 
   try {
-    return JSON.parse(rawUser);
+    return normalizeStoredUser(JSON.parse(rawUser));
   } catch (error) {
     return null;
   }
 }
 
 function storeUser(user) {
-  localStorage.setItem('magalu_system_user', JSON.stringify(user));
+  localStorage.setItem('magalu_system_user', JSON.stringify(normalizeStoredUser(user)));
 }
 
 function clearStoredUser() {
@@ -180,12 +226,37 @@ async function parseApiResponse(response) {
   };
 }
 
+async function fetchUserKitStatus(userId) {
+  if (!userId) {
+    return null;
+  }
+
+  try {
+    const response = await fetch(
+      buildApiUrl(`/api/users/${encodeURIComponent(userId)}/kit`),
+      withApiDefaults({ method: 'GET' })
+    );
+    const data = await parseApiResponse(response);
+
+    if (!response.ok || !data || typeof data !== 'object') {
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    return null;
+  }
+}
+
 window.magaluApi = {
   buildAppUrl,
   buildApiUrl,
   clearStoredUser,
+  fetchUserKitStatus,
   getAuthenticatedHomeUrl,
   getAppRootUrl,
+  hasPendingKit,
+  mergeUserKitStatus,
   parseApiResponse,
   readStoredUser,
   resolveQrNavigationUrl,

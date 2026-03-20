@@ -4,7 +4,7 @@ const QRCode = require('qrcode');
 const { getAereosCollection, getRotasCollection, getUsersCollection } = require('../config/collections');
 const { createAereo, normalizeAereoPayload } = require('../models/aereo');
 const { createRota, normalizeRotaPayload } = require('../models/rota');
-const { buildUserQrData, createUser, createUserQrPayload } = require('../models/user');
+const { buildUserQrData, createUser, createUserQrPayload, normalizeUserLegacyFields } = require('../models/user');
 const { buildCacheKey, deleteCacheByPrefix, deleteCacheKeys, getOrSetJsonCache } = require('../services/cache');
 const { buildUserAccessPipeline } = require('../services/userAccessPipeline');
 
@@ -17,6 +17,14 @@ const USER_QRCODE_CACHE_TTL_SECONDS = Number(process.env.REDIS_TTL_USER_QRCODE_S
 
 async function findUserWithAccessData(usersCollection, matchStage) {
   return usersCollection.aggregate(buildUserAccessPipeline(matchStage, { limitOne: true })).next();
+}
+
+function normalizeUserResponse(user) {
+  return normalizeUserLegacyFields(user);
+}
+
+function normalizeUserResponseList(users = []) {
+  return users.map((user) => normalizeUserResponse(user));
 }
 
 function normalizeEditableUserFields(payload = {}) {
@@ -163,7 +171,7 @@ async function createUserHandler(req, res) {
       idMagalu: userWithQrCode.id_magalu,
     });
 
-    res.status(201).json(userWithQrCode);
+    res.status(201).json(normalizeUserResponse(userWithQrCode));
   } catch (error) {
     if (error.code === 11000) {
       res.status(409).json({ error: 'Ja existe um usuario com este id_magalu.' });
@@ -227,7 +235,7 @@ async function updateUserProfileHandler(req, res) {
       idMagalu: existingUser.id_magalu,
     });
 
-    res.json(refreshedUser);
+    res.json(normalizeUserResponse(refreshedUser));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -302,7 +310,7 @@ async function getUserByIdHandler(req, res) {
       return;
     }
 
-    res.json(user);
+    res.json(normalizeUserResponse(user));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -343,16 +351,18 @@ async function getUserKitStatusHandler(req, res) {
       return;
     }
 
+    const normalizedUser = normalizeUserResponse(user);
+
     res.json({
-      userId: String(user._id),
-      nome: user.nome || '',
-      id_magalu: user.id_magalu || '',
-      filial: user.filial || user.loja || '',
-      regional: user.regional || user.regiao || '',
-      cargo: user.cargo || '',
-      kit: Boolean(user.kit),
-      kitExtra: Boolean(user.kitExtra),
-      kitExtraRetirada: Boolean(user.kitExtra) && Boolean(user.kitExtraRetirada),
+      userId: String(normalizedUser._id),
+      nome: normalizedUser.nome || '',
+      id_magalu: normalizedUser.id_magalu || '',
+      filial: normalizedUser.filial,
+      regional: normalizedUser.regional,
+      cargo: normalizedUser.cargo || '',
+      kit: Boolean(normalizedUser.kit),
+      kitExtra: Boolean(normalizedUser.kitExtra),
+      kitExtraRetirada: Boolean(normalizedUser.kitExtra) && Boolean(normalizedUser.kitExtraRetirada),
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -420,7 +430,7 @@ async function upsertUserRotaHandler(req, res) {
     res.status(existingRota ? 200 : 201).json({
       message: existingRota ? 'Rota atualizada com sucesso.' : 'Rota criada com sucesso.',
       rota: refreshedUser ? refreshedUser.rota : null,
-      user: refreshedUser,
+      user: normalizeUserResponse(refreshedUser),
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -488,7 +498,7 @@ async function upsertUserAereoHandler(req, res) {
     res.status(existingAereo ? 200 : 201).json({
       message: existingAereo ? 'Aereo atualizado com sucesso.' : 'Aereo criado com sucesso.',
       aereo: refreshedUser ? refreshedUser.aereoDetalhes : null,
-      user: refreshedUser,
+      user: normalizeUserResponse(refreshedUser),
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -507,7 +517,7 @@ async function listUsersHandler(req, res) {
       },
     });
 
-    res.json(users);
+    res.json(normalizeUserResponseList(users));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -526,17 +536,29 @@ async function listAgendaByTurmaHandler(req, res) {
             projection: {
               nome: 1,
               regional: 1,
+              regiao: 1,
               cargo: 1,
               filial: 1,
+              loja: 1,
             },
           }
-        ).sort({ regional: 1, nome: 1 }).toArray();
+        ).toArray();
+
+        const normalizedUsers = normalizeUserResponseList(users).sort((leftUser, rightUser) => {
+          const regionalComparison = leftUser.regional.localeCompare(rightUser.regional, 'pt-BR');
+
+          if (regionalComparison !== 0) {
+            return regionalComparison;
+          }
+
+          return (leftUser.nome || '').localeCompare(rightUser.nome || '', 'pt-BR');
+        });
 
         const initialAgenda = {
           'Sem regional': [],
         };
 
-        return users.reduce((groups, user) => {
+        return normalizedUsers.reduce((groups, user) => {
           const turmaName = user.regional || 'Sem regional';
 
           if (!groups[turmaName]) {

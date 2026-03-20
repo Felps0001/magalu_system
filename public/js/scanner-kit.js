@@ -18,7 +18,7 @@ function setScannerStatus(message, type) {
 }
 
 function updateResult(value) {
-  scannerResult.textContent = value || 'Nenhum QR Code lido ainda.';
+  scannerResult.textContent = value || 'Nenhum codigo lido.';
 }
 
 function updateKitStatus(summary, meta) {
@@ -81,7 +81,7 @@ async function processarKit(userId) {
   const extraInfo = user.kitExtra
     ? `\nKit extra: sim\nRetirada kit extra: ${user.kitExtraRetirada ? 'sim' : 'nao'}`
     : '\nKit extra: nao';
-  const meta = `ID Magalu: ${user.id_magalu || '-'}\nFilial: ${user.filial || user.loja || '-'}\nRegional: ${user.regional || user.regiao || '-'}\nCargo: ${user.cargo || '-'}${extraInfo}`;
+  const meta = `ID Magalu: ${user.id_magalu || '-'}\nFilial: ${user.filial || '-'}\nRegional: ${user.regional || '-'}\nCargo: ${user.cargo || '-'}${extraInfo}`;
 
   if (user.kit) {
     updateKitStatus(`Kit ja retirado por ${user.nome || 'usuario'}.`, meta);
@@ -126,9 +126,9 @@ async function startScanner() {
     }
     startScanButton.disabled = true;
     stopScanButton.disabled = false;
-    updateResult('Nenhum QR Code lido ainda.');
+    updateResult('Nenhum QR lido.');
     lastDecodedValue = '';
-    setScannerStatus('Abrindo camera traseira...', 'info-message');
+    setScannerStatus('Abrindo camera...', 'info-message');
     await html5QrCode.start(
       { facingMode: 'environment' },
       {
@@ -167,7 +167,7 @@ async function startScanner() {
       },
       () => {}
     );
-    setScannerStatus('Camera ativa. Aponte para um QR Code.', 'info-message');
+    setScannerStatus('Camera ativa. Aponte para o QR.', 'info-message');
     scannerPreview.classList.add('scanner-active');
   } catch (error) {
     startScanButton.disabled = false;

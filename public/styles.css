@@ -3131,6 +3131,10 @@ button:hover {
     border-bottom-width: 5px;
   }
 }
+[hidden] {
+  display: none !important;
+}
+
 .first-access-top-subtitle {
   font-size: clamp(1.1rem, 5vw, 2rem);
   line-height: 1.05;
