@@ -12,7 +12,9 @@
     "report:users-kit-extra-not-found": "node scripts/report-users-kit-extra-not-found.js",
     "migrate:users-schema": "node scripts/migrate-users-schema.js",
     "build:pages": "gulp build-pages",
-    "watch:pages": "gulp watch"
+    "watch:pages": "gulp watch",
+    "deploy": "npm run build:pages && wrangler deploy",
+    "preview": "npm run build:pages && wrangler dev"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1006.0",
@@ -30,6 +32,7 @@
     "gulp": "^5.0.1",
     "gulp-clean-css": "^4.3.0",
     "gulp-terser": "^2.1.0",
-    "sass": "^1.98.0"
+    "sass": "^1.98.0",
+    "wrangler": "^4.76.0"
   }
 }
