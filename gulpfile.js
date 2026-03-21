@@ -94,7 +94,7 @@ function writePagesRoutes(done) {
   writeRouteIndex('scanner', 'perfil.html');
   writeRootIndex();
   write404Page();
-  console.log('Build do GitHub Pages gerado em dist/.');
+  console.log('Build estatico gerado em dist/ para Cloudflare Pages.');
   done();
 }
 

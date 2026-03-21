@@ -9,14 +9,67 @@ const { createApp } = require('./src/app');
 
 const PORT = process.env.PORT || 3000;
 
-const app = createApp();
-app.use(cors({
-  origin: [
+function parseCsvEnvList(value) {
+  return String(value || '')
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function buildAllowedOriginPatterns() {
+  const defaultExactOrigins = [
     'https://felps0001.github.io',
     'http://localhost:3000',
-    'http://127.0.0.1:3000'
-  ],
-  credentials: true
+    'http://127.0.0.1:3000',
+  ];
+  const configuredOrigins = parseCsvEnvList(process.env.CORS_ALLOWED_ORIGINS);
+  const exactOrigins = new Set([...defaultExactOrigins, ...configuredOrigins]);
+  const configuredPagesProject = String(process.env.CLOUDFLARE_PAGES_PROJECT || '').trim();
+  const patterns = [];
+
+  if (configuredPagesProject) {
+    patterns.push(new RegExp(`^https://${escapeRegex(configuredPagesProject)}\\.pages\\.dev$`, 'i'));
+    patterns.push(new RegExp(`^https://[a-z0-9-]+\\.${escapeRegex(configuredPagesProject)}\\.pages\\.dev$`, 'i'));
+  }
+
+  patterns.push(/^https:\/\/[a-z0-9-]+\.pages\.dev$/i);
+  patterns.push(/^https:\/\/[a-z0-9-]+\.[a-z0-9-]+\.pages\.dev$/i);
+
+  return {
+    exactOrigins,
+    patterns,
+  };
+}
+
+function isAllowedOrigin(origin, allowedOrigins) {
+  if (!origin) {
+    return true;
+  }
+
+  if (allowedOrigins.exactOrigins.has(origin)) {
+    return true;
+  }
+
+  return allowedOrigins.patterns.some((pattern) => pattern.test(origin));
+}
+
+const allowedOrigins = buildAllowedOriginPatterns();
+
+const app = createApp();
+app.use(cors({
+  origin(origin, callback) {
+    if (isAllowedOrigin(origin, allowedOrigins)) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error(`Origem nao permitida pelo CORS: ${origin}`));
+  },
+  credentials: true,
 }));
 let server;
 
@@ -57,7 +110,7 @@ async function shutdown(signal) {
     }
 
     await closeMongoDBConnection();
-  await closeRedisConnection();
+    await closeRedisConnection();
     console.log(`Conexao com MongoDB encerrada apos sinal ${signal}.`);
     process.exit(0);
   } catch (error) {

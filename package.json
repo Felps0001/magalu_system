@@ -7,6 +7,9 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "import:users-csv": "node scripts/import-users-csv.js",
+    "import:users-kit-extra-csv": "node scripts/import-users-kit-extra-csv.js",
+    "report:users-kit-extra-db-status": "node scripts/report-users-kit-extra-db-status.js",
+    "report:users-kit-extra-not-found": "node scripts/report-users-kit-extra-not-found.js",
     "migrate:users-schema": "node scripts/migrate-users-schema.js",
     "build:pages": "gulp build-pages",
     "watch:pages": "gulp watch"
