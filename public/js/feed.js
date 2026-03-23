@@ -35,6 +35,7 @@ const imageCaption = document.getElementById('feed-image-caption');
 let currentUser = null;
 let kitCodeLoaded = false;
 let drawerCloseTimer = null;
+let currentUserCanPublish = false;
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
@@ -47,6 +48,15 @@ function redirectToFirstAccess() {
 function setFormMessage(message, type) {
   feedFormMessage.textContent = message;
   feedFormMessage.className = `form-message feed-mobile-message ${type}`;
+}
+
+function updateComposerAvailability(canPublish) {
+  currentUserCanPublish = Boolean(canPublish);
+  openComposerButton.hidden = !currentUserCanPublish;
+
+  if (!currentUserCanPublish && !composerModal.hidden) {
+    setComposerState(false);
+  }
 }
 
 function setDrawerState(isOpen) {
@@ -321,7 +331,9 @@ function renderFeed(items) {
 
     const emptyText = document.createElement('p');
     emptyText.className = 'feed-mobile-empty';
-    emptyText.textContent = 'Nenhuma publicacao ainda. Toque no botao + para criar a primeira postagem.';
+    emptyText.textContent = currentUserCanPublish
+      ? 'Nenhuma publicacao ainda. Toque no botao + para criar a primeira postagem.'
+      : 'Nenhuma publicacao ainda. O envio de posts esta liberado apenas para usuarios autorizados.';
 
     emptyState.appendChild(emptyText);
     feedList.appendChild(emptyState);
@@ -429,6 +441,47 @@ async function createPost(user) {
   return data;
 }
 
+async function loadPublishAccess(user) {
+  if (!user || (!user._id && !user.id_magalu)) {
+    updateComposerAvailability(false);
+    return false;
+  }
+
+  try {
+    const accessUrl = new URL(window.magaluApi.buildApiUrl('/api/feed/publish-access'), window.location.origin);
+
+    if (user._id) {
+      accessUrl.searchParams.set('authorId', user._id);
+    }
+
+    if (user.id_magalu) {
+      accessUrl.searchParams.set('authorIdMagalu', user.id_magalu);
+    }
+
+    const response = await fetch(
+      accessUrl.toString(),
+      window.magaluApi.withApiDefaults({ method: 'GET' })
+    );
+    const data = await window.magaluApi.parseApiResponse(response);
+
+    if (!response.ok) {
+      throw new Error(normalizeApiError(data, 'Nao foi possivel validar a permissao de publicacao do feed.'));
+    }
+
+    const canPublish = Boolean(data && data.canPublish);
+    currentUser = {
+      ...currentUser,
+      feedCanPublish: canPublish,
+    };
+    window.magaluApi.storeUser(currentUser);
+    updateComposerAvailability(canPublish);
+    return canPublish;
+  } catch (error) {
+    updateComposerAvailability(Boolean(user.feedCanPublish));
+    return Boolean(user.feedCanPublish);
+  }
+}
+
 const user = window.magaluApi.readStoredUser();
 
 if (!user) {
@@ -443,7 +496,9 @@ if (!user) {
   feedUserRole.textContent = userRole;
   feedDrawerUserName.textContent = userName;
   feedDrawerUserRole.textContent = userRole;
+  updateComposerAvailability(Boolean(user.feedCanPublish));
   syncKitActionVisibility();
+  loadPublishAccess(user);
   loadFeed();
 }
 
@@ -452,6 +507,12 @@ feedForm.addEventListener('submit', async (event) => {
 
   if (!user) {
     redirectToLogin();
+    return;
+  }
+
+  if (!currentUserCanPublish) {
+    setFormMessage('Seu usuario nao possui permissao para publicar no feed.', 'error');
+    setComposerState(false);
     return;
   }
 
@@ -527,6 +588,11 @@ if (closeImageButton) {
 }
 
 openComposerButton.addEventListener('click', () => {
+  if (!currentUserCanPublish) {
+    setFormMessage('Seu usuario nao possui permissao para publicar no feed.', 'error');
+    return;
+  }
+
   setComposerState(true);
 });
 

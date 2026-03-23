@@ -8,6 +8,8 @@ const profileRegional = document.getElementById('profile-regional');
 const profileFilial = document.getElementById('profile-filial');
 const profileIdMagalu = document.getElementById('profile-id-magalu');
 const profileCpf = document.getElementById('profile-cpf');
+const profilePassword = document.getElementById('profile-password');
+const profilePasswordConfirmation = document.getElementById('profile-password-confirmation');
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
@@ -37,6 +39,7 @@ function getPayload() {
     cargo: profileCargo.value,
     regional: profileRegional.value,
     filial: profileFilial.value,
+    senha: profilePassword.value,
   };
 }
 
@@ -55,6 +58,16 @@ firstAccessForm.addEventListener('submit', async (event) => {
 
   if (!currentUser || !currentUser._id) {
     redirectToLogin();
+    return;
+  }
+
+  if (!profilePassword.value.trim()) {
+    setFirstAccessMessage('Crie uma senha para concluir seu cadastro.', 'error');
+    return;
+  }
+
+  if (profilePassword.value !== profilePasswordConfirmation.value) {
+    setFirstAccessMessage('A confirmacao da senha nao confere.', 'error');
     return;
   }
 

@@ -6,6 +6,7 @@ const { createAereo, normalizeAereoPayload } = require('../models/aereo');
 const { createRota, normalizeRotaPayload } = require('../models/rota');
 const { buildUserQrData, createUser, createUserQrPayload, normalizeUserLegacyFields } = require('../models/user');
 const { buildCacheKey, deleteCacheByPrefix, deleteCacheKeys, getOrSetJsonCache } = require('../services/cache');
+const { hashPassword, normalizePassword } = require('../services/password');
 const { buildUserAccessPipeline } = require('../services/userAccessPipeline');
 
 const USERS_CACHE_KEY = buildCacheKey(['users', 'list']);
@@ -20,7 +21,16 @@ async function findUserWithAccessData(usersCollection, matchStage) {
 }
 
 function normalizeUserResponse(user) {
-  return normalizeUserLegacyFields(user);
+  if (!user || typeof user !== 'object') {
+    return user;
+  }
+
+  const { passwordHash, ...safeUser } = user;
+
+  return {
+    ...normalizeUserLegacyFields(safeUser),
+    hasPassword: Boolean(passwordHash),
+  };
 }
 
 function normalizeUserResponseList(users = []) {
@@ -200,11 +210,24 @@ async function updateUserProfileHandler(req, res) {
     }
 
     const editableFields = normalizeEditableUserFields(req.body);
+    const senha = normalizePassword(req.body.senha);
+
+    if (!senha) {
+      res.status(400).json({ error: 'Informe uma senha para concluir seu primeiro acesso.' });
+      return;
+    }
+
+    if (senha.length < 4) {
+      res.status(400).json({ error: 'A senha deve ter pelo menos 4 caracteres.' });
+      return;
+    }
+
     const qrCodeGeneratedAt = new Date().toISOString();
     const updatedUser = {
       ...existingUser,
       ...editableFields,
       firstAccessCompleted: true,
+      passwordHash: hashPassword(senha),
     };
 
     await usersCollection.updateOne(
@@ -213,6 +236,7 @@ async function updateUserProfileHandler(req, res) {
         $set: {
           ...editableFields,
           firstAccessCompleted: true,
+          passwordHash: updatedUser.passwordHash,
           qrCodeGeneratedAt,
           qrCodePayload: createUserQrPayload(updatedUser, qrCodeGeneratedAt),
           updatedAt: new Date().toISOString(),

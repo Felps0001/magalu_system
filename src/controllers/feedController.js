@@ -3,6 +3,7 @@ const { ObjectId } = require('mongodb');
 const { getFeedCollection, getUsersCollection } = require('../config/collections');
 const { createFeedUploadUrl, uploadFeedImage } = require('../config/r2');
 const { createFeed } = require('../models/feed');
+const { canPublishToFeed } = require('../services/feedAccess');
 const { buildCacheKey, deleteCacheKey, getOrSetJsonCache } = require('../services/cache');
 
 const ALLOWED_IMAGE_MIME_TYPES = new Set([
@@ -38,6 +39,11 @@ async function createFeedHandler(req, res) {
 
     if (!author) {
       res.status(404).json({ error: 'Usuario autor da publicacao nao encontrado.' });
+      return;
+    }
+
+    if (!canPublishToFeed(author)) {
+      res.status(403).json({ error: 'Seu usuario nao possui permissao para publicar no feed.' });
       return;
     }
 
@@ -92,6 +98,11 @@ async function createFeedUploadUrlHandler(req, res) {
 
     if (!author) {
       res.status(404).json({ error: 'Usuario autor da publicacao nao encontrado.' });
+      return;
+    }
+
+    if (!canPublishToFeed(author)) {
+      res.status(403).json({ error: 'Seu usuario nao possui permissao para publicar no feed.' });
       return;
     }
 
@@ -191,8 +202,29 @@ async function listFeedHandler(req, res) {
   }
 }
 
+async function getFeedPublishAccessHandler(req, res) {
+  try {
+    const author = await resolveAuthor({
+      authorId: req.query.authorId,
+      authorIdMagalu: req.query.authorIdMagalu,
+    });
+
+    if (!author) {
+      res.status(404).json({ error: 'Usuario nao encontrado para validar o acesso ao feed.' });
+      return;
+    }
+
+    res.json({
+      canPublish: canPublishToFeed(author),
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
 module.exports = {
   createFeedHandler,
   createFeedUploadUrlHandler,
+  getFeedPublishAccessHandler,
   listFeedHandler,
 };

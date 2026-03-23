@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Login Magalu System</title>
+  <title>Posicionamento Magalu 2026</title>
   <meta name="theme-color" content="#0a0a0a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -41,9 +41,22 @@
           required
         >
 
+        <label class="sr-only" for="password">Senha</label>
+        <input
+          id="password"
+          name="password"
+          class="auth-mobile-input"
+          type="password"
+          placeholder="Senha"
+          autocomplete="current-password"
+          required
+        >
+
         <button id="login-button" class="auth-mobile-primary" type="submit">
           <span class="auth-mobile-primary-label">Acessar</span>
         </button>
+
+        <button id="first-access-button" class="secondary-button" type="button">Primeiro acesso</button>
 
         <!-- <div class="auth-mobile-actions">
           <button id="update-button" class="auth-mobile-link" type="button">Atualizar app</button>
