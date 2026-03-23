@@ -1,4 +1,5 @@
 const turmaSections = Array.from(document.querySelectorAll('[data-turma]'));
+const publicAgendaSections = Array.from(document.querySelectorAll('[data-agenda-publica="true"]'));
 const logoutButton = document.getElementById('logout-button');
 const agendaUserName = document.getElementById('agenda-user-name');
 const agendaUserRole = document.getElementById('agenda-user-role');
@@ -323,6 +324,10 @@ function renderAgendaForTurma(turma) {
   const turmaNormalizada = normalizeTurma(turma);
   let encontrouTurma = false;
 
+  publicAgendaSections.forEach((section) => {
+    setSectionVisibility(section, true);
+  });
+
   turmaSections.forEach((section) => {
     const turmaDaSection = normalizeTurma(section.dataset.turma);
     const deveMostrar = !turmaNormalizada || turmaDaSection === turmaNormalizada;
@@ -336,7 +341,7 @@ function renderAgendaForTurma(turma) {
 
   if (!turmaNormalizada) {
     agendaUserName.textContent = 'Agenda geral do evento';
-    agendaUserRole.textContent = 'Exibindo a agenda completa do evento.';
+    agendaUserRole.textContent = 'Exibindo a agenda aberta do dia e a programacao geral do evento.';
     return;
   }
 
@@ -347,7 +352,7 @@ function renderAgendaForTurma(turma) {
   }
 
   agendaUserName.textContent = `Agenda segmentada ${turma}`;
-  agendaUserRole.textContent = 'Exibindo apenas o bloco de agenda correspondente a este acesso.';
+  agendaUserRole.textContent = 'Exibindo a agenda aberta do dia junto do bloco correspondente a este acesso.';
 }
 
 const user = window.magaluApi.readStoredUser();
