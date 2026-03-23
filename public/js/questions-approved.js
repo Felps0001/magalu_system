@@ -30,7 +30,7 @@ function setApprovedStatus(message, type) {
 function buildApprovedFilterOptions() {
   const allOption = document.createElement('option');
   allOption.value = 'all';
-  allOption.textContent = 'Todas as palestras';
+  allOption.textContent = 'Todos os palcos';
   approvedFilter.appendChild(allOption);
 
   palestraOrder.forEach((palestraId) => {
@@ -50,8 +50,8 @@ function updateHeroCopy() {
 
   if (selectedPalestraId === 'all') {
     approvedHeroTitle.textContent = 'Perguntas aprovadas';
-    approvedHeroCopy.textContent = 'Exibicao consolidada com todas as perguntas ja aprovadas para as palestras do evento.';
-    approvedSessionSummary.textContent = 'Mostrando apenas as perguntas aprovadas das sessoes ativas de cada palestra.';
+    approvedHeroCopy.textContent = 'Exibicao consolidada com todas as perguntas ja aprovadas para os palcos do evento.';
+    approvedSessionSummary.textContent = 'Mostrando apenas as perguntas aprovadas das sessoes ativas de cada palco.';
     return;
   }
 
@@ -59,7 +59,7 @@ function updateHeroCopy() {
   approvedHeroCopy.textContent = `Exibicao filtrada apenas com as perguntas aprovadas de ${palestraLabels[selectedPalestraId]}.`;
   approvedSessionSummary.textContent = currentSession
     ? `${currentSession.label} iniciada em ${formatApprovedDateTime(currentSession.startedAt)}.`
-    : 'Esta palestra esta sem sessao ativa no momento.';
+    : 'Este palco esta sem sessao ativa no momento.';
 }
 
 function createApprovedEmptyState() {

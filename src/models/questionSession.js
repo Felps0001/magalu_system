@@ -5,7 +5,7 @@ function createQuestionSession({ palestraId, sequence }) {
   const normalizedSequence = Number(sequence || 1);
 
   if (!normalizedPalestraId || !PALESTRA_IDS.includes(normalizedPalestraId)) {
-    throw new Error('A palestra informada para a sessao e invalida.');
+    throw new Error('O palco informado para a sessao e invalido.');
   }
 
   if (!Number.isInteger(normalizedSequence) || normalizedSequence <= 0) {

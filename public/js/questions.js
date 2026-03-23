@@ -13,9 +13,13 @@ const questionStageTitle = document.getElementById('question-stage-title');
 const questionStageDescription = document.getElementById('question-stage-description');
 const questionSwitchList = document.getElementById('question-switch-list');
 
-const { palestraLabels, palestraOrder } = window.magaluQuestions;
-const currentPalestraId = questionPageRoot ? questionPageRoot.dataset.palestraId : '';
-const currentPalestraLabel = palestraLabels[currentPalestraId] || 'Palestra';
+const { palestraLabels, palestraOrder, stageRouteSlugs, normalizeStageId, resolveStageIdFromPath } = window.magaluQuestions;
+const currentPalestraId = normalizeStageId(
+  questionPageRoot
+    ? questionPageRoot.dataset.palestraId || questionPageRoot.dataset.stageId || resolveStageIdFromPath(window.location.pathname)
+    : resolveStageIdFromPath(window.location.pathname)
+);
+const currentPalestraLabel = palestraLabels[currentPalestraId] || 'Palco';
 const currentUser = window.magaluApi.readStoredUser();
 const MAX_QUESTION_LENGTH = 500;
 let currentSession = null;
@@ -36,7 +40,7 @@ function renderStageMeta() {
   questionStageTitle.textContent = `Envie sua pergunta para ${currentPalestraLabel}`;
   questionStageDescription.textContent = currentSession
     ? `${currentSession.label} ativa.`
-    : 'Sessão ainda não foi iniciada';
+    : 'Sessao ainda nao foi iniciada.';
 }
 
 function setSubmissionAvailability(isAvailable) {
@@ -54,7 +58,7 @@ async function loadActiveSession() {
     const data = await window.magaluApi.parseApiResponse(response);
 
     if (!response.ok) {
-      throw new Error(data && data.error ? data.error : 'Nao foi possivel consultar a sessao ativa desta palestra.');
+      throw new Error(data && data.error ? data.error : 'Nao foi possivel consultar a sessao ativa deste palco.');
     }
 
     currentSession = Array.isArray(data) && data.length > 0 ? data[0] : null;
@@ -62,7 +66,7 @@ async function loadActiveSession() {
     setSubmissionAvailability(Boolean(currentSession));
 
     if (!currentSession) {
-      setFormMessage('As perguntas desta palestra estao encerradas por enquanto. Aguarde a abertura de uma nova sessao.', 'info-message');
+      setFormMessage('As perguntas deste palco estao encerradas por enquanto. Aguarde a abertura de uma nova sessao.', 'info-message');
     }
   } catch (error) {
     currentSession = null;
@@ -84,7 +88,7 @@ function renderUserContext() {
   }
 
   questionUserName.textContent = currentPalestraLabel;
-  questionUserRole.textContent = 'Preencha seu nome para enviar a pergunta para a sala correta.';
+  questionUserRole.textContent = 'Preencha seu nome para enviar a pergunta para o palco correto.';
   questionAuthorHint.textContent = 'Se o usuario nao estiver autenticado, identifique-se manualmente.';
 }
 
@@ -96,7 +100,7 @@ function renderSwitchLinks() {
     const isCurrent = palestraId === currentPalestraId;
 
     link.className = `question-switch-link${isCurrent ? ' question-switch-link--current' : ''}`;
-    link.href = window.magaluApi.buildAppUrl(`/${palestraId.replace('palestra', 'perguntas-palestra')}/`);
+    link.href = window.magaluApi.buildAppUrl(`/${stageRouteSlugs[palestraId] || palestraId}/`);
     link.textContent = palestraLabels[palestraId];
 
     if (isCurrent) {
@@ -111,7 +115,7 @@ async function submitQuestion(event) {
   event.preventDefault();
 
   if (!currentSession) {
-    setFormMessage('Esta palestra esta sem sessao ativa. Aguarde o moderador iniciar a proxima sessao.', 'error');
+    setFormMessage('Este palco esta sem sessao ativa. Aguarde o moderador iniciar a proxima sessao.', 'error');
     return;
   }
 
@@ -156,11 +160,16 @@ async function submitQuestion(event) {
   }
 }
 
-renderStageMeta();
-renderUserContext();
-renderSwitchLinks();
-updateCounter();
-loadActiveSession();
+if (!currentPalestraId) {
+  setSubmissionAvailability(false);
+  setFormMessage('Nao foi possivel identificar o palco desta pagina.', 'error');
+} else {
+  renderStageMeta();
+  renderUserContext();
+  renderSwitchLinks();
+  updateCounter();
+  loadActiveSession();
 
-questionTextInput.addEventListener('input', updateCounter);
-questionForm.addEventListener('submit', submitQuestion);
+  questionTextInput.addEventListener('input', updateCounter);
+  questionForm.addEventListener('submit', submitQuestion);
+}

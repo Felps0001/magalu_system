@@ -12,7 +12,7 @@ async function listActiveQuestionSessionsHandler(req, res) {
       : null;
 
     if (Object.prototype.hasOwnProperty.call(req.query, 'palestraId') && !palestraId) {
-      res.status(400).json({ error: 'A palestra informada para consultar a sessao ativa e invalida.' });
+      res.status(400).json({ error: 'O palco informado para consultar a sessao ativa e invalido.' });
       return;
     }
 
@@ -28,7 +28,7 @@ async function startQuestionSessionHandler(req, res) {
     const palestraId = normalizePalestraId(req.body.palestraId);
 
     if (!palestraId) {
-      res.status(400).json({ error: 'A palestra informada para abrir nova sessao e invalida.' });
+      res.status(400).json({ error: 'O palco informado para abrir nova sessao e invalido.' });
       return;
     }
 
@@ -44,7 +44,7 @@ async function endQuestionSessionHandler(req, res) {
     const palestraId = normalizePalestraId(req.body.palestraId);
 
     if (!palestraId) {
-      res.status(400).json({ error: 'A palestra informada para encerrar a sessao e invalida.' });
+      res.status(400).json({ error: 'O palco informado para encerrar a sessao e invalido.' });
       return;
     }
 

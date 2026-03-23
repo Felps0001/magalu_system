@@ -52,7 +52,7 @@ function renderSessionSummary() {
   const currentSession = findActiveSessionForSelection();
 
   if (selectedPalestraId === 'all') {
-    moderationSessionSummary.textContent = 'Mostrando apenas as perguntas das sessoes ativas de cada palestra. Para encerrar uma sessao, selecione uma palestra especifica.';
+    moderationSessionSummary.textContent = 'Mostrando apenas as perguntas das sessoes ativas de cada palco. Para encerrar uma sessao, selecione um palco especifico.';
     moderationStartSessionButton.disabled = true;
     moderationEndSessionButton.disabled = true;
     return;
@@ -73,7 +73,7 @@ function renderSessionSummary() {
 function buildFilterOptions() {
   const allOption = document.createElement('option');
   allOption.value = 'all';
-  allOption.textContent = 'Todas as palestras';
+  allOption.textContent = 'Todos os palcos';
   moderationFilter.appendChild(allOption);
 
   palestraOrder.forEach((palestraId) => {
@@ -390,7 +390,7 @@ async function endCurrentSession() {
     return;
   }
 
-  const confirmed = window.confirm(`Encerrar a sessao ativa de ${palestraLabels[selectedPalestraId]}? As perguntas atuais saem do quadro ativo e a palestra ficara sem receber novas perguntas ate voce iniciar outra sessao.`);
+  const confirmed = window.confirm(`Encerrar a sessao ativa de ${palestraLabels[selectedPalestraId]}? As perguntas atuais saem do quadro ativo e o palco ficara sem receber novas perguntas ate voce iniciar outra sessao.`);
 
   if (!confirmed) {
     return;

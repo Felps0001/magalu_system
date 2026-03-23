@@ -1,5 +1,10 @@
 const QUESTION_STATUSES = Object.freeze(['reprovada', 'pendente', 'aprovada']);
-const PALESTRA_IDS = Object.freeze(['palestra-1', 'palestra-2', 'palestra-3']);
+const PALESTRA_IDS = Object.freeze(['palco-1', 'palco-2', 'palco-3', 'palco-4', 'palco-5']);
+const LEGACY_PALESTRA_ALIASES = Object.freeze({
+  'palestra-1': 'palco-1',
+  'palestra-2': 'palco-2',
+  'palestra-3': 'palco-3',
+});
 const MAX_QUESTION_LENGTH = 500;
 
 function normalizeString(value) {
@@ -15,7 +20,11 @@ function normalizeQuestionStatus(value) {
 function normalizePalestraId(value) {
   const normalizedValue = normalizeString(value).toLowerCase();
 
-  return PALESTRA_IDS.includes(normalizedValue) ? normalizedValue : null;
+  if (PALESTRA_IDS.includes(normalizedValue)) {
+    return normalizedValue;
+  }
+
+  return LEGACY_PALESTRA_ALIASES[normalizedValue] || null;
 }
 
 function createQuestion({ palestraId, texto, authorName, authorUserId, authorIdMagalu, sessionId, sessionLabel }) {
@@ -26,7 +35,7 @@ function createQuestion({ palestraId, texto, authorName, authorUserId, authorIdM
   const normalizedSessionLabel = normalizeString(sessionLabel);
 
   if (!normalizedPalestraId) {
-    throw new Error('A palestra informada e invalida.');
+    throw new Error('O palco informado e invalido.');
   }
 
   if (!normalizedText) {
@@ -42,7 +51,7 @@ function createQuestion({ palestraId, texto, authorName, authorUserId, authorIdM
   }
 
   if (!normalizedSessionId) {
-    throw new Error('Nao foi possivel identificar a sessao ativa desta palestra.');
+    throw new Error('Nao foi possivel identificar a sessao ativa deste palco.');
   }
 
   const timestamp = new Date().toISOString();

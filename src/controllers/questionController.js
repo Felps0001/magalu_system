@@ -22,7 +22,7 @@ async function buildQuestionFilters(query = {}) {
     const palestraId = normalizePalestraId(query.palestraId);
 
     if (!palestraId) {
-      throw new Error('O filtro de palestra informado e invalido.');
+      throw new Error('O filtro de palco informado e invalido.');
     }
 
     filters.palestraId = palestraId;
@@ -63,7 +63,7 @@ async function createQuestionHandler(req, res) {
     const activeSession = await getActiveSessionForPalestra(req.body.palestraId);
 
     if (!activeSession) {
-      res.status(409).json({ error: 'Esta palestra esta sem sessao ativa no momento. Aguarde o moderador iniciar a proxima sessao.' });
+      res.status(409).json({ error: 'Este palco esta sem sessao ativa no momento. Aguarde o moderador iniciar a proxima sessao.' });
       return;
     }
 

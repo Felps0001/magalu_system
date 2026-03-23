@@ -29,29 +29,35 @@ router.get('/logistica', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'logistica.html'));
 });
 
-router.get('/perguntas-palestra-1', (req, res) => {
-  res.sendFile(path.join(publicDirectory, 'questions-palestra-1.html'));
-});
+for (let palcoNumber = 1; palcoNumber <= 5; palcoNumber += 1) {
+  const palcoRoute = `/palco-${palcoNumber}`;
+  const perguntasPalcoRoute = `/perguntas-palco-${palcoNumber}`;
+  const questionsPalcoRoute = `/questions-palco-${palcoNumber}`;
 
-router.get('/questions-palestra-1', (req, res) => {
-  res.sendFile(path.join(publicDirectory, 'questions-palestra-1.html'));
-});
+  router.get(palcoRoute, (req, res) => {
+    res.sendFile(path.join(publicDirectory, 'questions-stage.html'));
+  });
 
-router.get('/perguntas-palestra-2', (req, res) => {
-  res.sendFile(path.join(publicDirectory, 'questions-palestra-2.html'));
-});
+  router.get(perguntasPalcoRoute, (req, res) => {
+    res.sendFile(path.join(publicDirectory, 'questions-stage.html'));
+  });
 
-router.get('/questions-palestra-2', (req, res) => {
-  res.sendFile(path.join(publicDirectory, 'questions-palestra-2.html'));
-});
+  router.get(questionsPalcoRoute, (req, res) => {
+    res.sendFile(path.join(publicDirectory, 'questions-stage.html'));
+  });
+}
 
-router.get('/perguntas-palestra-3', (req, res) => {
-  res.sendFile(path.join(publicDirectory, 'questions-palestra-3.html'));
-});
+for (let palestraNumber = 1; palestraNumber <= 3; palestraNumber += 1) {
+  const palcoRoute = `/palco-${palestraNumber}/`;
 
-router.get('/questions-palestra-3', (req, res) => {
-  res.sendFile(path.join(publicDirectory, 'questions-palestra-3.html'));
-});
+  router.get(`/perguntas-palestra-${palestraNumber}`, (req, res) => {
+    res.redirect(palcoRoute);
+  });
+
+  router.get(`/questions-palestra-${palestraNumber}`, (req, res) => {
+    res.redirect(palcoRoute);
+  });
+}
 
 router.get('/moderacao-perguntas', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'questions-moderation.html'));

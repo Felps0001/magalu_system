@@ -43,7 +43,7 @@ async function getActiveSessionForPalestra(palestraId) {
   const normalizedPalestraId = normalizePalestraId(palestraId);
 
   if (!normalizedPalestraId) {
-    throw new Error('A palestra informada para a sessao e invalida.');
+    throw new Error('O palco informado para a sessao e invalido.');
   }
 
   const questionSessionsCollection = await getQuestionSessionsCollection();
@@ -82,7 +82,7 @@ async function startNewSessionForPalestra(palestraId) {
   const normalizedPalestraId = normalizePalestraId(palestraId);
 
   if (!normalizedPalestraId) {
-    throw new Error('A palestra informada para abrir nova sessao e invalida.');
+    throw new Error('O palco informado para abrir nova sessao e invalido.');
   }
 
   const questionSessionsCollection = await getQuestionSessionsCollection();
@@ -92,7 +92,7 @@ async function startNewSessionForPalestra(palestraId) {
   });
 
   if (currentActiveSession) {
-    throw new Error('Ja existe uma sessao ativa para esta palestra. Encerre a sessao atual antes de iniciar outra.');
+    throw new Error('Ja existe uma sessao ativa para este palco. Encerre a sessao atual antes de iniciar outra.');
   }
 
   const latestSession = await findLatestSession(questionSessionsCollection, normalizedPalestraId);
@@ -124,7 +124,7 @@ async function endActiveSessionForPalestra(palestraId) {
   const normalizedPalestraId = normalizePalestraId(palestraId);
 
   if (!normalizedPalestraId) {
-    throw new Error('A palestra informada para encerrar a sessao e invalida.');
+    throw new Error('O palco informado para encerrar a sessao e invalido.');
   }
 
   const questionSessionsCollection = await getQuestionSessionsCollection();
@@ -134,7 +134,7 @@ async function endActiveSessionForPalestra(palestraId) {
   });
 
   if (!activeSession) {
-    throw new Error('Nao existe sessao ativa para esta palestra.');
+    throw new Error('Nao existe sessao ativa para este palco.');
   }
 
   const timestamp = new Date().toISOString();
