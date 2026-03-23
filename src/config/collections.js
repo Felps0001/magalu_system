@@ -40,6 +40,11 @@ async function getQuestionSessionsCollection() {
   return database.collection('question_sessions');
 }
 
+async function getQuestionSessionCheckinsCollection() {
+  const database = await connectToMongoDB();
+  return database.collection('question_session_checkins');
+}
+
 async function findDuplicateCheckinsByUserAndEstande() {
   const checkinsCollection = await getCheckinsCollection();
 
@@ -90,6 +95,7 @@ async function ensureDatabaseIndexes() {
   const feedCollection = await getFeedCollection();
   const questionsCollection = await getQuestionsCollection();
   const questionSessionsCollection = await getQuestionSessionsCollection();
+  const questionSessionCheckinsCollection = await getQuestionSessionCheckinsCollection();
   const duplicateUserIds = await findDuplicateUserIds();
   const duplicateCheckins = await findDuplicateCheckinsByUserAndEstande();
 
@@ -188,6 +194,30 @@ async function ensureDatabaseIndexes() {
     }
   );
 
+  await questionSessionsCollection.createIndex(
+    { attendanceToken: 1 },
+    {
+      unique: true,
+      sparse: true,
+      name: 'question_sessions_attendance_token_unique',
+    }
+  );
+
+  await questionSessionCheckinsCollection.createIndex(
+    { userId: 1, sessionId: 1 },
+    {
+      unique: true,
+      name: 'question_session_checkins_user_session_unique',
+    }
+  );
+
+  await questionSessionCheckinsCollection.createIndex(
+    { sessionId: 1, checkinEm: -1 },
+    {
+      name: 'question_session_checkins_session_checkin_desc',
+    }
+  );
+
   return {
     warnings,
   };
@@ -202,5 +232,6 @@ module.exports = {
   getFeedCollection,
   getQuestionsCollection,
   getQuestionSessionsCollection,
+  getQuestionSessionCheckinsCollection,
   ensureDatabaseIndexes,
 };

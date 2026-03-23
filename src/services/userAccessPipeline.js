@@ -13,10 +13,28 @@ function buildUserAccessPipeline(matchStage = {}, options = {}) {
       },
     },
     {
+      $lookup: {
+        from: 'question_session_checkins',
+        localField: '_id',
+        foreignField: 'userId',
+        as: 'sessionCheckins',
+      },
+    },
+    {
       $addFields: {
-        pontos: { $sum: '$checkins.pontos' },
+        pontos: {
+          $add: [
+            { $sum: '$checkins.pontos' },
+            { $sum: '$sessionCheckins.pontos' },
+          ],
+        },
         tempo: { $sum: '$checkins.tempo' },
-        totalCheckins: { $size: '$checkins' },
+        totalCheckins: {
+          $add: [
+            { $size: '$checkins' },
+            { $size: '$sessionCheckins' },
+          ],
+        },
       },
     },
     {
@@ -53,6 +71,7 @@ function buildUserAccessPipeline(matchStage = {}, options = {}) {
       $project: {
         rotaCollection: 0,
         aereoCollection: 0,
+        sessionCheckins: 0,
       },
     },
   ];

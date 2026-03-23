@@ -6,7 +6,10 @@ const {
   updateQuestionStatusHandler,
 } = require('../controllers/questionController');
 const {
+  createQuestionSessionAttendanceHandler,
   endQuestionSessionHandler,
+  getQuestionSessionAttendanceStatusHandler,
+  getQuestionSessionQrCodeHandler,
   listActiveQuestionSessionsHandler,
   startQuestionSessionHandler,
 } = require('../controllers/questionSessionController');
@@ -14,7 +17,10 @@ const {
 const router = express.Router();
 
 router.get('/sessions/active', listActiveQuestionSessionsHandler);
+router.get('/sessions/attendance', getQuestionSessionAttendanceStatusHandler);
+router.get('/sessions/qrcode', getQuestionSessionQrCodeHandler);
 router.post('/sessions/end', endQuestionSessionHandler);
+router.post('/sessions/attendance', createQuestionSessionAttendanceHandler);
 router.post('/sessions/start', startQuestionSessionHandler);
 router.get('/', listQuestionsHandler);
 router.post('/', createQuestionHandler);

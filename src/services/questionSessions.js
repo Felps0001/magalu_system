@@ -1,18 +1,51 @@
 const {
   getQuestionsCollection,
+  getQuestionSessionCheckinsCollection,
   getQuestionSessionsCollection,
 } = require('../config/collections');
-const { normalizePalestraId, PALESTRA_IDS } = require('../models/question');
+const { getPalestraLabel, normalizePalestraId, PALESTRA_IDS } = require('../models/question');
 const { createQuestionSession } = require('../models/questionSession');
+const { SESSION_ATTENDANCE_POINTS } = require('../models/questionSessionCheckin');
 
 function normalizeSessionDocument(session) {
   if (!session) {
     return null;
   }
 
+  const { attendanceToken, ...restOfSession } = session;
+
   return {
-    ...session,
+    ...restOfSession,
     _id: String(session._id),
+    palestraLabel: getPalestraLabel(session.palestraId),
+  };
+}
+
+function normalizeAttendanceToken(value) {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function buildSessionAttendancePath(session) {
+  const attendanceToken = normalizeAttendanceToken(session && session.attendanceToken);
+
+  if (!attendanceToken) {
+    throw new Error('A sessao ativa ainda nao possui QR de presenca configurado.');
+  }
+
+  return `/checkin-presenca-palco/?token=${encodeURIComponent(attendanceToken)}`;
+}
+
+function normalizeSessionAttendanceQr(session) {
+  const normalizedSession = normalizeSessionDocument(session);
+
+  if (!normalizedSession) {
+    return null;
+  }
+
+  return {
+    ...normalizedSession,
+    attendancePoints: SESSION_ATTENDANCE_POINTS,
+    attendancePath: buildSessionAttendancePath(session),
   };
 }
 
@@ -76,6 +109,67 @@ async function listActiveSessions({ palestraId } = {}) {
   const sessions = await Promise.all(PALESTRA_IDS.map((currentPalestraId) => getActiveSessionForPalestra(currentPalestraId)));
 
   return sessions.filter(Boolean);
+}
+
+async function getActiveSessionByAttendanceToken(attendanceToken) {
+  const normalizedAttendanceToken = normalizeAttendanceToken(attendanceToken);
+
+  if (!normalizedAttendanceToken) {
+    throw new Error('O token do QR de presenca e obrigatorio.');
+  }
+
+  const questionSessionsCollection = await getQuestionSessionsCollection();
+  const session = await questionSessionsCollection.findOne({
+    attendanceToken: normalizedAttendanceToken,
+    isActive: true,
+  });
+
+  return session || null;
+}
+
+async function getActiveSessionAttendanceQrByPalestra(palestraId) {
+  const normalizedPalestraId = normalizePalestraId(palestraId);
+
+  if (!normalizedPalestraId) {
+    throw new Error('O palco informado para carregar o QR e invalido.');
+  }
+
+  const questionSessionsCollection = await getQuestionSessionsCollection();
+  const session = await questionSessionsCollection.findOne({
+    palestraId: normalizedPalestraId,
+    isActive: true,
+  });
+
+  if (!session) {
+    return null;
+  }
+
+  return normalizeSessionAttendanceQr(session);
+}
+
+async function getSessionAttendanceStatus(attendanceToken, userId) {
+  const session = await getActiveSessionByAttendanceToken(attendanceToken);
+
+  if (!session) {
+    return null;
+  }
+
+  let alreadyCheckedIn = false;
+
+  if (userId) {
+    const questionSessionCheckinsCollection = await getQuestionSessionCheckinsCollection();
+    const existingCheckin = await questionSessionCheckinsCollection.findOne({
+      userId,
+      sessionId: session._id,
+    });
+
+    alreadyCheckedIn = Boolean(existingCheckin);
+  }
+
+  return {
+    session: normalizeSessionAttendanceQr(session),
+    alreadyCheckedIn,
+  };
 }
 
 async function startNewSessionForPalestra(palestraId) {
@@ -161,7 +255,11 @@ async function endActiveSessionForPalestra(palestraId) {
 module.exports = {
   endActiveSessionForPalestra,
   getActiveSessionForPalestra,
+  getActiveSessionAttendanceQrByPalestra,
+  getActiveSessionByAttendanceToken,
+  getSessionAttendanceStatus,
   listActiveSessions,
+  normalizeSessionAttendanceQr,
   normalizeSessionDocument,
   startNewSessionForPalestra,
 };

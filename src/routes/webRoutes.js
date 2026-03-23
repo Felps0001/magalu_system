@@ -79,6 +79,22 @@ router.get('/questions-approved', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'questions-approved.html'));
 });
 
+router.get('/qrcode-presenca-palco', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'questions-session-qrcode.html'));
+});
+
+router.get('/questions-session-qrcode', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'questions-session-qrcode.html'));
+});
+
+router.get('/checkin-presenca-palco', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'questions-session-checkin.html'));
+});
+
+router.get('/questions-session-checkin', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'questions-session-checkin.html'));
+});
+
 router.get('/teste', (req, res) => {
   res.redirect('/perfil/');
 });

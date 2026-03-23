@@ -1,4 +1,4 @@
-const CACHE_NAME = 'magalu-system-v18';
+const CACHE_NAME = 'magalu-system-v19';
 const APP_SHELL = [
   './',
   './login/',
@@ -32,6 +32,10 @@ const APP_SHELL = [
   './question-moderation/',
   './perguntas-aprovadas/',
   './questions-approved/',
+  './qrcode-presenca-palco/',
+  './questions-session-qrcode/',
+  './checkin-presenca-palco/',
+  './questions-session-checkin/',
   './teste/',
   './agenda/',
   './feed/',
@@ -49,10 +53,14 @@ const APP_SHELL = [
   './js/questions.js',
   './js/questions-moderation.js',
   './js/questions-approved.js',
+  './js/questions-session-qrcode.js',
+  './js/questions-session-checkin.js',
   './js/scanner-kit.js',
   './js/perfil.js',
   './js/pwa.js',
   './questions-stage.html',
+  './questions-session-qrcode.html',
+  './questions-session-checkin.html',
   './vendor/html5-qrcode.min.js',
   './manifest.webmanifest',
   './icons/icon-192.svg',

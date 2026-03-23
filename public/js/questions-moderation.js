@@ -6,6 +6,7 @@ const moderationBoard = document.getElementById('questions-board');
 const moderationSessionSummary = document.getElementById('questions-session-summary');
 const moderationStartSessionButton = document.getElementById('questions-start-session-button');
 const moderationEndSessionButton = document.getElementById('questions-end-session-button');
+const moderationOpenQrButton = document.getElementById('questions-open-qrcode-button');
 
 const { palestraLabels, palestraOrder, statusLabels, statusOrder } = window.magaluQuestions;
 const columnBodies = new Map();
@@ -55,6 +56,7 @@ function renderSessionSummary() {
     moderationSessionSummary.textContent = 'Mostrando apenas as perguntas das sessoes ativas de cada palco. Para encerrar uma sessao, selecione um palco especifico.';
     moderationStartSessionButton.disabled = true;
     moderationEndSessionButton.disabled = true;
+    moderationOpenQrButton.disabled = true;
     return;
   }
 
@@ -62,12 +64,32 @@ function renderSessionSummary() {
     moderationSessionSummary.textContent = `${palestraLabels[selectedPalestraId]} esta sem sessao ativa. Clique em iniciar sessao para liberar novas perguntas.`;
     moderationStartSessionButton.disabled = false;
     moderationEndSessionButton.disabled = true;
+    moderationOpenQrButton.disabled = true;
     return;
   }
 
   moderationStartSessionButton.disabled = true;
   moderationEndSessionButton.disabled = false;
+  moderationOpenQrButton.disabled = false;
   moderationSessionSummary.textContent = `${palestraLabels[selectedPalestraId]} · ${currentSession.label} iniciada em ${formatDateTime(currentSession.startedAt)}.`;
+}
+
+function openAttendanceQrScreen() {
+  const currentSession = findActiveSessionForSelection();
+
+  if (!currentSession) {
+    return;
+  }
+
+  const qrcodeUrl = window.magaluApi.buildAppUrl(`/qrcode-presenca-palco/?palestraId=${encodeURIComponent(currentSession.palestraId)}`);
+  const openedWindow = window.open(qrcodeUrl, '_blank', 'noopener');
+
+  if (openedWindow && typeof openedWindow.focus === 'function') {
+    openedWindow.focus();
+    return;
+  }
+
+  setBoardStatus('Nao foi possivel abrir uma nova aba. Verifique se o navegador bloqueou pop-ups para este site.', 'error');
 }
 
 function buildFilterOptions() {
@@ -448,6 +470,10 @@ moderationStartSessionButton.addEventListener('click', () => {
 
 moderationEndSessionButton.addEventListener('click', () => {
   endCurrentSession();
+});
+
+moderationOpenQrButton.addEventListener('click', () => {
+  openAttendanceQrScreen();
 });
 
 window.setInterval(() => {

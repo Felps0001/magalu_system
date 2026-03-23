@@ -1,3 +1,5 @@
+const { randomUUID } = require('crypto');
+
 const { PALESTRA_IDS, normalizePalestraId } = require('./question');
 
 function createQuestionSession({ palestraId, sequence }) {
@@ -18,6 +20,8 @@ function createQuestionSession({ palestraId, sequence }) {
     palestraId: normalizedPalestraId,
     sequence: normalizedSequence,
     label: `Sessao ${normalizedSequence}`,
+    attendanceToken: randomUUID(),
+    attendanceQrGeneratedAt: timestamp,
     isActive: true,
     startedAt: timestamp,
     endedAt: null,

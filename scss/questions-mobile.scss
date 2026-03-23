@@ -17,14 +17,37 @@
     padding: 14px;
   }
 
+  .questions-qrcode-screen-body {
+    padding: 0;
+  }
+
   .questions-board-hero {
     padding: 20px;
   }
 
   .questions-board-toolbar,
   .questions-board-meta,
-  .question-form-footer {
+  .question-form-footer,
+  .questions-qrcode-layout,
+  .questions-qrcode-actions,
+  .questions-checkin-actions {
     align-items: stretch;
+  }
+
+  .questions-qrcode-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .questions-qrcode-screen {
+    padding: 18px;
+    gap: 16px;
+  }
+
+  .questions-qrcode-screen-preview {
+    width: min(100%, 92vw);
+    min-height: min(92vw, 520px);
+    padding: 18px;
+    border-radius: 24px;
   }
 
   .questions-filter,
@@ -32,7 +55,11 @@
   .questions-board-toolbar-actions,
   .questions-session-button,
   .questions-refresh-button,
-  .question-form-footer .primary-button {
+  .question-form-footer .primary-button,
+  .questions-qrcode-actions .primary-button,
+  .questions-qrcode-actions .secondary-button,
+  .questions-checkin-actions .primary-button,
+  .questions-checkin-actions .secondary-button {
     width: 100%;
   }
 

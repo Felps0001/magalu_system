@@ -27,6 +27,17 @@ function normalizePalestraId(value) {
   return LEGACY_PALESTRA_ALIASES[normalizedValue] || null;
 }
 
+function getPalestraLabel(palestraId) {
+  const normalizedPalestraId = normalizePalestraId(palestraId);
+
+  if (!normalizedPalestraId) {
+    return null;
+  }
+
+  const palcoNumber = normalizedPalestraId.split('-')[1];
+  return `Palco ${palcoNumber}`;
+}
+
 function createQuestion({ palestraId, texto, authorName, authorUserId, authorIdMagalu, sessionId, sessionLabel }) {
   const normalizedPalestraId = normalizePalestraId(palestraId);
   const normalizedText = normalizeString(texto);
@@ -77,6 +88,7 @@ module.exports = {
   PALESTRA_IDS,
   QUESTION_STATUSES,
   createQuestion,
+  getPalestraLabel,
   normalizePalestraId,
   normalizeQuestionStatus,
 };

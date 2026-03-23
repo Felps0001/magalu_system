@@ -103,6 +103,10 @@ function writePagesRoutes(done) {
   writeRouteIndex('question-moderation', 'questions-moderation.html');
   writeRouteIndex('perguntas-aprovadas', 'questions-approved.html');
   writeRouteIndex('questions-approved', 'questions-approved.html');
+  writeRouteIndex('qrcode-presenca-palco', 'questions-session-qrcode.html');
+  writeRouteIndex('questions-session-qrcode', 'questions-session-qrcode.html');
+  writeRouteIndex('checkin-presenca-palco', 'questions-session-checkin.html');
+  writeRouteIndex('questions-session-checkin', 'questions-session-checkin.html');
   writeRouteIndex('teste', 'perfil.html');
   writeRouteIndex('agenda', 'agenda.html');
   writeRouteIndex('feed', 'feed.html');
