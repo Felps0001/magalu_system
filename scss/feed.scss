@@ -297,11 +297,13 @@
 
 .feed-drawer-subnav {
   margin-top: -2px;
-  padding: 8px 0 8px 0px;
+  padding: 8px 0 20px 0px;
   display: grid;
   gap: 8px;
   overflow: hidden;
   will-change: height, opacity;
+  border-bottom: 1px solid #ffffff;
+    margin-bottom: 20px;
 }
 
 .feed-drawer-subtitle {
