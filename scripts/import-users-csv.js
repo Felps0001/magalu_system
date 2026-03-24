@@ -7,7 +7,7 @@ const { ObjectId } = require('mongodb');
 const { connectToMongoDB, closeMongoDBConnection } = require('../src/config/mongodb');
 const { createUser, createUserQrPayload } = require('../src/models/user');
 
-const DEFAULT_CSV_FILE = path.resolve(__dirname, '..', 'MAGALU-DADOSPESSOAIS.csv');
+const DEFAULT_CSV_FILE = path.resolve(__dirname, '..', 'MAGALU-USERS-PE26-UNIFICADO.csv');
 
 function parseArgs(argv) {
   const options = {
@@ -153,7 +153,6 @@ async function importUsersFromCsv({ file, dryRun }) {
             nome: normalizedUser.nome,
             cpf: normalizedUser.cpf,
             regional: normalizedUser.regional,
-            diretoria: normalizedUser.diretoria,
             filial: normalizedUser.filial,
             cargo: normalizedUser.cargo,
             qrCodeGeneratedAt: timestamp,

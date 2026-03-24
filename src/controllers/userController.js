@@ -1,15 +1,12 @@
 const { ObjectId } = require('mongodb');
 const QRCode = require('qrcode');
 
-const { getAereosCollection, getHospedagensCollection, getRotasCollection, getUsersCollection } = require('../config/collections');
+const { getAereosCollection, getRotasCollection, getUsersCollection } = require('../config/collections');
 const { createAereo, normalizeAereoPayload } = require('../models/aereo');
-const { createHospedagem, normalizeHospedagemPayload } = require('../models/hospedagem');
 const { createRota, normalizeRotaPayload } = require('../models/rota');
 const { buildUserQrData, createUser, createUserQrPayload, normalizeUserLegacyFields } = require('../models/user');
 const { buildCacheKey, deleteCacheByPrefix, deleteCacheKeys, getOrSetJsonCache } = require('../services/cache');
-const { hashPassword, normalizePassword } = require('../services/password');
 const { buildUserAccessPipeline } = require('../services/userAccessPipeline');
-const { buildUserLogisticaFilter } = require('../services/userLogisticaLookup');
 
 const USERS_CACHE_KEY = buildCacheKey(['users', 'list']);
 const USERS_AGENDA_CACHE_KEY = buildCacheKey(['users', 'agenda']);
@@ -23,16 +20,7 @@ async function findUserWithAccessData(usersCollection, matchStage) {
 }
 
 function normalizeUserResponse(user) {
-  if (!user || typeof user !== 'object') {
-    return user;
-  }
-
-  const { passwordHash, ...safeUser } = user;
-
-  return {
-    ...normalizeUserLegacyFields(safeUser),
-    hasPassword: Boolean(passwordHash),
-  };
+  return normalizeUserLegacyFields(user);
 }
 
 function normalizeUserResponseList(users = []) {
@@ -212,24 +200,11 @@ async function updateUserProfileHandler(req, res) {
     }
 
     const editableFields = normalizeEditableUserFields(req.body);
-    const senha = normalizePassword(req.body.senha);
-
-    if (!senha) {
-      res.status(400).json({ error: 'Informe uma senha para concluir seu primeiro acesso.' });
-      return;
-    }
-
-    if (senha.length < 4) {
-      res.status(400).json({ error: 'A senha deve ter pelo menos 4 caracteres.' });
-      return;
-    }
-
     const qrCodeGeneratedAt = new Date().toISOString();
     const updatedUser = {
       ...existingUser,
       ...editableFields,
       firstAccessCompleted: true,
-      passwordHash: hashPassword(senha),
     };
 
     await usersCollection.updateOne(
@@ -238,7 +213,6 @@ async function updateUserProfileHandler(req, res) {
         $set: {
           ...editableFields,
           firstAccessCompleted: true,
-          passwordHash: updatedUser.passwordHash,
           qrCodeGeneratedAt,
           qrCodePayload: createUserQrPayload(updatedUser, qrCodeGeneratedAt),
           updatedAt: new Date().toISOString(),
@@ -405,7 +379,7 @@ async function getUserRotaHandler(req, res) {
     }
 
     const rotasCollection = await getRotasCollection();
-    const rota = await rotasCollection.findOne(buildUserLogisticaFilter(existingUser.user._id));
+    const rota = await rotasCollection.findOne({ userId: existingUser.user._id });
 
     if (!rota) {
       res.status(404).json({ error: 'Rota nao encontrada para este usuario.' });
@@ -429,19 +403,18 @@ async function upsertUserRotaHandler(req, res) {
 
     const normalizedPayload = normalizeRotaPayload(req.body);
     const rotasCollection = await getRotasCollection();
-    const userLogisticaFilter = buildUserLogisticaFilter(existingUser.user._id);
-    const existingRota = await rotasCollection.findOne(userLogisticaFilter);
+    const existingRota = await rotasCollection.findOne({ userId: existingUser.user._id });
     const rotaPayload = createRota({ userId, ...normalizedPayload });
 
     await rotasCollection.updateOne(
-      userLogisticaFilter,
+      { userId: existingUser.user._id },
       {
         $set: {
-          userId: rotaPayload.userId,
           ...normalizedPayload,
           updatedAt: rotaPayload.updatedAt,
         },
         $setOnInsert: {
+          userId: rotaPayload.userId,
           createdAt: rotaPayload.createdAt,
         },
       },
@@ -474,7 +447,7 @@ async function getUserAereoHandler(req, res) {
     }
 
     const aereosCollection = await getAereosCollection();
-    const aereo = await aereosCollection.findOne(buildUserLogisticaFilter(existingUser.user._id));
+    const aereo = await aereosCollection.findOne({ userId: existingUser.user._id });
 
     if (!aereo) {
       res.status(404).json({ error: 'Aereo nao encontrado para este usuario.' });
@@ -498,19 +471,18 @@ async function upsertUserAereoHandler(req, res) {
 
     const normalizedPayload = normalizeAereoPayload(req.body);
     const aereosCollection = await getAereosCollection();
-    const userLogisticaFilter = buildUserLogisticaFilter(existingUser.user._id);
-    const existingAereo = await aereosCollection.findOne(userLogisticaFilter);
+    const existingAereo = await aereosCollection.findOne({ userId: existingUser.user._id });
     const aereoPayload = createAereo({ userId, ...normalizedPayload });
 
     await aereosCollection.updateOne(
-      userLogisticaFilter,
+      { userId: existingUser.user._id },
       {
         $set: {
-          userId: aereoPayload.userId,
           ...normalizedPayload,
           updatedAt: aereoPayload.updatedAt,
         },
         $setOnInsert: {
+          userId: aereoPayload.userId,
           createdAt: aereoPayload.createdAt,
         },
       },
@@ -526,75 +498,6 @@ async function upsertUserAereoHandler(req, res) {
     res.status(existingAereo ? 200 : 201).json({
       message: existingAereo ? 'Aereo atualizado com sucesso.' : 'Aereo criado com sucesso.',
       aereo: refreshedUser ? refreshedUser.aereoDetalhes : null,
-      user: normalizeUserResponse(refreshedUser),
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
-
-async function getUserHospedagemHandler(req, res) {
-  try {
-    const { userId } = req.params;
-    const existingUser = await findExistingUserOrRespond(res, userId);
-
-    if (!existingUser) {
-      return;
-    }
-
-    const hospedagensCollection = await getHospedagensCollection();
-    const hospedagem = await hospedagensCollection.findOne(buildUserLogisticaFilter(existingUser.user._id));
-
-    if (!hospedagem) {
-      res.status(404).json({ error: 'Hospedagem nao encontrada para este usuario.' });
-      return;
-    }
-
-    res.json(hospedagem);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
-
-async function upsertUserHospedagemHandler(req, res) {
-  try {
-    const { userId } = req.params;
-    const existingUser = await findExistingUserOrRespond(res, userId);
-
-    if (!existingUser) {
-      return;
-    }
-
-    const normalizedPayload = normalizeHospedagemPayload(req.body);
-    const hospedagensCollection = await getHospedagensCollection();
-    const userLogisticaFilter = buildUserLogisticaFilter(existingUser.user._id);
-    const existingHospedagem = await hospedagensCollection.findOne(userLogisticaFilter);
-    const hospedagemPayload = createHospedagem({ userId, ...normalizedPayload });
-
-    await hospedagensCollection.updateOne(
-      userLogisticaFilter,
-      {
-        $set: {
-          userId: hospedagemPayload.userId,
-          ...normalizedPayload,
-          updatedAt: hospedagemPayload.updatedAt,
-        },
-        $setOnInsert: {
-          createdAt: hospedagemPayload.createdAt,
-        },
-      },
-      { upsert: true }
-    );
-
-    await invalidateUserCaches({
-      userId,
-      idMagalu: existingUser.user.id_magalu,
-    });
-
-    const refreshedUser = await findUserWithAccessData(existingUser.usersCollection, { _id: existingUser.user._id });
-    res.status(existingHospedagem ? 200 : 201).json({
-      message: existingHospedagem ? 'Hospedagem atualizada com sucesso.' : 'Hospedagem criada com sucesso.',
-      hospedagem: refreshedUser ? refreshedUser.hospedagem : null,
       user: normalizeUserResponse(refreshedUser),
     });
   } catch (error) {
@@ -727,7 +630,6 @@ module.exports = {
   createUserHandler,
   getUserByIdHandler,
   getUserAereoHandler,
-  getUserHospedagemHandler,
   getUserKitStatusHandler,
   getUserQrCodeHandler,
   getUserRotaHandler,
@@ -735,7 +637,6 @@ module.exports = {
   listAgendaByTurmaHandler,
   marcarKitHandler,
   upsertUserAereoHandler,
-  upsertUserHospedagemHandler,
   upsertUserRotaHandler,
   updateUserProfileHandler,
 };

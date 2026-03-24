@@ -3,6 +3,7 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 
+const { getCanonicalHotelAddress } = require('./hotel-addresses');
 const {
   getRowValue,
   normalizeIdMagalu,
@@ -41,11 +42,14 @@ function parseCrossArgs(argv) {
 }
 
 function mapHospedagemRow(row) {
+  const nomeHotel = getRowValue(row, ['NOMEHOTEL', 'NOME_HOTEL', 'HOTEL', 'NOME_DO_HOTEL', 'HOSPEDAGEM']);
+  const enderecoHotel = getRowValue(row, ['ENDERECOHOTEL', 'ENDERECO_HOTEL', 'ENDERECO', 'HOTEL_ENDERECO', 'LOCALIZACAO', 'ENDERECO_DO_HOTEL']);
+
   return {
     id_magalu: getRowValue(row, ['ID_MAGALU', 'IDMAGALU', 'ID_MAGALU']),
     nomeCsv: getRowValue(row, ['NOME', 'NOME_COMPLETO']),
-    nomeHotel: getRowValue(row, ['NOMEHOTEL', 'NOME_HOTEL', 'HOTEL', 'NOME_DO_HOTEL', 'HOSPEDAGEM']),
-    enderecoHotel: getRowValue(row, ['ENDERECOHOTEL', 'ENDERECO_HOTEL', 'ENDERECO', 'HOTEL_ENDERECO', 'LOCALIZACAO', 'ENDERECO_DO_HOTEL']),
+    nomeHotel,
+    enderecoHotel: getCanonicalHotelAddress(nomeHotel, enderecoHotel),
     checkIn: getRowValue(row, ['CHECKIN', 'CHECK_IN', 'DATA_CHECK_IN', 'ENTRADA', 'DATA_ENTRADA']),
     checkOut: getRowValue(row, ['CHECKOUT', 'CHECK_OUT', 'DATA_CHECK_OUT', 'SAIDA', 'DATA_SAIDA']),
   };

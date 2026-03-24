@@ -6,6 +6,7 @@ const path = require('path');
 const { connectToMongoDB, closeMongoDBConnection } = require('../src/config/mongodb');
 const { createHospedagem, normalizeHospedagemPayload } = require('../src/models/hospedagem');
 const { buildUserLogisticaFilter } = require('../src/services/userLogisticaLookup');
+const { getCanonicalHotelAddress } = require('./hotel-addresses');
 const {
   findUserReference,
   getRowValue,
@@ -17,13 +18,16 @@ const {
 const DEFAULT_CSV_FILE = path.resolve(__dirname, '..', 'MAGALU-230326-HOTEISGERAL-VINCULADO.csv');
 
 function mapCsvRowToHospedagem(row) {
+  const nomeHotel = getRowValue(row, ['NOMEHOTEL', 'NOME_HOTEL', 'HOTEL', 'NOME_DO_HOTEL', 'HOSPEDAGEM']);
+  const enderecoHotel = getRowValue(row, ['ENDERECOHOTEL', 'ENDERECO_HOTEL', 'ENDERECO', 'HOTEL_ENDERECO', 'LOCALIZACAO', 'ENDERECO_DO_HOTEL']);
+
   return {
     userId: getRowValue(row, ['USER_ID', 'USERID', '_ID', 'ID_USUARIO']),
     id_magalu: getRowValue(row, ['ID_MAGALU', 'IDMAGALU', 'ID_MAGALU']),
-    nomeHotel: getRowValue(row, ['NOMEHOTEL', 'NOME_HOTEL', 'HOTEL', 'NOME_DO_HOTEL', 'HOSPEDAGEM']),
+    nomeHotel,
     checkIn: getRowValue(row, ['CHECKIN', 'CHECK_IN', 'DATA_CHECK_IN', 'ENTRADA', 'DATA_ENTRADA']),
     checkOut: getRowValue(row, ['CHECKOUT', 'CHECK_OUT', 'DATA_CHECK_OUT', 'SAIDA', 'DATA_SAIDA']),
-    enderecoHotel: getRowValue(row, ['ENDERECOHOTEL', 'ENDERECO_HOTEL', 'ENDERECO', 'HOTEL_ENDERECO', 'LOCALIZACAO', 'ENDERECO_DO_HOTEL']),
+    enderecoHotel: getCanonicalHotelAddress(nomeHotel, enderecoHotel),
   };
 }
 
