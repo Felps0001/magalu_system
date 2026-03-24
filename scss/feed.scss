@@ -586,12 +586,6 @@
   cursor: pointer;
 }
 
-.linktree-card-tag,
-.linktree-card-title,
-.linktree-card-copy {
-  margin: 0;
-}
-
 .linktree-card-tag {
   width: fit-content;
   padding: 7px 12px;
@@ -602,6 +596,12 @@
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.linktree-card-tag,
+.linktree-card-title,
+.linktree-card-copy {
+  margin: 0;
 }
 
 .linktree-card-title {

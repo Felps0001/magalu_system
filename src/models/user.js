@@ -1,3 +1,5 @@
+const { getDiretoriaByRegional } = require('../services/diretoria');
+
 function getNormalizedRegional(user = {}) {
   if (typeof user.regional === 'string' && user.regional.trim()) {
     return user.regional.trim();
@@ -22,6 +24,20 @@ function getNormalizedFilial(user = {}) {
   return '';
 }
 
+function getNormalizedDiretoria(user = {}) {
+  const mappedDiretoria = getDiretoriaByRegional(getNormalizedRegional(user));
+
+  if (mappedDiretoria) {
+    return mappedDiretoria;
+  }
+
+  if (typeof user.diretoria === 'string') {
+    return user.diretoria.trim();
+  }
+
+  return '';
+}
+
 function normalizeUserLegacyFields(user = {}) {
   if (!user || typeof user !== 'object') {
     return user;
@@ -32,6 +48,7 @@ function normalizeUserLegacyFields(user = {}) {
   return {
     ...normalizedUser,
     regional: getNormalizedRegional(user),
+    diretoria: getNormalizedDiretoria(user),
     filial: getNormalizedFilial(user),
   };
 }
@@ -60,6 +77,7 @@ function createUser({
     id_magalu,
     cpf,
     regional: normalizedRegional,
+    diretoria: getNormalizedDiretoria({ regional: normalizedRegional }),
     filial: normalizedFilial,
     cargo,
     firstAccessCompleted: false,
@@ -87,6 +105,7 @@ function buildUserQrData(user, generatedAt = new Date().toISOString()) {
       nome: normalizedUser.nome || '',
       cpf: normalizedUser.cpf || '',
       regional: normalizedUser.regional,
+      diretoria: normalizedUser.diretoria || '',
       filial: normalizedUser.filial,
       cargo: normalizedUser.cargo || '',
       kit: typeof normalizedUser.kit === 'boolean' ? normalizedUser.kit : false,
@@ -105,6 +124,7 @@ module.exports = {
   createUser,
   createUserQrPayload,
   getNormalizedFilial,
+  getNormalizedDiretoria,
   getNormalizedRegional,
   normalizeUserLegacyFields,
 };

@@ -153,6 +153,7 @@ async function importUsersFromCsv({ file, dryRun }) {
             nome: normalizedUser.nome,
             cpf: normalizedUser.cpf,
             regional: normalizedUser.regional,
+            diretoria: normalizedUser.diretoria,
             filial: normalizedUser.filial,
             cargo: normalizedUser.cargo,
             qrCodeGeneratedAt: timestamp,

@@ -37,11 +37,13 @@
             <p class="feed-drawer-subtitle">Logistica</p>
             <a class="feed-drawer-sublink" href="../logistica/#rota">Rota</a>
             <a class="feed-drawer-sublink" href="../logistica/#aereo">Aereo</a>
+            <a class="feed-drawer-sublink" href="../logistica/#hospedagem">Hospedagem</a>
           </div>
         </details>
+        <a class="feed-drawer-link" href="../linktree/">Home</a>
         <a class="feed-drawer-link feed-drawer-link--current" href="../agenda/" aria-current="page">Agenda</a>
         <a class="feed-drawer-link" href="../estandes/">Estandes</a>
-        <button class="feed-drawer-link" id="agenda-open-scanner-menu" type="button">Scanner</button>
+        <button class="feed-drawer-link" id="agenda-open-scanner-menu" type="button">Check-in</button>
         <button class="feed-drawer-link" id="agenda-open-kit-code-menu" type="button">Retirada Kit</button>
         <a class="feed-drawer-link" href="../feed/">Feed</a>
       </nav>
@@ -201,19 +203,29 @@
         </div>
       </section>
 
+      <section id="agenda-day-27-section" class="agenda-track-mobile agenda-track-mobile--public" data-agenda-publica="true">
+        <div class="agenda-track-mobile-heading">
+          <p class="agenda-track-mobile-kicker">Dia 27/03</p>
+          <h2>Agenda por diretoria</h2>
+          <p id="agenda-day-27-note" class="feed-top-subtitle">Oficinas exibidas conforme a diretoria do acesso.</p>
+        </div>
+
+        <div id="agenda-day-27-list" class="agenda-list-mobile"></div>
+      </section>
+
     </section>
 
     <button id="agenda-open-scanner" class="profile-qr-trigger agenda-qr-trigger" type="button" aria-haspopup="dialog" aria-controls="agenda-scanner-modal">
       <span class="profile-qr-mini" aria-hidden="true"></span>
-      <span class="profile-qr-mini-label">Scanner</span>
+      <span class="profile-qr-mini-label">Check-in</span>
     </button>
 
     <section id="agenda-scanner-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="agenda-scanner-title" hidden>
-      <button id="agenda-scanner-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar Scanner"></button>
+      <button id="agenda-scanner-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar Check-in"></button>
       <div class="profile-qrcode-panel">
         <div class="profile-qrcode-header">
           <div>
-            <p class="profile-section-kicker">Scanner de check-in</p>
+            <p class="profile-section-kicker">Check-in</p>
             <h2 id="agenda-scanner-title" class="profile-section-title">Escaneie o codigo</h2>
           </div>
           <button id="agenda-close-scanner" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
@@ -224,8 +236,8 @@
         <div id="agenda-scanner-status" class="form-message info-message">Pronto para escanear.</div>
         <div id="agenda-scanner-result" class="scanner-result">Nenhum QR lido.</div>
         <div class="profile-qrcode-actions">
-          <button id="agenda-start-scan-button" class="primary-button" type="button">Iniciar Scanner</button>
-          <button id="agenda-stop-scan-button" class="secondary-button" type="button" disabled>Parar Scanner</button>
+          <button id="agenda-start-scan-button" class="primary-button" type="button">Iniciar Check-in</button>
+          <button id="agenda-stop-scan-button" class="secondary-button" type="button" disabled>Parar Check-in</button>
         </div>
       </div>
     </section>

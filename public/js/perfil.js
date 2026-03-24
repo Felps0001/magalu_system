@@ -10,7 +10,6 @@ const userRegional = document.getElementById('user-regional');
 const userFilial = document.getElementById('user-filial');
 const userKitStatus = document.getElementById('user-kit-status');
 const userAereo = document.getElementById('user-aereo');
-const userHospedagem = document.getElementById('user-hospedagem');
 const generateKitCodeButton = document.getElementById('generate-kit-code-button');
 const kitCodeModal = document.getElementById('profile-kit-code-modal');
 const kitCodeBackdrop = document.getElementById('profile-kit-code-backdrop');
@@ -63,7 +62,6 @@ function renderProfileUser(user) {
   userFilial.textContent = user.filial || '-';
   renderKitStatus(user);
   userAereo.textContent = formatAereoSummary(user.aereoDetalhes) || user.aereo || '-';
-  userHospedagem.textContent = formatHospedagemSummary(user.hospedagem) || '-';
   window.magaluApi.storeUser(user);
 }
 
@@ -129,23 +127,6 @@ function formatAereoSummary(aereoDetalhes) {
   return summaryLines.join('\n');
 }
 
-function formatHospedagemSummary(hospedagem) {
-  if (!hospedagem) {
-    return '';
-  }
-
-  const parts = [
-    hospedagem.nomeHotel,
-    hospedagem.checkIn ? `Check-in: ${hospedagem.checkIn}` : '',
-    hospedagem.checkOut ? `Check-out: ${hospedagem.checkOut}` : '',
-  ].filter(Boolean);
-
-  // if (hospedagem.enderecoHotel) {
-  //   parts.push(hospedagem.enderecoHotel);
-  // }
-
-  return parts.join('\n');
-}
 let drawerCloseTimer = null;
 
 function redirectToLogin() {

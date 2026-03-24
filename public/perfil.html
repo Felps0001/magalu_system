@@ -37,11 +37,13 @@
             <p class="feed-drawer-subtitle">Logistica</p>
             <a class="feed-drawer-sublink" href="../logistica/#rota">Rota</a>
             <a class="feed-drawer-sublink" href="../logistica/#aereo">Aereo</a>
+            <a class="feed-drawer-sublink" href="../logistica/#hospedagem">Hospedagem</a>
           </div>
         </details>
+        <a class="feed-drawer-link" href="../linktree/">Home</a>
         <a class="feed-drawer-link" href="../agenda/">Agenda</a>
         <a class="feed-drawer-link" href="../estandes/">Estandes</a>
-        <button class="feed-drawer-link" id="profile-open-scanner-menu" type="button">Scanner</button>
+        <button class="feed-drawer-link" id="profile-open-scanner-menu" type="button">Check-in</button>
         <button class="feed-drawer-link" id="profile-open-kit-code-menu" type="button">Retirada Kit</button>
         <a class="feed-drawer-link" href="../feed/">Feed</a>
       </nav>
@@ -104,7 +106,6 @@
           <div><dt>Filial</dt><dd id="user-filial">-</dd></div>
           <div><dt>Kit</dt><dd id="user-kit-status">Retirada pendente</dd></div>
           <div><dt>Aereo</dt><dd id="user-aereo">-</dd></div>
-          <div><dt>Hospedagem</dt><dd id="user-hospedagem">-</dd></div>
         </dl>
       </article>
 
@@ -112,14 +113,14 @@
 
     <button id="profile-open-scanner" class="profile-qr-trigger" type="button" aria-haspopup="dialog" aria-controls="profile-scanner-modal">
       <span class="profile-qr-mini" aria-hidden="true"></span>
-      <span class="profile-qr-mini-label">Scanner</span>
+      <span class="profile-qr-mini-label">Check-in</span>
     </button>
     <section id="profile-scanner-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="profile-scanner-title" hidden>
-      <button id="profile-scanner-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar Scanner"></button>
+      <button id="profile-scanner-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar Check-in"></button>
       <div class="profile-qrcode-panel">
         <div class="profile-qrcode-header">
           <div>
-            <p class="profile-section-kicker">Scanner de check-in</p>
+            <p class="profile-section-kicker">Check-in</p>
             <h2 id="profile-scanner-title" class="profile-section-title">Escaneie o codigo</h2>
           </div>
           <button id="profile-close-scanner" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
@@ -130,8 +131,8 @@
         <div id="profile-scanner-status" class="form-message info-message">Pronto para escanear.</div>
         <div id="profile-scanner-result" class="scanner-result">Nenhum QR lido.</div>
         <div class="profile-qrcode-actions">
-          <button id="profile-start-scan-button" class="primary-button" type="button">Iniciar Scanner</button>
-          <button id="profile-stop-scan-button" class="secondary-button" type="button" disabled>Parar Scanner</button>
+          <button id="profile-start-scan-button" class="primary-button" type="button">Iniciar Check-in</button>
+          <button id="profile-stop-scan-button" class="secondary-button" type="button" disabled>Parar Check-in</button>
         </div>
       </div>
     </section>

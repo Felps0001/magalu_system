@@ -1369,12 +1369,6 @@ button:hover {
   cursor: pointer;
 }
 
-.linktree-card-tag,
-.linktree-card-title,
-.linktree-card-copy {
-  margin: 0;
-}
-
 .linktree-card-tag {
   width: fit-content;
   padding: 7px 12px;
@@ -1385,6 +1379,12 @@ button:hover {
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.linktree-card-tag,
+.linktree-card-title,
+.linktree-card-copy {
+  margin: 0;
 }
 
 .linktree-card-title {
@@ -1821,12 +1821,8 @@ button:hover {
 .profile-qr-mini {
   width: 22px;
   height: 22px;
-  border-radius: 6px;
-  background: linear-gradient(90deg, #0d2142 0 22%, transparent 22% 34%, #0d2142 34% 56%, transparent 56% 68%, #0d2142 68% 100%), linear-gradient(#0d2142 0 22%, transparent 22% 34%, #0d2142 34% 56%, transparent 56% 68%, #0d2142 68% 100%), #ffffff;
-  background-size: 100% 4px, 4px 100%, auto;
-  background-position: center center;
-  background-repeat: repeat-y, repeat-x, no-repeat;
-  box-shadow: inset 0 0 0 3px #ffffff;
+  background: url("./assets/img/qr-code.png") center/contain no-repeat;
+  filter: brightness(0) invert(1);
 }
 
 .profile-qr-mini-label {
@@ -2106,6 +2102,12 @@ button:hover {
   gap: 8px;
 }
 
+.agenda-item-mobile-card--detail {
+  display: grid;
+  align-items: start;
+  gap: 8px;
+}
+
 .agenda-item-mobile-card strong,
 .agenda-item-label {
   margin: 0;
@@ -2129,6 +2131,19 @@ button:hover {
 .agenda-item-mobile-card--public strong {
   font-size: 1.08rem;
   line-height: 1.18;
+}
+
+.agenda-item-detail {
+  margin: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.agenda-item-detail-value {
+  color: #0f2f63;
+  font-size: 0.96rem;
+  line-height: 1.25;
+  font-weight: 700;
 }
 
 .agenda-item-mobile-card div:last-child {

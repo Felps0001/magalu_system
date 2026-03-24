@@ -6,19 +6,20 @@ const path = require('path');
 const { connectToMongoDB, closeMongoDBConnection } = require('../src/config/mongodb');
 const { createRota, normalizeRotaPayload } = require('../src/models/rota');
 const {
-  findUserByIdMagalu,
+  findUserReference,
   getRowValue,
   invalidateUserLogisticaCaches,
   parseArgs,
   parseCsvFile,
 } = require('./import-logistica-csv-utils');
 
-const DEFAULT_CSV_FILE = path.resolve(__dirname, '..', 'MAGALU-ROTAS.csv');
+const DEFAULT_CSV_FILE = path.resolve(__dirname, '..', 'MAGALU-ROTAS-PREENCHIDA-FINAL-2-PRONTO-IMPORT.csv');
 
 function mapCsvRowToRota(row) {
   return {
+    userId: getRowValue(row, ['USER_ID', 'USERID', '_ID', 'ID_USUARIO']),
     id_magalu: getRowValue(row, ['ID_MAGALU', 'IDMAGALU', 'ID_MAGALU']),
-    nomeRota: getRowValue(row, ['NOME_ROTA', 'ROTA', 'NOME_DA_ROTA', 'NOME']),
+    nomeRota: getRowValue(row, ['NOME_ROTA', 'NOMEROTA', 'ROTA', 'NOME_DA_ROTA']),
     horario: getRowValue(row, ['HORARIO', 'HORA', 'HORARIO_TRANSFER', 'HORARIO_DO_TRANSFER']),
   };
 }
@@ -42,12 +43,12 @@ async function importRotasFromCsv({ file, dryRun }) {
   for (const row of rows) {
     const payload = mapCsvRowToRota(row);
 
-    if (!payload.id_magalu) {
+    if (!payload.userId && !payload.id_magalu) {
       skippedCount += 1;
       continue;
     }
 
-    const existingUser = await findUserByIdMagalu(usersCollection, payload.id_magalu);
+    const existingUser = await findUserReference(usersCollection, payload);
 
     if (!existingUser) {
       notFoundCount += 1;

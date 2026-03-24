@@ -26,6 +26,121 @@ const closeKitCodeButton = document.getElementById('agenda-close-kit-code');
 const closeKitCodeSecondaryButton = document.getElementById('agenda-close-kit-code-secondary');
 const generateKitCodeButton = document.getElementById('agenda-generate-kit-code-button');
 const kitCodePreview = document.getElementById('agenda-kit-code-preview');
+const agendaDay27Section = document.getElementById('agenda-day-27-section');
+const agendaDay27List = document.getElementById('agenda-day-27-list');
+const agendaDay27Note = document.getElementById('agenda-day-27-note');
+
+const FORCE_SHOW_DAY_27 = true;
+
+const REGIONAL_TO_DIRETORIA = {
+  ARACAJU: 'N_NE',
+  'BELEM DO PARA': 'N_NE',
+  FORTALEZA: 'N_NE',
+  'JOAO PESSOA': 'N_NE',
+  MACEIO: 'N_NE',
+  MARABA: 'N_NE',
+  NATAL: 'N_NE',
+  PETROLINA: 'N_NE',
+  RECIFE: 'N_NE',
+  SALVADOR: 'N_NE',
+  'SAO LUIS': 'N_NE',
+  TERESINA: 'N_NE',
+  BAURU: 'SP_RJ',
+  CAMPINAS: 'SP_RJ',
+  'CAPITAL RIO': 'SP_RJ',
+  'GRANDE RIO': 'SP_RJ',
+  'RIBEIRAO PRETO': 'SP_RJ',
+  'RIO PRETO': 'SP_RJ',
+  'ABC LITORAL': 'SP_RJ',
+  'OESTE SUL': 'SP_RJ',
+  'ZONA LESTE': 'SP_RJ',
+  VALE: 'SP_RJ',
+  'BARRA BONITA': 'VIRTUAL',
+  BATATAIS: 'VIRTUAL',
+  'CAMPO BOM': 'VIRTUAL',
+  COSMOPOLIS: 'VIRTUAL',
+  IBIPORA: 'VIRTUAL',
+  OLIMPIA: 'VIRTUAL',
+  'SAO LOURENCO': 'VIRTUAL',
+  CAXIAS: 'SUL',
+  CHAPECO: 'SUL',
+  CURITIBA: 'SUL',
+  FLORIANOPOLIS: 'SUL',
+  LONDRINA: 'SUL',
+  'PORTO ALEGRE': 'SUL',
+  'BELO HORIZONTE': 'MG/CO',
+  BRASILIA: 'MG/CO',
+  'CAMPO GRANDE': 'MG/CO',
+  CUIABA: 'MG/CO',
+  'JUIZ DE FORA': 'MG/CO',
+  UBERLANDIA: 'MG/CO',
+};
+
+const DAY_27_AGENDA = [
+  { time: '08h00', title: 'Feira' },
+  { time: '09h00', title: 'Abertura' },
+  { time: '09h30', title: 'Fornecedor: Samsung' },
+  { time: '10h00', title: 'Oficina simultanea: Rodada 1', round: 1 },
+  { time: '10h50', title: 'Intervalo' },
+  { time: '11h00', title: 'Fornecedor: JBL' },
+  { time: '11h30', title: 'Oficina: Rodada 2', round: 2 },
+  { time: '12h20', title: 'Almoco' },
+  { time: '13h50', title: 'Fornecedor: Mondial/Aiwa' },
+  { time: '14h20', title: 'Oficina: Rodada 3', round: 3 },
+  { time: '15h10', title: 'Intervalo' },
+  { time: '15h20', title: 'Oficina: Rodada 4', round: 4 },
+  { time: '16h10', title: 'Intervalo' },
+  { time: '16h20', title: 'Oficina: Rodada 5', round: 5 },
+  { time: '17h10', title: 'Intervalo' },
+  { time: '17h20', title: 'Oficina: Rodada 6', round: 6 },
+  { time: '18h10', title: 'Intervalo' },
+  { time: '18h20', title: 'Reconhecimento Academia do Varejo' },
+];
+
+const DAY_27_WORKSHOP_TRACKS = {
+  1: {
+    SP_RJ: 'Agente integrador',
+    'MG/CO': 'Agente integrador',
+    VIRTUAL: 'Agente integrador',
+    N_NE: 'Agente integrador',
+    SUL: 'Agente integrador',
+  },
+  2: {
+    SP_RJ: 'Feira',
+    'MG/CO': 'Feira',
+    VIRTUAL: 'Servicos & Consorcio',
+    N_NE: 'Credito',
+    SUL: 'Operacoes',
+  },
+  3: {
+    SP_RJ: 'Operacoes',
+    'MG/CO': 'Feira',
+    VIRTUAL: 'Feira',
+    N_NE: 'Servicos & Consorcio',
+    SUL: 'Credito',
+  },
+  4: {
+    SP_RJ: 'Credito',
+    'MG/CO': 'Operacoes',
+    VIRTUAL: 'Feira',
+    N_NE: 'Feira',
+    SUL: 'Servicos & Consorcio',
+  },
+  5: {
+    SP_RJ: 'Servicos & Consorcio',
+    'MG/CO': 'Credito',
+    VIRTUAL: 'Operacoes',
+    N_NE: 'Feira',
+    SUL: 'Feira',
+  },
+  6: {
+    SP_RJ: 'Feira',
+    'MG/CO': 'Servicos & Consorcio',
+    VIRTUAL: 'Credito',
+    N_NE: 'Operacoes',
+    SUL: 'Feira',
+  },
+};
 
 let currentUser = null;
 let kitCodeLoaded = false;
@@ -124,6 +239,146 @@ function normalizeTurma(value) {
     .trim()
     .toUpperCase()
     .replace(/^TURMA\s+/, '');
+}
+
+function normalizeLookupValue(value) {
+  if (!value) {
+    return '';
+  }
+
+  return String(value)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+    .toUpperCase()
+    .replace(/\s*\/\s*/g, '_')
+    .replace(/\s*&\s*/g, ' & ')
+    .replace(/\s+/g, ' ');
+}
+
+function normalizeDiretoria(value) {
+  const normalizedValue = normalizeLookupValue(value)
+    .replace(/\s+/g, '_')
+    .replace('CO_MG', 'MG/CO')
+    .replace('MG_CO', 'MG/CO')
+    .replace('N_NE', 'N_NE')
+    .replace('N/NE', 'N_NE');
+
+  if (normalizedValue === 'SP_RJ' || normalizedValue === 'VIRTUAL' || normalizedValue === 'SUL' || normalizedValue === 'MG/CO' || normalizedValue === 'N_NE') {
+    return normalizedValue;
+  }
+
+  return '';
+}
+
+function getDiretoriaForUser(user) {
+  const diretoriaFromUser = normalizeDiretoria(user && user.diretoria);
+
+  if (diretoriaFromUser) {
+    return diretoriaFromUser;
+  }
+
+  const normalizedRegional = normalizeLookupValue(user && user.regional);
+
+  return REGIONAL_TO_DIRETORIA[normalizedRegional] || '';
+}
+
+function shouldShowDay27Agenda() {
+  return FORCE_SHOW_DAY_27;
+}
+
+function createAgendaCard(title, detailLabel, detailValue) {
+  const card = document.createElement('div');
+  card.className = 'agenda-item-mobile-card agenda-item-mobile-card--public';
+
+  const titleText = document.createElement('strong');
+  titleText.textContent = title;
+  card.appendChild(titleText);
+
+  if (!detailValue) {
+    card.classList.add('agenda-item-mobile-card--single');
+    return card;
+  }
+
+  card.classList.add('agenda-item-mobile-card--detail');
+
+  const detailColumn = document.createElement('div');
+  detailColumn.className = 'agenda-item-detail';
+  const detailLabelElement = document.createElement('p');
+  detailLabelElement.className = 'agenda-item-label';
+  detailLabelElement.textContent = detailLabel;
+  const detailValueElement = document.createElement('span');
+  detailValueElement.className = 'agenda-item-detail-value';
+  detailValueElement.textContent = detailValue;
+
+  detailColumn.appendChild(detailLabelElement);
+  detailColumn.appendChild(detailValueElement);
+  card.appendChild(detailColumn);
+
+  return card;
+}
+
+function createAgendaItem({ time, title, detailLabel = '', detailValue = '' }) {
+  const article = document.createElement('article');
+  article.className = 'agenda-item-mobile agenda-item-mobile--public';
+
+  const meta = document.createElement('div');
+  meta.className = 'agenda-item-mobile-meta agenda-item-mobile-meta--public';
+
+  const timeElement = document.createElement('span');
+  timeElement.className = 'agenda-item-time agenda-item-time--public';
+  timeElement.textContent = time;
+
+  meta.appendChild(timeElement);
+  article.appendChild(meta);
+  article.appendChild(createAgendaCard(title, detailLabel, detailValue));
+
+  return article;
+}
+
+function getWorkshopTrack(round, diretoria) {
+  const roundTracks = DAY_27_WORKSHOP_TRACKS[round];
+
+  if (!roundTracks) {
+    return '';
+  }
+
+  return roundTracks[diretoria] || '';
+}
+
+function renderDay27Agenda(user) {
+  if (!agendaDay27Section || !agendaDay27List || !agendaDay27Note) {
+    return;
+  }
+
+  const isVisible = shouldShowDay27Agenda();
+  setSectionVisibility(agendaDay27Section, isVisible);
+
+  if (!isVisible) {
+    return;
+  }
+
+  const diretoria = getDiretoriaForUser(user);
+  agendaDay27List.innerHTML = '';
+
+  DAY_27_AGENDA.forEach((entry) => {
+    const workshopTrack = entry.round ? getWorkshopTrack(entry.round, diretoria) : '';
+    const agendaItem = createAgendaItem({
+      time: entry.time,
+      title: entry.title,
+      detailLabel: workshopTrack ? 'Trilha da sua diretoria' : '',
+      detailValue: workshopTrack ? workshopTrack : '',
+    });
+
+    agendaDay27List.appendChild(agendaItem);
+  });
+
+  if (!diretoria) {
+    agendaDay27Note.textContent = 'Oficinas exibidas em modo de validacao. Diretoria do usuario ainda nao identificada.';
+    return;
+  }
+
+  agendaDay27Note.textContent = `Oficinas exibidas para a diretoria ${diretoria}.`;
 }
 
 function setSectionVisibility(section, visible) {
@@ -373,6 +628,7 @@ if (!user) {
   const userRoleText = `${user.cargo || 'Sem cargo'} · ${user.filial || 'Sem filial'}`;
   drawerUserName.textContent = userNameText;
   drawerUserRole.textContent = userRoleText;
+  renderDay27Agenda(user);
   renderAgendaForTurma(user.turma || user.Turma || '');
   syncKitActionVisibility();
 }

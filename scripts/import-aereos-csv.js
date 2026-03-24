@@ -6,7 +6,7 @@ const path = require('path');
 const { connectToMongoDB, closeMongoDBConnection } = require('../src/config/mongodb');
 const { createAereo, normalizeAereoPayload } = require('../src/models/aereo');
 const {
-  findUserByIdMagalu,
+  findUserReference,
   getRowValue,
   invalidateUserLogisticaCaches,
   parseArgs,
@@ -17,9 +17,10 @@ const DEFAULT_CSV_FILE = path.resolve(__dirname, '..', 'MAGALU-AEREOS.csv');
 
 function mapCsvRowToAereo(row) {
   return {
+    userId: getRowValue(row, ['USER_ID', 'USERID', '_ID', 'ID_USUARIO']),
     id_magalu: getRowValue(row, ['ID_MAGALU', 'IDMAGALU', 'ID_MAGALU']),
     companhiaIda: getRowValue(row, ['COMPANHIA_IDA', 'CIA_IDA', 'COMPANHIAIDA', 'COMPANHIA_DE_IDA']),
-    dataSaidaIda: getRowValue(row, ['DATA_SAIDA_IDA', 'SAIDA_IDA', 'DATAIDA', 'DATA_DE_SAIDA_IDA']),
+    dataSaidaIda: getRowValue(row, ['DATA_SAIDA_IDA', 'DATASAIDAIDA', 'SAIDA_IDA', 'DATAIDA', 'DATA_DE_SAIDA_IDA']),
     vooIda: getRowValue(row, ['VOO_IDA', 'VOOIDA']),
     origemIda: getRowValue(row, ['ORIGEM_IDA', 'ORIGEMIDA']),
     destinoIda: getRowValue(row, ['DESTINO_IDA', 'DESTINOIDA']),
@@ -56,12 +57,12 @@ async function importAereosFromCsv({ file, dryRun }) {
   for (const row of rows) {
     const payload = mapCsvRowToAereo(row);
 
-    if (!payload.id_magalu) {
+    if (!payload.userId && !payload.id_magalu) {
       skippedCount += 1;
       continue;
     }
 
-    const existingUser = await findUserByIdMagalu(usersCollection, payload.id_magalu);
+    const existingUser = await findUserReference(usersCollection, payload);
 
     if (!existingUser) {
       notFoundCount += 1;
