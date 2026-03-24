@@ -4,6 +4,7 @@ const drawerUserName = document.getElementById('logistica-drawer-user-name');
 const drawerUserRole = document.getElementById('logistica-drawer-user-role');
 const rotaValue = document.getElementById('logistica-transfer');
 const aereoValue = document.getElementById('logistica-aereo');
+const hospedagemValue = document.getElementById('logistica-hospedagem');
 const menuButton = document.getElementById('logistica-menu-button');
 const drawer = document.getElementById('logistica-drawer');
 const drawerBackdrop = document.getElementById('logistica-drawer-backdrop');
@@ -29,6 +30,7 @@ const logoutButton = document.getElementById('logout-button');
 const sectionLinks = {
   rota: document.getElementById('logistica-link-rota'),
   aereo: document.getElementById('logistica-link-aereo'),
+  hospedagem: document.getElementById('logistica-link-hospedagem'),
 };
 
 let currentUser = null;
@@ -37,6 +39,42 @@ let drawerCloseTimer = null;
 let html5QrCode = null;
 let lastDecodedValue = '';
 let isHandlingScan = false;
+
+function renderLogisticaUser(user) {
+  if (!user) {
+    return;
+  }
+
+  currentUser = user;
+  const userNameText = user.nome || 'Usuario';
+  const userRoleText = `${user.cargo || 'Sem cargo'} · ${user.filial || 'Sem filial'}`;
+
+  logisticaUserName.textContent = userNameText;
+  logisticaUserRole.textContent = 'Informacoes da sua rota, do seu aereo e da sua hospedagem no evento.';
+  drawerUserName.textContent = userNameText;
+  drawerUserRole.textContent = userRoleText;
+  rotaValue.textContent = formatRotaDetails(user.rota) || 'Nao informado.';
+  aereoValue.textContent = formatAereoDetails(user.aereoDetalhes) || user.aereo || 'Nao informado.';
+  hospedagemValue.textContent = formatHospedagemDetails(user.hospedagem) || 'Nao informado.';
+  window.magaluApi.storeUser(user);
+}
+
+async function refreshCurrentUser() {
+  if (!currentUser || !currentUser._id) {
+    return;
+  }
+
+  const freshUser = await window.magaluApi.fetchUserById(currentUser._id);
+
+  if (!freshUser) {
+    return;
+  }
+
+  renderLogisticaUser({
+    ...currentUser,
+    ...freshUser,
+  });
+}
 
 function formatRotaDetails(rota) {
   if (!rota) {
@@ -83,6 +121,32 @@ function formatAereoDetails(aereoDetalhes) {
   ].filter(Boolean);
 
   return [idaLines.join('\n'), voltaLines.join('\n')].filter(Boolean).join('\n\n');
+}
+
+function formatHospedagemDetails(hospedagem) {
+  if (!hospedagem) {
+    return '';
+  }
+
+  const lines = [];
+
+  if (hospedagem.nomeHotel) {
+    lines.push(`Hotel: ${hospedagem.nomeHotel}`);
+  }
+
+  if (hospedagem.checkIn) {
+    lines.push(`Check-in: ${hospedagem.checkIn}`);
+  }
+
+  if (hospedagem.checkOut) {
+    lines.push(`Check-out: ${hospedagem.checkOut}`);
+  }
+
+  // if (hospedagem.enderecoHotel) {
+  //   lines.push(`Endereco: ${hospedagem.enderecoHotel}`);
+  // }
+
+  return lines.join('\n');
 }
 
 function redirectToLogin() {
@@ -385,17 +449,9 @@ if (!user) {
 } else if (window.magaluApi.requiresFirstAccess(user)) {
   redirectToFirstAccess();
 } else {
-  currentUser = user;
-  const userNameText = user.nome || 'Usuario';
-  const userRoleText = `${user.cargo || 'Sem cargo'} · ${user.filial || 'Sem filial'}`;
-
-  logisticaUserName.textContent = userNameText;
-  logisticaUserRole.textContent = 'Informacoes da sua rota e do seu aereo no evento.';
-  drawerUserName.textContent = userNameText;
-  drawerUserRole.textContent = userRoleText;
-  rotaValue.textContent = formatRotaDetails(user.rota) || 'Nao informado.';
-  aereoValue.textContent = formatAereoDetails(user.aereoDetalhes) || user.aereo || 'Nao informado.';
+  renderLogisticaUser(user);
   syncKitActionVisibility();
+  refreshCurrentUser();
 }
 
 highlightCurrentSection();

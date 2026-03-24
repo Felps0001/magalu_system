@@ -10,6 +10,7 @@ const userRegional = document.getElementById('user-regional');
 const userFilial = document.getElementById('user-filial');
 const userKitStatus = document.getElementById('user-kit-status');
 const userAereo = document.getElementById('user-aereo');
+const userHospedagem = document.getElementById('user-hospedagem');
 const generateKitCodeButton = document.getElementById('generate-kit-code-button');
 const kitCodeModal = document.getElementById('profile-kit-code-modal');
 const kitCodeBackdrop = document.getElementById('profile-kit-code-backdrop');
@@ -39,6 +40,49 @@ let kitCodeLoaded = false;
 let html5QrCode = null;
 let lastDecodedValue = '';
 let isHandlingScan = false;
+
+function renderProfileUser(user) {
+  if (!user) {
+    return;
+  }
+
+  currentUser = user;
+  const userNameText = user.nome || 'Usuario';
+  const userRoleText = `${user.cargo || 'Sem cargo'} · ${user.filial || 'Sem filial'}`;
+
+  profilePageTitle.textContent = userNameText;
+  document.title = userNameText;
+  drawerUserName.textContent = userNameText;
+  drawerUserRole.textContent = userRoleText;
+  userIdMagalu.textContent = user.id_magalu || '-';
+  userPontos.textContent = String(user.pontos || 0);
+  userCheckins.textContent = String(user.totalCheckins || 0);
+  userCpf.textContent = user.cpf || '-';
+  userCargo.textContent = user.cargo || '-';
+  userRegional.textContent = user.regional || '-';
+  userFilial.textContent = user.filial || '-';
+  renderKitStatus(user);
+  userAereo.textContent = formatAereoSummary(user.aereoDetalhes) || user.aereo || '-';
+  userHospedagem.textContent = formatHospedagemSummary(user.hospedagem) || '-';
+  window.magaluApi.storeUser(user);
+}
+
+async function refreshCurrentUser() {
+  if (!currentUser || !currentUser._id) {
+    return;
+  }
+
+  const freshUser = await window.magaluApi.fetchUserById(currentUser._id);
+
+  if (!freshUser) {
+    return;
+  }
+
+  renderProfileUser({
+    ...currentUser,
+    ...freshUser,
+  });
+}
 
 function formatRotaSummary(rota) {
   if (!rota) {
@@ -83,6 +127,24 @@ function formatAereoSummary(aereoDetalhes) {
   }
 
   return summaryLines.join('\n');
+}
+
+function formatHospedagemSummary(hospedagem) {
+  if (!hospedagem) {
+    return '';
+  }
+
+  const parts = [
+    hospedagem.nomeHotel,
+    hospedagem.checkIn ? `Check-in: ${hospedagem.checkIn}` : '',
+    hospedagem.checkOut ? `Check-out: ${hospedagem.checkOut}` : '',
+  ].filter(Boolean);
+
+  if (hospedagem.enderecoHotel) {
+    parts.push(hospedagem.enderecoHotel);
+  }
+
+  return parts.join('\n');
 }
 let drawerCloseTimer = null;
 
@@ -382,24 +444,9 @@ if (!user) {
 } else if (window.magaluApi.requiresFirstAccess(user)) {
   redirectToFirstAccess();
 } else {
-  currentUser = user;
-  const userNameText = user.nome || 'Usuario';
-  const userRoleText = `${user.cargo || 'Sem cargo'} · ${user.filial || 'Sem filial'}`;
-
-  profilePageTitle.textContent = userNameText;
-  document.title = userNameText;
-  drawerUserName.textContent = userNameText;
-  drawerUserRole.textContent = userRoleText;
-  userIdMagalu.textContent = user.id_magalu || '-';
-  userPontos.textContent = String(user.pontos || 0);
-  userCheckins.textContent = String(user.totalCheckins || 0);
-  userCpf.textContent = user.cpf || '-';
-  userCargo.textContent = user.cargo || '-';
-  userRegional.textContent = user.regional || '-';
-  userFilial.textContent = user.filial || '-';
-  renderKitStatus(user);
-  userAereo.textContent = formatAereoSummary(user.aereoDetalhes) || user.aereo || '-';
+  renderProfileUser(user);
   syncKitActionVisibility();
+  refreshCurrentUser();
 }
 
 generateKitCodeButton.addEventListener('click', () => {

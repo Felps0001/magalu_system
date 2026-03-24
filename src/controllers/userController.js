@@ -1,8 +1,9 @@
 const { ObjectId } = require('mongodb');
 const QRCode = require('qrcode');
 
-const { getAereosCollection, getRotasCollection, getUsersCollection } = require('../config/collections');
+const { getAereosCollection, getHospedagensCollection, getRotasCollection, getUsersCollection } = require('../config/collections');
 const { createAereo, normalizeAereoPayload } = require('../models/aereo');
+const { createHospedagem, normalizeHospedagemPayload } = require('../models/hospedagem');
 const { createRota, normalizeRotaPayload } = require('../models/rota');
 const { buildUserQrData, createUser, createUserQrPayload, normalizeUserLegacyFields } = require('../models/user');
 const { buildCacheKey, deleteCacheByPrefix, deleteCacheKeys, getOrSetJsonCache } = require('../services/cache');
@@ -529,6 +530,74 @@ async function upsertUserAereoHandler(req, res) {
   }
 }
 
+async function getUserHospedagemHandler(req, res) {
+  try {
+    const { userId } = req.params;
+    const existingUser = await findExistingUserOrRespond(res, userId);
+
+    if (!existingUser) {
+      return;
+    }
+
+    const hospedagensCollection = await getHospedagensCollection();
+    const hospedagem = await hospedagensCollection.findOne({ userId: existingUser.user._id });
+
+    if (!hospedagem) {
+      res.status(404).json({ error: 'Hospedagem nao encontrada para este usuario.' });
+      return;
+    }
+
+    res.json(hospedagem);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function upsertUserHospedagemHandler(req, res) {
+  try {
+    const { userId } = req.params;
+    const existingUser = await findExistingUserOrRespond(res, userId);
+
+    if (!existingUser) {
+      return;
+    }
+
+    const normalizedPayload = normalizeHospedagemPayload(req.body);
+    const hospedagensCollection = await getHospedagensCollection();
+    const existingHospedagem = await hospedagensCollection.findOne({ userId: existingUser.user._id });
+    const hospedagemPayload = createHospedagem({ userId, ...normalizedPayload });
+
+    await hospedagensCollection.updateOne(
+      { userId: existingUser.user._id },
+      {
+        $set: {
+          ...normalizedPayload,
+          updatedAt: hospedagemPayload.updatedAt,
+        },
+        $setOnInsert: {
+          userId: hospedagemPayload.userId,
+          createdAt: hospedagemPayload.createdAt,
+        },
+      },
+      { upsert: true }
+    );
+
+    await invalidateUserCaches({
+      userId,
+      idMagalu: existingUser.user.id_magalu,
+    });
+
+    const refreshedUser = await findUserWithAccessData(existingUser.usersCollection, { _id: existingUser.user._id });
+    res.status(existingHospedagem ? 200 : 201).json({
+      message: existingHospedagem ? 'Hospedagem atualizada com sucesso.' : 'Hospedagem criada com sucesso.',
+      hospedagem: refreshedUser ? refreshedUser.hospedagem : null,
+      user: normalizeUserResponse(refreshedUser),
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 async function listUsersHandler(req, res) {
   try {
     const users = await getOrSetJsonCache({
@@ -654,6 +723,7 @@ module.exports = {
   createUserHandler,
   getUserByIdHandler,
   getUserAereoHandler,
+  getUserHospedagemHandler,
   getUserKitStatusHandler,
   getUserQrCodeHandler,
   getUserRotaHandler,
@@ -661,6 +731,7 @@ module.exports = {
   listAgendaByTurmaHandler,
   marcarKitHandler,
   upsertUserAereoHandler,
+  upsertUserHospedagemHandler,
   upsertUserRotaHandler,
   updateUserProfileHandler,
 };

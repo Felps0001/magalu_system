@@ -62,15 +62,25 @@ function buildUserAccessPipeline(matchStage = {}, options = {}) {
       },
     },
     {
+      $lookup: {
+        from: 'hospedagens',
+        localField: '_id',
+        foreignField: 'userId',
+        as: 'hospedagemCollection',
+      },
+    },
+    {
       $addFields: {
         rota: { $arrayElemAt: ['$rotaCollection', 0] },
         aereoDetalhes: { $arrayElemAt: ['$aereoCollection', 0] },
+        hospedagem: { $arrayElemAt: ['$hospedagemCollection', 0] },
       },
     },
     {
       $project: {
         rotaCollection: 0,
         aereoCollection: 0,
+        hospedagemCollection: 0,
         sessionCheckins: 0,
       },
     },

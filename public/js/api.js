@@ -248,10 +248,33 @@ async function fetchUserKitStatus(userId) {
   }
 }
 
+async function fetchUserById(userId) {
+  if (!userId) {
+    return null;
+  }
+
+  try {
+    const response = await fetch(
+      buildApiUrl(`/api/users/${encodeURIComponent(userId)}`),
+      withApiDefaults({ method: 'GET' })
+    );
+    const data = await parseApiResponse(response);
+
+    if (!response.ok || !data || typeof data !== 'object') {
+      return null;
+    }
+
+    return normalizeStoredUser(data);
+  } catch (error) {
+    return null;
+  }
+}
+
 window.magaluApi = {
   buildAppUrl,
   buildApiUrl,
   clearStoredUser,
+  fetchUserById,
   fetchUserKitStatus,
   getAuthenticatedHomeUrl,
   getAppRootUrl,

@@ -15,6 +15,11 @@ async function getAereosCollection() {
   return database.collection('aereos');
 }
 
+async function getHospedagensCollection() {
+  const database = await connectToMongoDB();
+  return database.collection('hospedagens');
+}
+
 async function getEstandesCollection() {
   const database = await connectToMongoDB();
   return database.collection('estandes');
@@ -91,6 +96,7 @@ async function ensureDatabaseIndexes() {
   const usersCollection = await getUsersCollection();
   const rotasCollection = await getRotasCollection();
   const aereosCollection = await getAereosCollection();
+  const hospedagensCollection = await getHospedagensCollection();
   const checkinsCollection = await getCheckinsCollection();
   const feedCollection = await getFeedCollection();
   const questionsCollection = await getQuestionsCollection();
@@ -156,6 +162,14 @@ async function ensureDatabaseIndexes() {
     {
       unique: true,
       name: 'aereos_user_unique',
+    }
+  );
+
+  await hospedagensCollection.createIndex(
+    { userId: 1 },
+    {
+      unique: true,
+      name: 'hospedagens_user_unique',
     }
   );
 
@@ -225,6 +239,7 @@ async function ensureDatabaseIndexes() {
 
 module.exports = {
   getAereosCollection,
+  getHospedagensCollection,
   getUsersCollection,
   getRotasCollection,
   getEstandesCollection,

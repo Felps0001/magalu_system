@@ -4,6 +4,7 @@ const {
   createUserHandler,
   getUserByIdHandler,
   getUserAereoHandler,
+  getUserHospedagemHandler,
   getUserKitStatusHandler,
   getUserQrCodeHandler,
   getUserRotaHandler,
@@ -11,6 +12,7 @@ const {
   listUsersHandler,
   marcarKitHandler,
   upsertUserAereoHandler,
+  upsertUserHospedagemHandler,
   upsertUserRotaHandler,
   updateUserProfileHandler,
 } = require('../controllers/userController');
@@ -25,6 +27,9 @@ router.put('/:userId/rota', upsertUserRotaHandler);
 router.get('/:userId/aereo', getUserAereoHandler);
 router.post('/:userId/aereo', upsertUserAereoHandler);
 router.put('/:userId/aereo', upsertUserAereoHandler);
+router.get('/:userId/hospedagem', getUserHospedagemHandler);
+router.post('/:userId/hospedagem', upsertUserHospedagemHandler);
+router.put('/:userId/hospedagem', upsertUserHospedagemHandler);
 router.get('/:userId/kit', getUserKitStatusHandler);
 router.get('/:userId/qrcode', getUserQrCodeHandler);
 router.get('/:userId', getUserByIdHandler);
