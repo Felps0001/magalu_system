@@ -59,8 +59,7 @@ function isAllowedOrigin(origin, allowedOrigins) {
 
 const allowedOrigins = buildAllowedOriginPatterns();
 
-const app = createApp();
-app.use(cors({
+const corsMiddleware = cors({
   origin(origin, callback) {
     if (isAllowedOrigin(origin, allowedOrigins)) {
       callback(null, true);
@@ -70,7 +69,11 @@ app.use(cors({
     callback(new Error(`Origem nao permitida pelo CORS: ${origin}`));
   },
   credentials: true,
-}));
+});
+
+const app = createApp({
+  preRouteMiddlewares: [corsMiddleware],
+});
 let server;
 
 async function startServer() {
