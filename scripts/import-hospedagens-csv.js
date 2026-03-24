@@ -13,7 +13,7 @@ const {
   parseCsvFile,
 } = require('./import-logistica-csv-utils');
 
-const DEFAULT_CSV_FILE = path.resolve(__dirname, '..', 'MAGALU-HOSPEDAGENS.csv');
+const DEFAULT_CSV_FILE = path.resolve(__dirname, '..', 'MAGALU-230326-HOTEISGERAL-VINCULADO.csv');
 
 function mapCsvRowToHospedagem(row) {
   return {

@@ -238,14 +238,14 @@
 }
 
 .agenda-qr-trigger {
-  min-width: min(288px, calc(100vw - 40px));
-  min-height: 84px;
-  border-radius: 34px 34px 0 0;
-  font-size: 1.1rem;
+  min-width: min(168px, calc(100vw - 32px));
+  min-height: 48px;
+  border-radius: 18px 18px 0 0;
+  font-size: inherit;
 }
 
 .agenda-qr-trigger .profile-qr-mini {
-  width: 40px;
-  height: 40px;
+  width: 22px;
+  height: 22px;
 }
 

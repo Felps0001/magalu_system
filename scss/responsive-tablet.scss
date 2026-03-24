@@ -38,7 +38,7 @@
   }
 
   .profile-qr-trigger {
-    min-width: calc(100vw - 36px);
+    min-width: min(168px, calc(100vw - 32px));
   }
 
   .agenda-track-header {

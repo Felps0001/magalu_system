@@ -75,6 +75,8 @@ function setKitCodeModalState(isOpen) {
 
 function setScannerModalState(isOpen) {
   scannerModal.hidden = !isOpen;
+  scannerModal.setAttribute('aria-hidden', String(!isOpen));
+  openScannerButton.setAttribute('aria-expanded', String(isOpen));
   document.body.classList.toggle('feed-ui-lock', isOpen || !drawer.hidden || !kitCodeModal.hidden);
 }
 
