@@ -5,6 +5,7 @@ const path = require('path');
 
 const { connectToMongoDB, closeMongoDBConnection } = require('../src/config/mongodb');
 const { createHospedagem, normalizeHospedagemPayload } = require('../src/models/hospedagem');
+const { buildUserLogisticaFilter } = require('../src/services/userLogisticaLookup');
 const {
   findUserReference,
   getRowValue,
@@ -68,7 +69,8 @@ async function importHospedagensFromCsv({ file, dryRun }) {
     }
 
     const hospedagemPayload = createHospedagem({ userId: String(existingUser._id), ...normalizedPayload });
-    const existingHospedagem = await hospedagensCollection.findOne({ userId: existingUser._id });
+    const userLogisticaFilter = buildUserLogisticaFilter(existingUser._id);
+    const existingHospedagem = await hospedagensCollection.findOne(userLogisticaFilter);
 
     if (dryRun) {
       if (existingHospedagem) {
@@ -80,14 +82,14 @@ async function importHospedagensFromCsv({ file, dryRun }) {
     }
 
     await hospedagensCollection.updateOne(
-      { userId: existingUser._id },
+      userLogisticaFilter,
       {
         $set: {
+          userId: hospedagemPayload.userId,
           ...normalizedPayload,
           updatedAt: hospedagemPayload.updatedAt,
         },
         $setOnInsert: {
-          userId: hospedagemPayload.userId,
           createdAt: hospedagemPayload.createdAt,
         },
       },

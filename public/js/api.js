@@ -248,6 +248,50 @@ async function fetchUserKitStatus(userId) {
   }
 }
 
+async function fetchUserRota(userId) {
+  if (!userId) {
+    return null;
+  }
+
+  try {
+    const response = await fetch(
+      buildApiUrl(`/api/users/${encodeURIComponent(userId)}/rota`),
+      withApiDefaults({ method: 'GET' })
+    );
+    const data = await parseApiResponse(response);
+
+    if (!response.ok || !data || typeof data !== 'object') {
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    return null;
+  }
+}
+
+async function fetchUserAereo(userId) {
+  if (!userId) {
+    return null;
+  }
+
+  try {
+    const response = await fetch(
+      buildApiUrl(`/api/users/${encodeURIComponent(userId)}/aereo`),
+      withApiDefaults({ method: 'GET' })
+    );
+    const data = await parseApiResponse(response);
+
+    if (!response.ok || !data || typeof data !== 'object') {
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    return null;
+  }
+}
+
 async function fetchUserById(userId) {
   if (!userId) {
     return null;
@@ -274,8 +318,10 @@ window.magaluApi = {
   buildAppUrl,
   buildApiUrl,
   clearStoredUser,
+  fetchUserAereo,
   fetchUserById,
   fetchUserKitStatus,
+  fetchUserRota,
   getAuthenticatedHomeUrl,
   getAppRootUrl,
   hasPendingKit,

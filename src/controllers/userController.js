@@ -9,6 +9,7 @@ const { buildUserQrData, createUser, createUserQrPayload, normalizeUserLegacyFie
 const { buildCacheKey, deleteCacheByPrefix, deleteCacheKeys, getOrSetJsonCache } = require('../services/cache');
 const { hashPassword, normalizePassword } = require('../services/password');
 const { buildUserAccessPipeline } = require('../services/userAccessPipeline');
+const { buildUserLogisticaFilter } = require('../services/userLogisticaLookup');
 
 const USERS_CACHE_KEY = buildCacheKey(['users', 'list']);
 const USERS_AGENDA_CACHE_KEY = buildCacheKey(['users', 'agenda']);
@@ -404,7 +405,7 @@ async function getUserRotaHandler(req, res) {
     }
 
     const rotasCollection = await getRotasCollection();
-    const rota = await rotasCollection.findOne({ userId: existingUser.user._id });
+    const rota = await rotasCollection.findOne(buildUserLogisticaFilter(existingUser.user._id));
 
     if (!rota) {
       res.status(404).json({ error: 'Rota nao encontrada para este usuario.' });
@@ -428,18 +429,19 @@ async function upsertUserRotaHandler(req, res) {
 
     const normalizedPayload = normalizeRotaPayload(req.body);
     const rotasCollection = await getRotasCollection();
-    const existingRota = await rotasCollection.findOne({ userId: existingUser.user._id });
+    const userLogisticaFilter = buildUserLogisticaFilter(existingUser.user._id);
+    const existingRota = await rotasCollection.findOne(userLogisticaFilter);
     const rotaPayload = createRota({ userId, ...normalizedPayload });
 
     await rotasCollection.updateOne(
-      { userId: existingUser.user._id },
+      userLogisticaFilter,
       {
         $set: {
+          userId: rotaPayload.userId,
           ...normalizedPayload,
           updatedAt: rotaPayload.updatedAt,
         },
         $setOnInsert: {
-          userId: rotaPayload.userId,
           createdAt: rotaPayload.createdAt,
         },
       },
@@ -472,7 +474,7 @@ async function getUserAereoHandler(req, res) {
     }
 
     const aereosCollection = await getAereosCollection();
-    const aereo = await aereosCollection.findOne({ userId: existingUser.user._id });
+    const aereo = await aereosCollection.findOne(buildUserLogisticaFilter(existingUser.user._id));
 
     if (!aereo) {
       res.status(404).json({ error: 'Aereo nao encontrado para este usuario.' });
@@ -496,18 +498,19 @@ async function upsertUserAereoHandler(req, res) {
 
     const normalizedPayload = normalizeAereoPayload(req.body);
     const aereosCollection = await getAereosCollection();
-    const existingAereo = await aereosCollection.findOne({ userId: existingUser.user._id });
+    const userLogisticaFilter = buildUserLogisticaFilter(existingUser.user._id);
+    const existingAereo = await aereosCollection.findOne(userLogisticaFilter);
     const aereoPayload = createAereo({ userId, ...normalizedPayload });
 
     await aereosCollection.updateOne(
-      { userId: existingUser.user._id },
+      userLogisticaFilter,
       {
         $set: {
+          userId: aereoPayload.userId,
           ...normalizedPayload,
           updatedAt: aereoPayload.updatedAt,
         },
         $setOnInsert: {
-          userId: aereoPayload.userId,
           createdAt: aereoPayload.createdAt,
         },
       },
@@ -540,7 +543,7 @@ async function getUserHospedagemHandler(req, res) {
     }
 
     const hospedagensCollection = await getHospedagensCollection();
-    const hospedagem = await hospedagensCollection.findOne({ userId: existingUser.user._id });
+    const hospedagem = await hospedagensCollection.findOne(buildUserLogisticaFilter(existingUser.user._id));
 
     if (!hospedagem) {
       res.status(404).json({ error: 'Hospedagem nao encontrada para este usuario.' });
@@ -564,18 +567,19 @@ async function upsertUserHospedagemHandler(req, res) {
 
     const normalizedPayload = normalizeHospedagemPayload(req.body);
     const hospedagensCollection = await getHospedagensCollection();
-    const existingHospedagem = await hospedagensCollection.findOne({ userId: existingUser.user._id });
+    const userLogisticaFilter = buildUserLogisticaFilter(existingUser.user._id);
+    const existingHospedagem = await hospedagensCollection.findOne(userLogisticaFilter);
     const hospedagemPayload = createHospedagem({ userId, ...normalizedPayload });
 
     await hospedagensCollection.updateOne(
-      { userId: existingUser.user._id },
+      userLogisticaFilter,
       {
         $set: {
+          userId: hospedagemPayload.userId,
           ...normalizedPayload,
           updatedAt: hospedagemPayload.updatedAt,
         },
         $setOnInsert: {
-          userId: hospedagemPayload.userId,
           createdAt: hospedagemPayload.createdAt,
         },
       },

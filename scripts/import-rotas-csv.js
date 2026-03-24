@@ -5,6 +5,7 @@ const path = require('path');
 
 const { connectToMongoDB, closeMongoDBConnection } = require('../src/config/mongodb');
 const { createRota, normalizeRotaPayload } = require('../src/models/rota');
+const { buildUserLogisticaFilter } = require('../src/services/userLogisticaLookup');
 const {
   findUserReference,
   getRowValue,
@@ -66,7 +67,8 @@ async function importRotasFromCsv({ file, dryRun }) {
     }
 
     const rotaPayload = createRota({ userId: String(existingUser._id), ...normalizedPayload });
-    const existingRota = await rotasCollection.findOne({ userId: existingUser._id });
+    const userLogisticaFilter = buildUserLogisticaFilter(existingUser._id);
+    const existingRota = await rotasCollection.findOne(userLogisticaFilter);
 
     if (dryRun) {
       if (existingRota) {
@@ -78,14 +80,14 @@ async function importRotasFromCsv({ file, dryRun }) {
     }
 
     await rotasCollection.updateOne(
-      { userId: existingUser._id },
+      userLogisticaFilter,
       {
         $set: {
+          userId: rotaPayload.userId,
           ...normalizedPayload,
           updatedAt: rotaPayload.updatedAt,
         },
         $setOnInsert: {
-          userId: rotaPayload.userId,
           createdAt: rotaPayload.createdAt,
         },
       },

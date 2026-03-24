@@ -17,6 +17,7 @@ const AEREO_FIELDS = Object.freeze([
   'horarioVolta',
   'horarioChegadaVolta',
   'dataChegadaVolta',
+  'localizador',
 ]);
 
 function normalizeString(value) {

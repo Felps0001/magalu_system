@@ -64,7 +64,11 @@ async function refreshCurrentUser() {
     return;
   }
 
-  const freshUser = await window.magaluApi.fetchUserById(currentUser._id);
+  const [freshUser, rota, aereoDetalhes] = await Promise.all([
+    window.magaluApi.fetchUserById(currentUser._id),
+    window.magaluApi.fetchUserRota(currentUser._id),
+    window.magaluApi.fetchUserAereo(currentUser._id),
+  ]);
 
   if (!freshUser) {
     return;
@@ -73,6 +77,8 @@ async function refreshCurrentUser() {
   renderLogisticaUser({
     ...currentUser,
     ...freshUser,
+    rota: freshUser.rota || rota || currentUser.rota,
+    aereoDetalhes: freshUser.aereoDetalhes || aereoDetalhes || currentUser.aereoDetalhes,
   });
 }
 
@@ -119,8 +125,11 @@ function formatAereoDetails(aereoDetalhes) {
     aereoDetalhes.horarioChegadaVolta ? `Horario chegada volta: ${aereoDetalhes.horarioChegadaVolta}` : '',
     aereoDetalhes.dataChegadaVolta ? `Data chegada volta: ${aereoDetalhes.dataChegadaVolta}` : '',
   ].filter(Boolean);
+  const extraLines = [
+    aereoDetalhes.localizador ? `Localizador: ${aereoDetalhes.localizador}` : '',
+  ].filter(Boolean);
 
-  return [idaLines.join('\n'), voltaLines.join('\n')].filter(Boolean).join('\n\n');
+  return [idaLines.join('\n'), voltaLines.join('\n'), extraLines.join('\n')].filter(Boolean).join('\n\n');
 }
 
 function formatHospedagemDetails(hospedagem) {

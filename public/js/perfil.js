@@ -9,7 +9,6 @@ const userCargo = document.getElementById('user-cargo');
 const userRegional = document.getElementById('user-regional');
 const userFilial = document.getElementById('user-filial');
 const userKitStatus = document.getElementById('user-kit-status');
-const userAereo = document.getElementById('user-aereo');
 const generateKitCodeButton = document.getElementById('generate-kit-code-button');
 const kitCodeModal = document.getElementById('profile-kit-code-modal');
 const kitCodeBackdrop = document.getElementById('profile-kit-code-backdrop');
@@ -61,7 +60,6 @@ function renderProfileUser(user) {
   userRegional.textContent = user.regional || '-';
   userFilial.textContent = user.filial || '-';
   renderKitStatus(user);
-  userAereo.textContent = formatAereoSummary(user.aereoDetalhes) || user.aereo || '-';
   window.magaluApi.storeUser(user);
 }
 
@@ -80,51 +78,6 @@ async function refreshCurrentUser() {
     ...currentUser,
     ...freshUser,
   });
-}
-
-function formatRotaSummary(rota) {
-  if (!rota) {
-    return '';
-  }
-
-  const parts = [];
-
-  if (rota.nomeRota) {
-    parts.push(rota.nomeRota);
-  }
-
-  if (rota.horario) {
-    parts.push(`Horario: ${rota.horario}`);
-  }
-
-  return parts.join(' · ');
-}
-
-function formatAereoSummary(aereoDetalhes) {
-  if (!aereoDetalhes) {
-    return '';
-  }
-
-  const idaParts = [aereoDetalhes.companhiaIda, aereoDetalhes.vooIda, aereoDetalhes.origemIda && aereoDetalhes.destinoIda ? `${aereoDetalhes.origemIda} -> ${aereoDetalhes.destinoIda}` : '']
-    .filter(Boolean);
-  const voltaParts = [aereoDetalhes.companhiaVolta, aereoDetalhes.vooVolta, aereoDetalhes.origemVolta && aereoDetalhes.destinoVolta ? `${aereoDetalhes.origemVolta} -> ${aereoDetalhes.destinoVolta}` : '']
-    .filter(Boolean);
-
-  if (idaParts.length === 0 && voltaParts.length === 0) {
-    return '';
-  }
-
-  const summaryLines = [];
-
-  if (idaParts.length > 0) {
-    summaryLines.push(`Ida: ${idaParts.join(' · ')}`);
-  }
-
-  if (voltaParts.length > 0) {
-    summaryLines.push(`Volta: ${voltaParts.join(' · ')}`);
-  }
-
-  return summaryLines.join('\n');
 }
 
 let drawerCloseTimer = null;

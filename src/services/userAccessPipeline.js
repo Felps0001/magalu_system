@@ -1,3 +1,5 @@
+const { buildUserLogisticaLookup } = require('./userLogisticaLookup');
+
 function buildUserAccessPipeline(matchStage = {}, options = {}) {
   const { limitOne = false } = options;
   const pipeline = [
@@ -45,30 +47,9 @@ function buildUserAccessPipeline(matchStage = {}, options = {}) {
         as: 'estandesVisitados',
       },
     },
-    {
-      $lookup: {
-        from: 'rotas',
-        localField: '_id',
-        foreignField: 'userId',
-        as: 'rotaCollection',
-      },
-    },
-    {
-      $lookup: {
-        from: 'aereos',
-        localField: '_id',
-        foreignField: 'userId',
-        as: 'aereoCollection',
-      },
-    },
-    {
-      $lookup: {
-        from: 'hospedagens',
-        localField: '_id',
-        foreignField: 'userId',
-        as: 'hospedagemCollection',
-      },
-    },
+    buildUserLogisticaLookup('rotas', 'rotaCollection'),
+    buildUserLogisticaLookup('aereos', 'aereoCollection'),
+    buildUserLogisticaLookup('hospedagens', 'hospedagemCollection'),
     {
       $addFields: {
         rota: { $arrayElemAt: ['$rotaCollection', 0] },

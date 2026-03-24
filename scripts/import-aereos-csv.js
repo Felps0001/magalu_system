@@ -5,6 +5,7 @@ const path = require('path');
 
 const { connectToMongoDB, closeMongoDBConnection } = require('../src/config/mongodb');
 const { createAereo, normalizeAereoPayload } = require('../src/models/aereo');
+const { buildUserLogisticaFilter } = require('../src/services/userLogisticaLookup');
 const {
   findUserReference,
   getRowValue,
@@ -13,7 +14,7 @@ const {
   parseCsvFile,
 } = require('./import-logistica-csv-utils');
 
-const DEFAULT_CSV_FILE = path.resolve(__dirname, '..', 'MAGALU-AEREOS.csv');
+const DEFAULT_CSV_FILE = path.resolve(__dirname, '..', 'AEREO-EMITIDOS-GERAL-VINCULADO.csv');
 
 function mapCsvRowToAereo(row) {
   return {
@@ -35,6 +36,7 @@ function mapCsvRowToAereo(row) {
     horarioVolta: getRowValue(row, ['HORARIO_VOLTA', 'HORARIOVOLTA', 'HORA_VOLTA']),
     horarioChegadaVolta: getRowValue(row, ['HORARIO_CHEGADA_VOLTA', 'CHEGADA_VOLTA', 'HORARIOCHEGADAVOLTA']),
     dataChegadaVolta: getRowValue(row, ['DATA_CHEGADA_VOLTA', 'CHEGADA_DATA_VOLTA', 'DATACHEGADAVOLTA']),
+    localizador: getRowValue(row, ['LOCALIZADOR', 'CODIGO_LOCALIZADOR']),
   };
 }
 
@@ -80,7 +82,8 @@ async function importAereosFromCsv({ file, dryRun }) {
     }
 
     const aereoPayload = createAereo({ userId: String(existingUser._id), ...normalizedPayload });
-    const existingAereo = await aereosCollection.findOne({ userId: existingUser._id });
+    const userLogisticaFilter = buildUserLogisticaFilter(existingUser._id);
+    const existingAereo = await aereosCollection.findOne(userLogisticaFilter);
 
     if (dryRun) {
       if (existingAereo) {
@@ -92,14 +95,14 @@ async function importAereosFromCsv({ file, dryRun }) {
     }
 
     await aereosCollection.updateOne(
-      { userId: existingUser._id },
+      userLogisticaFilter,
       {
         $set: {
+          userId: aereoPayload.userId,
           ...normalizedPayload,
           updatedAt: aereoPayload.updatedAt,
         },
         $setOnInsert: {
-          userId: aereoPayload.userId,
           createdAt: aereoPayload.createdAt,
         },
       },

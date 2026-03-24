@@ -1636,27 +1636,130 @@ button:hover {
 
 .logistica-anchor-link {
   min-height: 42px;
-  padding: 0 16px;
+  padding: 0 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  color: var(--accent-dark);
-  background: rgba(0, 134, 255, 0.1);
+  color: #0e376d;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(232, 244, 255, 0.92));
+  border: 1px solid rgba(0, 104, 201, 0.12);
+  box-shadow: 0 12px 26px rgba(0, 89, 214, 0.08);
   text-decoration: none;
   font-weight: 700;
 }
 
+.logistica-anchor-link:hover {
+  transform: translateY(-1px);
+}
+
 .logistica-section-card {
+  position: relative;
   scroll-margin-top: 18px;
+  overflow: hidden;
+  padding: 24px 22px 22px;
+  border: 1px solid rgba(13, 78, 153, 0.1);
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.68), transparent 30%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(241, 247, 255, 0.96));
+  box-shadow:
+    0 28px 60px rgba(0, 67, 155, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.logistica-section-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent 55%);
+  pointer-events: none;
+}
+
+.logistica-section-card--rota {
+  background:
+    radial-gradient(circle at top right, rgba(255, 212, 120, 0.28), transparent 30%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(255, 247, 229, 0.96));
+}
+
+.logistica-section-card--aereo {
+  background:
+    radial-gradient(circle at top right, rgba(91, 194, 255, 0.3), transparent 32%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(232, 246, 255, 0.96));
+}
+
+.logistica-section-card--hospedagem {
+  background:
+    radial-gradient(circle at top right, rgba(80, 200, 152, 0.28), transparent 32%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(234, 250, 242, 0.96));
+}
+
+.logistica-card-glow {
+  position: absolute;
+  top: -36px;
+  right: -22px;
+  width: 136px;
+  height: 136px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0));
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.logistica-section-header {
+  position: relative;
+  z-index: 1;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.logistica-card-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(12, 45, 84, 0.08);
+  color: #0b356a;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+
+.logistica-section-copy {
+  margin: 8px 0 0;
+  max-width: 26ch;
+  color: rgba(13, 33, 66, 0.68);
+  font-size: 0.92rem;
+  line-height: 1.45;
 }
 
 .logistica-detail-value {
   margin: 0;
-  color: var(--text);
+  position: relative;
+  z-index: 1;
+  padding: 18px 18px 18px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.56);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.62));
+  color: #0d2142;
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.75;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
   white-space: pre-wrap;
+}
+
+.logistica-detail-value::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  left: 0;
+  bottom: 16px;
+  width: 4px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #0086ff, #ffd23f);
 }
 
 .profile-mobile-update {
@@ -1764,6 +1867,20 @@ button:hover {
 .profile-detail-list dd {
   font-weight: 700;
   text-align: right;
+}
+
+@media (max-width: 520px) {
+  .logistica-section-header {
+    align-items: flex-start;
+  }
+
+  .logistica-card-badge {
+    margin-top: 4px;
+  }
+
+  .logistica-section-copy {
+    max-width: none;
+  }
 }
 
 .profile-estandes-list {
