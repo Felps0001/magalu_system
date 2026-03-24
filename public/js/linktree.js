@@ -1,5 +1,4 @@
 const linktreeUserName = document.getElementById('linktree-user-name');
-const linktreeUserRole = document.getElementById('linktree-user-role');
 const drawerUserName = document.getElementById('linktree-drawer-user-name');
 const drawerUserRole = document.getElementById('linktree-drawer-user-role');
 const menuButton = document.getElementById('linktree-menu-button');
@@ -102,10 +101,10 @@ function getKitCodeRequestError(data) {
   const rawText = data && typeof data.rawText === 'string' ? data.rawText : '';
 
   if (rawText.includes('Cannot GET') && rawText.includes('/qrcode')) {
-    return 'O backend em uso ainda nao possui a rota do codigo. Reinicie o servidor local ou publique a versao nova do backend.';
+    return 'O backend em uso ainda não possui a rota do código. Reinicie o servidor local ou publique a versão nova do backend.';
   }
 
-  return 'O backend retornou uma resposta invalida ao gerar o codigo.';
+  return 'O backend retornou uma resposta inválida ao gerar o código.';
 }
 
 async function loadUserKitCode(options = {}) {
@@ -115,7 +114,7 @@ async function loadUserKitCode(options = {}) {
   } = options;
 
   if (!currentUser || !currentUser._id) {
-    renderKitCodePlaceholder('Usuario nao encontrado para gerar o codigo.');
+    renderKitCodePlaceholder('Usuário não encontrado para gerar o código.');
     return;
   }
 
@@ -142,10 +141,10 @@ async function loadUserKitCode(options = {}) {
     };
     window.magaluApi.storeUser(currentUser);
   } catch (error) {
-    renderKitCodePlaceholder('O codigo nao foi carregado.');
+    renderKitCodePlaceholder('O código não foi carregado.');
   } finally {
     generateKitCodeButton.disabled = false;
-    generateKitCodeButton.textContent = 'Atualizar codigo';
+    generateKitCodeButton.textContent = 'Atualizar código';
   }
 }
 
@@ -170,11 +169,10 @@ const storedUser = window.magaluApi.readStoredUser();
 
 if (storedUser) {
   currentUser = storedUser;
-  const userNameText = storedUser.nome || 'Usuario';
+  const userNameText = storedUser.nome || 'Usuário';
   const userRoleText = `${storedUser.cargo || 'Sem cargo'} · ${storedUser.filial || 'Sem filial'}`;
 
-  linktreeUserName.textContent = userNameText;
-  linktreeUserRole.textContent = 'Atalhos rapidos para navegar por todas as telas do projeto.';
+  linktreeUserName.textContent = `Olá ${userNameText},`;
   drawerUserName.textContent = userNameText;
   drawerUserRole.textContent = userRoleText;
   syncKitActionVisibility();
