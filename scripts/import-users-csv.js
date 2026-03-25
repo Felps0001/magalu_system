@@ -7,7 +7,7 @@ const { ObjectId } = require('mongodb');
 const { connectToMongoDB, closeMongoDBConnection } = require('../src/config/mongodb');
 const { createUser, createUserQrPayload } = require('../src/models/user');
 
-const DEFAULT_CSV_FILE = path.resolve(__dirname, '..', 'MAGALU-USERS-PE26-UNIFICADO.csv');
+const DEFAULT_CSV_FILE = path.resolve(__dirname, '..', 'ROSA-MTG.csv');
 
 function parseArgs(argv) {
   const options = {
