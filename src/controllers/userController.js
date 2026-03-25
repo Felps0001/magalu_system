@@ -77,6 +77,17 @@ function normalizeEditableUserFields(payload = {}) {
   return normalizedPayload;
 }
 
+function buildUserQrMetadata(user, generatedAt = new Date().toISOString()) {
+  if (!user || !user.id_magalu) {
+    return null;
+  }
+
+  return {
+    qrCodeGeneratedAt: generatedAt,
+    qrCodePayload: createUserQrPayload(user, generatedAt),
+  };
+}
+
 async function ensureUserQrCode(usersCollection, user) {
   if (user.qrCodePayload) {
     return user;
@@ -144,9 +155,14 @@ async function invalidateUserCaches({ userId, idMagalu }) {
 async function createUserHandler(req, res) {
   try {
     const usersCollection = await getUsersCollection();
-    const existingUser = await usersCollection.findOne({
-      id_magalu: req.body.id_magalu,
-    });
+    const idMagalu = typeof req.body.id_magalu === 'string'
+      ? req.body.id_magalu.trim()
+      : req.body.id_magalu
+        ? String(req.body.id_magalu).trim()
+        : '';
+    const existingUser = idMagalu
+      ? await usersCollection.findOne({ id_magalu: idMagalu })
+      : null;
 
     if (existingUser) {
       res.status(409).json({ error: 'Ja existe um usuario com este id_magalu.' });
@@ -159,10 +175,10 @@ async function createUserHandler(req, res) {
       _id: userId,
       ...createUser(req.body),
     };
+    const qrMetadata = buildUserQrMetadata(user, qrCodeGeneratedAt);
     const userWithQrCode = {
       ...user,
-      qrCodeGeneratedAt,
-      qrCodePayload: createUserQrPayload(user, qrCodeGeneratedAt),
+      ...(qrMetadata || {}),
     };
 
     await usersCollection.insertOne(userWithQrCode);
@@ -206,26 +222,34 @@ async function updateUserProfileHandler(req, res) {
       ...editableFields,
       firstAccessCompleted: true,
     };
+    const qrMetadata = buildUserQrMetadata(updatedUser, qrCodeGeneratedAt);
+    const setPayload = {
+      ...editableFields,
+      firstAccessCompleted: true,
+      updatedAt: new Date().toISOString(),
+    };
+    const unsetPayload = {
+      aereo: '',
+      regiao: '',
+      loja: '',
+      turma: '',
+      cidade: '',
+      transfer: '',
+      hospedagem: '',
+    };
+
+    if (qrMetadata) {
+      Object.assign(setPayload, qrMetadata);
+    } else {
+      unsetPayload.qrCodeGeneratedAt = '';
+      unsetPayload.qrCodePayload = '';
+    }
 
     await usersCollection.updateOne(
       { _id: existingUser._id },
       {
-        $set: {
-          ...editableFields,
-          firstAccessCompleted: true,
-          qrCodeGeneratedAt,
-          qrCodePayload: createUserQrPayload(updatedUser, qrCodeGeneratedAt),
-          updatedAt: new Date().toISOString(),
-        },
-        $unset: {
-          aereo: '',
-          regiao: '',
-          loja: '',
-          turma: '',
-          cidade: '',
-          transfer: '',
-          hospedagem: '',
-        },
+        $set: setPayload,
+        $unset: unsetPayload,
       }
     );
 
@@ -251,13 +275,25 @@ async function getUserQrCodeHandler(req, res) {
     }
 
     const usersCollection = await getUsersCollection();
+    const existingUser = await usersCollection.findOne({ _id: new ObjectId(userId) });
+
+    if (!existingUser) {
+      res.status(404).json({ error: 'Usuario nao encontrado.' });
+      return;
+    }
+
+    if (!existingUser.id_magalu) {
+      res.status(400).json({ error: 'Usuario sem id_magalu nao possui QR Code disponivel.' });
+      return;
+    }
+
     const qrCodeResponse = await getOrSetJsonCache({
       key: buildUserQrCodeCacheKey(userId),
       ttlSeconds: USER_QRCODE_CACHE_TTL_SECONDS,
       loader: async () => {
         const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
 
-        if (!user) {
+        if (!user || !user.id_magalu) {
           return null;
         }
 
@@ -599,14 +635,24 @@ async function marcarKitHandler(req, res) {
       ...existingUser,
       kit: true,
     };
+    const qrMetadata = buildUserQrMetadata(updatedUser, qrCodeGeneratedAt);
+    const setPayload = {
+      kit: true,
+    };
+    const unsetPayload = {};
+
+    if (qrMetadata) {
+      Object.assign(setPayload, qrMetadata);
+    } else {
+      unsetPayload.qrCodeGeneratedAt = '';
+      unsetPayload.qrCodePayload = '';
+    }
+
     const result = await usersCollection.updateOne(
       { _id: new ObjectId(userId) },
       {
-        $set: {
-          kit: true,
-          qrCodeGeneratedAt,
-          qrCodePayload: createUserQrPayload(updatedUser, qrCodeGeneratedAt),
-        },
+        $set: setPayload,
+        ...(Object.keys(unsetPayload).length > 0 ? { $unset: unsetPayload } : {}),
       }
     );
 

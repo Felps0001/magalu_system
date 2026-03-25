@@ -17,6 +17,22 @@ router.get('/primeiro-acesso', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'first-access.html'));
 });
 
+router.get('/users-register.html', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'users-register.html'));
+});
+
+router.get('/users-register', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'users-register.html'));
+});
+
+router.get('/cadastro-users', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'users-register.html'));
+});
+
+router.get('/cadastro-usuarios', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'users-register.html'));
+});
+
 router.get('/perfil', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'perfil.html'));
 });

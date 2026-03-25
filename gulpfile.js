@@ -73,6 +73,8 @@ function write404Page() {
 function writePagesRoutes(done) {
   writeRouteIndex('login', 'index.html');
   writeRouteIndex('primeiro-acesso', 'first-access.html');
+  writeRouteIndex('cadastro-users', 'users-register.html');
+  writeRouteIndex('cadastro-usuarios', 'users-register.html');
   writeRouteIndex('perfil', 'perfil.html');
   writeRouteIndex('linktree', 'linktree.html');
   writeRouteIndex('logistica', 'logistica.html');

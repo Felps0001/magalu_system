@@ -53,6 +53,18 @@ function normalizeUserLegacyFields(user = {}) {
   };
 }
 
+function normalizeOptionalString(value) {
+  if (typeof value === 'string') {
+    return value.trim();
+  }
+
+  if (value === undefined || value === null) {
+    return '';
+  }
+
+  return String(value).trim();
+}
+
 function createUser({
   nome,
   id_magalu,
@@ -65,21 +77,17 @@ function createUser({
   kitExtra,
   kitExtraRetirada,
 }) {
-  if (!id_magalu) {
-    throw new Error('O campo id_magalu e obrigatorio.');
-  }
-
   const normalizedRegional = getNormalizedRegional({ regional, regiao });
   const normalizedFilial = getNormalizedFilial({ filial, loja });
 
   return {
-    nome,
-    id_magalu,
-    cpf,
+    nome: normalizeOptionalString(nome),
+    id_magalu: normalizeOptionalString(id_magalu),
+    cpf: normalizeOptionalString(cpf),
     regional: normalizedRegional,
     diretoria: getNormalizedDiretoria({ regional: normalizedRegional }),
     filial: normalizedFilial,
-    cargo,
+    cargo: normalizeOptionalString(cargo),
     firstAccessCompleted: false,
     kit: false, // campo kit default false
     kitExtra: Boolean(kitExtra),
