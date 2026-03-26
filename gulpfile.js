@@ -113,6 +113,9 @@ function writePagesRoutes(done) {
   writeRouteIndex('teste', 'perfil.html');
   writeRouteIndex('agenda', 'agenda.html');
   writeRouteIndex('feed', 'feed.html');
+  writeRouteIndex('perguntas-dissertativas-luiza', 'perguntas-dissertativas-luiza.html');
+  writeRouteIndex('perguntas-dissertativas-fred', 'perguntas-dissertativas-fred.html');
+  writeRouteIndex('perguntas-dissertativas-palestra', 'perguntas-dissertativas-palestra.html');
   writeRouteIndex('scanner', 'perfil.html');
   writeRootIndex();
   write404Page();
