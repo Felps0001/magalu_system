@@ -95,23 +95,69 @@ async function marcarKit(userId) {
   return payload;
 }
 
-async function processarKit(userId) {
-  const user = await consultarKit(userId);
+function buildKitMeta(user) {
   const extraInfo = user.kitExtra
     ? `\nKit extra: sim\nRetirada kit extra: ${user.kitExtraRetirada ? 'sim' : 'nao'}`
     : '\nKit extra: nao';
-  const meta = `ID Magalu: ${user.id_magalu || '-'}\nFilial: ${user.filial || '-'}\nRegional: ${user.regional || '-'}\nCargo: ${user.cargo || '-'}${extraInfo}`;
 
-  if (user.kit) {
+  return `ID Magalu: ${user.id_magalu || '-'}\nFilial: ${user.filial || '-'}\nRegional: ${user.regional || '-'}\nCargo: ${user.cargo || '-'}${extraInfo}`;
+}
+
+function getNextKitAction(user) {
+  if (!user.kit) {
+    return 'kit';
+  }
+
+  if (user.kitExtra && !user.kitExtraRetirada) {
+    return 'kitExtra';
+  }
+
+  return 'done';
+}
+
+async function processarKit(userId) {
+  const user = await consultarKit(userId);
+  const meta = buildKitMeta(user);
+  const nextAction = getNextKitAction(user);
+
+  if (nextAction === 'done') {
+    if (user.kitExtra && user.kitExtraRetirada) {
+      updateKitStatus(`Kit e kit extra ja retirados por ${user.nome || 'usuario'}.`, meta, 'blocked');
+      setScannerStatus('Este usuario ja retirou kit e kit extra.', 'success');
+      return;
+    }
+
     updateKitStatus(`Kit ja retirado por ${user.nome || 'usuario'}.`, meta, 'blocked');
     setScannerStatus('Este usuario ja retirou o kit.', 'success');
     return;
   }
 
-  updateKitStatus(`Kit liberado para ${user.nome || 'usuario'}.`, meta, 'ready');
-  setScannerStatus('Kit pendente. Marcando retirada...', 'info-message');
+  updateKitStatus(
+    nextAction === 'kitExtra'
+      ? `Kit extra liberado para ${user.nome || 'usuario'}.`
+      : `Kit liberado para ${user.nome || 'usuario'}.`,
+    meta,
+    'ready'
+  );
+  setScannerStatus(nextAction === 'kitExtra' ? 'Kit extra pendente. Marcando retirada...' : 'Kit pendente. Marcando retirada...', 'info-message');
   await marcarKit(userId);
-  updateKitStatus(`Kit retirado por ${user.nome || 'usuario'}.`, meta, 'ready');
+
+  const updatedUser = await consultarKit(userId);
+  const updatedMeta = buildKitMeta(updatedUser);
+
+  if (nextAction === 'kitExtra') {
+    updateKitStatus(`Kit extra retirado por ${updatedUser.nome || 'usuario'}.`, updatedMeta, 'ready');
+    setScannerStatus('Kit extra marcado com sucesso!', 'success');
+    return;
+  }
+
+  if (updatedUser.kitExtra && !updatedUser.kitExtraRetirada) {
+    updateKitStatus(`Kit retirado. Kit extra ainda disponivel para ${updatedUser.nome || 'usuario'}.`, updatedMeta, 'ready');
+    setScannerStatus('Kit marcado com sucesso! Kit extra segue disponivel.', 'success');
+    return;
+  }
+
+  updateKitStatus(`Kit retirado por ${updatedUser.nome || 'usuario'}.`, updatedMeta, 'ready');
   setScannerStatus('Kit marcado com sucesso!', 'success');
 }
 

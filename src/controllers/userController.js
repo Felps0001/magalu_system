@@ -681,13 +681,25 @@ async function marcarKitHandler(req, res) {
     }
 
     const qrCodeGeneratedAt = new Date().toISOString();
+    let action = 'none';
+
+    if (existingUser.kit !== true) {
+      action = 'kit';
+    } else if (existingUser.kitExtra === true && existingUser.kitExtraRetirada !== true) {
+      action = 'kitExtra';
+    }
+
     const updatedUser = {
       ...existingUser,
-      kit: true,
+      kit: existingUser.kit === true || action === 'kit',
+      kitExtraRetirada: existingUser.kitExtra === true
+        ? (existingUser.kitExtraRetirada === true || action === 'kitExtra')
+        : false,
     };
     const qrMetadata = buildUserQrMetadata(updatedUser, qrCodeGeneratedAt);
     const setPayload = {
-      kit: true,
+      kit: updatedUser.kit,
+      kitExtraRetirada: updatedUser.kitExtraRetirada,
     };
     const unsetPayload = {};
 
@@ -716,7 +728,13 @@ async function marcarKitHandler(req, res) {
       idMagalu: existingUser.id_magalu,
     });
 
-    res.json({ success: true });
+    res.json({
+      success: true,
+      action,
+      kit: updatedUser.kit,
+      kitExtra: Boolean(updatedUser.kitExtra),
+      kitExtraRetirada: Boolean(updatedUser.kitExtraRetirada),
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

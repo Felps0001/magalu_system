@@ -56,43 +56,85 @@ async function marcarKit(userId) {
   const { buildApiUrl, withApiDefaults, parseApiResponse } = getApiHelpers();
 
   setScannerStatus('Marcando kit para usuario...', 'info-message');
-  try {
-    const resp = await fetch(
-      buildApiUrl(`/api/users/${userId}/kit`),
-      withApiDefaults({
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      })
-    );
-    const payload = await parseApiResponse(resp);
+  const resp = await fetch(
+    buildApiUrl(`/api/users/${userId}/kit`),
+    withApiDefaults({
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    })
+  );
+  const payload = await parseApiResponse(resp);
 
-    if (!resp.ok) {
-      throw new Error(payload.error || 'Erro ao marcar kit');
-    }
-
-    setScannerStatus('Kit marcado com sucesso!', 'success');
-  } catch (err) {
-    setScannerStatus(`Falha ao marcar kit: ${err.message}`, 'error');
+  if (!resp.ok) {
+    throw new Error(payload.error || 'Erro ao marcar kit');
   }
+
+  return payload;
+}
+
+function buildKitMeta(user) {
+  const extraInfo = user.kitExtra
+    ? `\nKit extra: sim\nRetirada kit extra: ${user.kitExtraRetirada ? 'sim' : 'nao'}`
+    : '\nKit extra: nao';
+
+  return `ID Magalu: ${user.id_magalu || '-'}\nFilial: ${user.filial || '-'}\nRegional: ${user.regional || '-'}\nCargo: ${user.cargo || '-'}${extraInfo}`;
+}
+
+function getNextKitAction(user) {
+  if (!user.kit) {
+    return 'kit';
+  }
+
+  if (user.kitExtra && !user.kitExtraRetirada) {
+    return 'kitExtra';
+  }
+
+  return 'done';
 }
 
 async function processarKit(userId) {
   const user = await consultarKit(userId);
-  const extraInfo = user.kitExtra
-    ? `\nKit extra: sim\nRetirada kit extra: ${user.kitExtraRetirada ? 'sim' : 'nao'}`
-    : '\nKit extra: nao';
-  const meta = `ID Magalu: ${user.id_magalu || '-'}\nFilial: ${user.filial || '-'}\nRegional: ${user.regional || '-'}\nCargo: ${user.cargo || '-'}${extraInfo}`;
+  const meta = buildKitMeta(user);
+  const nextAction = getNextKitAction(user);
 
-  if (user.kit) {
+  if (nextAction === 'done') {
+    if (user.kitExtra && user.kitExtraRetirada) {
+      updateKitStatus(`Kit e kit extra ja retirados por ${user.nome || 'usuario'}.`, meta);
+      setScannerStatus('Este usuario ja retirou kit e kit extra.', 'success');
+      return;
+    }
+
     updateKitStatus(`Kit ja retirado por ${user.nome || 'usuario'}.`, meta);
     setScannerStatus('Este usuario ja retirou o kit.', 'success');
     return;
   }
 
-  updateKitStatus(`Kit pendente para ${user.nome || 'usuario'}.`, meta);
-  setScannerStatus('Kit pendente. Marcando retirada...', 'info-message');
+  updateKitStatus(
+    nextAction === 'kitExtra'
+      ? `Kit extra pendente para ${user.nome || 'usuario'}.`
+      : `Kit pendente para ${user.nome || 'usuario'}.`,
+    meta
+  );
+  setScannerStatus(nextAction === 'kitExtra' ? 'Kit extra pendente. Marcando retirada...' : 'Kit pendente. Marcando retirada...', 'info-message');
   await marcarKit(userId);
-  updateKitStatus(`Kit retirado por ${user.nome || 'usuario'}.`, meta);
+
+  const updatedUser = await consultarKit(userId);
+  const updatedMeta = buildKitMeta(updatedUser);
+
+  if (nextAction === 'kitExtra') {
+    updateKitStatus(`Kit extra retirado por ${updatedUser.nome || 'usuario'}.`, updatedMeta);
+    setScannerStatus('Kit extra marcado com sucesso!', 'success');
+    return;
+  }
+
+  if (updatedUser.kitExtra && !updatedUser.kitExtraRetirada) {
+    updateKitStatus(`Kit retirado. Kit extra ainda disponivel para ${updatedUser.nome || 'usuario'}.`, updatedMeta);
+    setScannerStatus('Kit marcado com sucesso! Kit extra segue disponivel.', 'success');
+    return;
+  }
+
+  updateKitStatus(`Kit retirado por ${updatedUser.nome || 'usuario'}.`, updatedMeta);
+  setScannerStatus('Kit marcado com sucesso!', 'success');
 }
 
 async function stopScanner() {
