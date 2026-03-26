@@ -578,6 +578,13 @@
   text-decoration: none;
 }
 
+.feed-mobile-card.linktree-card--banner {
+  gap: 10px;
+  background: linear-gradient(135deg, #0086ff 0%, #0051c7 100%);
+  border: 1px solid rgba(0, 89, 214, 0.22);
+  box-shadow: 0 18px 34px rgba(0, 89, 214, 0.24);
+}
+
 .linktree-card-button {
   width: 100%;
   border: 0;
@@ -598,6 +605,11 @@
   text-transform: uppercase;
 }
 
+.linktree-card-tag--banner {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
 .linktree-card-tag,
 .linktree-card-title,
 .linktree-card-copy {
@@ -610,9 +622,17 @@
   line-height: 1.15;
 }
 
+.linktree-card-title--banner {
+  color: #ffffff;
+}
+
 .linktree-card-copy {
   color: var(--muted);
   line-height: 1.5;
+}
+
+.linktree-card-copy--banner {
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .feed-mobile-card {

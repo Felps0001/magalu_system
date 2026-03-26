@@ -135,6 +135,10 @@ router.get('/estandes', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'estandes.html'));
 });
 
+router.get('/ranking', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'ranking.html'));
+});
+
 router.get('/scanner', (req, res) => {
   res.redirect('/perfil/');
 });

@@ -27,6 +27,38 @@ function normalizeUserResponseList(users = []) {
   return users.map((user) => normalizeUserResponse(user));
 }
 
+function parsePositiveInteger(value) {
+  const parsedValue = Number.parseInt(value, 10);
+
+  if (!Number.isFinite(parsedValue) || parsedValue <= 0) {
+    return null;
+  }
+
+  return parsedValue;
+}
+
+function compareUsersByRanking(leftUser = {}, rightUser = {}) {
+  const pointsDifference = Number(rightUser.pontos || 0) - Number(leftUser.pontos || 0);
+
+  if (pointsDifference !== 0) {
+    return pointsDifference;
+  }
+
+  const checkinsDifference = Number(rightUser.totalCheckins || 0) - Number(leftUser.totalCheckins || 0);
+
+  if (checkinsDifference !== 0) {
+    return checkinsDifference;
+  }
+
+  const timeDifference = Number(leftUser.tempo || 0) - Number(rightUser.tempo || 0);
+
+  if (timeDifference !== 0) {
+    return timeDifference;
+  }
+
+  return String(leftUser.nome || '').localeCompare(String(rightUser.nome || ''), 'pt-BR');
+}
+
 function normalizeEditableUserFields(payload = {}) {
   const normalizedPayload = {};
 
@@ -553,7 +585,25 @@ async function listUsersHandler(req, res) {
       },
     });
 
-    res.json(normalizeUserResponseList(users));
+    const normalizedUsers = normalizeUserResponseList(users);
+    const requestedView = typeof req.query.view === 'string'
+      ? req.query.view.trim().toLowerCase()
+      : '';
+
+    if (requestedView === 'ranking') {
+      const rankingLimit = parsePositiveInteger(req.query.limit);
+      const rankingUsers = [...normalizedUsers]
+        .sort(compareUsersByRanking)
+        .map((user, index) => ({
+          ...user,
+          rankingPosition: index + 1,
+        }));
+
+      res.json(rankingLimit ? rankingUsers.slice(0, rankingLimit) : rankingUsers);
+      return;
+    }
+
+    res.json(normalizedUsers);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
