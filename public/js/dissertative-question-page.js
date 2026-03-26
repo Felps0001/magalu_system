@@ -82,27 +82,23 @@ async function loadDissertativeStatus() {
 
     const currentQuestion = getQuestionStatus(data);
     applyQuestionMeta(currentQuestion || data.question);
-    const answeredCount = Array.isArray(data.questions) ? data.questions.filter((question) => question.answered).length : 0;
-
     if (currentQuestion && currentQuestion.answered) {
       dissertativeAnswer.value = currentQuestion.answerText || '';
       updateDissertativeCounter();
       setDissertativeFormDisabled(true);
       dissertativeSubmitButton.textContent = 'Resposta ja enviada';
       dissertativeSummary.textContent = data.alreadySubmitted
-        ? `Atividade concluida. ${data.pontos} pontos ja foram adicionados ao seu total.`
-        : `Resposta desta pagina ja registrada. Progresso atual: ${answeredCount}/3 paginas respondidas.`;
-      dissertativeSubtitle.textContent = data.alreadySubmitted
-        ? 'Atividade completa com sucesso.'
-        : 'Esta etapa ja foi respondida por voce.';
+        ? `Resposta registrada. ${data.pontos} pontos ja foram adicionados ao seu total.`
+        : 'Resposta desta pagina ja registrada.';
+      dissertativeSubtitle.textContent = 'Esta pagina ja foi respondida por voce.';
       setDissertativeMessage('Esta pagina ja foi respondida por voce.', 'success');
       return;
     }
 
     setDissertativeFormDisabled(false);
-    dissertativeSummary.textContent = `Progresso atual: ${answeredCount}/3 paginas respondidas. Os 20 pontos entram quando as 3 forem concluidas.`;
-    dissertativeSubtitle.textContent = 'Responda esta etapa para avancar na atividade de 20 pontos.';
-    dissertativePointsBadge.textContent = '+20 pontos ao completar as 3 paginas';
+    dissertativeSummary.textContent = 'Esta pagina aceita um unico envio.';
+    dissertativeSubtitle.textContent = 'Responda esta pergunta dissertativa e envie seu texto.';
+    dissertativePointsBadge.textContent = 'Pergunta dissertativa';
   } catch (error) {
     setDissertativeFormDisabled(true);
     setDissertativeMessage(error.message, 'error');
@@ -140,15 +136,13 @@ async function submitDissertativeAnswer(event) {
     await refreshStoredUserAfterSubmit();
     dissertativeSubmitButton.textContent = 'Resposta enviada';
     dissertativeSummary.textContent = data.isComplete
-      ? `Atividade concluida com sucesso. ${data.pontos} pontos adicionados ao seu total.`
-      : `Resposta salva. Progresso atual: ${data.questions.filter((question) => question.answered).length}/3 paginas respondidas.`;
-    dissertativeSubtitle.textContent = data.isComplete
-      ? 'As 3 paginas foram concluidas.'
-      : 'Esta etapa foi concluida com sucesso.';
+      ? `Resposta enviada com sucesso. ${data.pontos} pontos adicionados ao seu total.`
+      : 'Resposta salva com sucesso.';
+    dissertativeSubtitle.textContent = 'Pergunta respondida com sucesso.';
     setDissertativeMessage(
       data.isComplete
         ? `Resposta enviada com sucesso. ${data.pontos} pontos adicionados.`
-        : 'Resposta enviada com sucesso. Continue nas proximas paginas para liberar os 20 pontos.',
+        : 'Resposta enviada com sucesso.',
       'success'
     );
   } catch (error) {
