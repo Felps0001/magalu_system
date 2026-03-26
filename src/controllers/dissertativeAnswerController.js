@@ -58,6 +58,55 @@ function buildQuestionStatusList(submission) {
   });
 }
 
+function parsePositiveInteger(value) {
+  const parsedValue = Number.parseInt(value, 10);
+
+  if (!Number.isFinite(parsedValue) || parsedValue <= 0) {
+    return null;
+  }
+
+  return parsedValue;
+}
+
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function normalizeSubmissionListItem(submission, questionKey = null) {
+  const normalizedSubmission = normalizeStoredResponse(submission);
+
+  if (!normalizedSubmission) {
+    return null;
+  }
+
+  const filteredAnswers = questionKey
+    ? normalizedSubmission.answers.filter((answer) => answer.questionKey === questionKey)
+    : normalizedSubmission.answers;
+
+  if (questionKey && filteredAnswers.length === 0) {
+    return null;
+  }
+
+  const user = submission && submission.user && typeof submission.user === 'object'
+    ? submission.user
+    : null;
+
+  return {
+    ...normalizedSubmission,
+    answers: filteredAnswers,
+    user: user
+      ? {
+        _id: user._id ? String(user._id) : null,
+        nome: user.nome || normalizedSubmission.authorName,
+        id_magalu: user.id_magalu || normalizedSubmission.authorIdMagalu || null,
+        cargo: user.cargo || '',
+        filial: user.filial || '',
+        regional: user.regional || '',
+      }
+      : null,
+  };
+}
+
 async function getDissertativeAnswerStatusHandler(req, res) {
   try {
     const userId = typeof req.query.userId === 'string' ? req.query.userId.trim() : '';
@@ -86,6 +135,79 @@ async function getDissertativeAnswerStatusHandler(req, res) {
       question: currentQuestion,
       alreadySubmitted: Boolean(existingResponse && isDissertativeActivityComplete(existingResponse.answers)),
       submission: normalizeStoredResponse(existingResponse),
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function listDissertativeAnswersHandler(req, res) {
+  try {
+    const search = typeof req.query.search === 'string' ? req.query.search.trim() : '';
+    const questionKey = normalizeQuestionKey(req.query.questionKey);
+    const limit = parsePositiveInteger(req.query.limit) || 200;
+    const matchStage = {
+      activityCode: DISSERTATIVE_ACTIVITY_CODE,
+    };
+
+    if (req.query.questionKey && !questionKey) {
+      res.status(400).json({ error: 'O filtro de pergunta informado e invalido.' });
+      return;
+    }
+
+    if (questionKey) {
+      matchStage['answers.questionKey'] = questionKey;
+    }
+
+    if (search) {
+      const searchRegex = new RegExp(escapeRegex(search), 'i');
+
+      matchStage.$or = [
+        { authorName: searchRegex },
+        { authorIdMagalu: searchRegex },
+      ];
+    }
+
+    const dissertativeAnswersCollection = await getDissertativeAnswersCollection();
+    const submissions = await dissertativeAnswersCollection.aggregate([
+      {
+        $match: matchStage,
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $addFields: {
+          user: { $arrayElemAt: ['$user', 0] },
+        },
+      },
+      {
+        $sort: {
+          updatedAt: -1,
+          createdAt: -1,
+        },
+      },
+      {
+        $limit: limit,
+      },
+    ]).toArray();
+
+    const items = submissions
+      .map((submission) => normalizeSubmissionListItem(submission, questionKey))
+      .filter(Boolean);
+
+    res.json({
+      activityCode: DISSERTATIVE_ACTIVITY_CODE,
+      activityTitle: DISSERTATIVE_ACTIVITY_TITLE,
+      pontos: DISSERTATIVE_ACTIVITY_POINTS,
+      question: questionKey ? getQuestionByKey(questionKey) : null,
+      total: items.length,
+      items,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -211,4 +333,5 @@ async function createDissertativeAnswerHandler(req, res) {
 module.exports = {
   createDissertativeAnswerHandler,
   getDissertativeAnswerStatusHandler,
+  listDissertativeAnswersHandler,
 };

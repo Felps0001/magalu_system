@@ -153,6 +153,52 @@
   text-align: right;
 }
 
+.dissertative-admin-search-form {
+  display: grid;
+  gap: 12px;
+}
+
+.dissertative-admin-card {
+  display: grid;
+  gap: 18px;
+}
+
+.dissertative-admin-answer-list {
+  display: grid;
+  gap: 12px;
+}
+
+.dissertative-admin-answer {
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 89, 214, 0.1);
+  background: rgba(255, 255, 255, 0.92);
+  display: grid;
+  gap: 8px;
+}
+
+.dissertative-admin-answer-title,
+.dissertative-admin-answer-prompt,
+.dissertative-admin-answer-text {
+  margin: 0;
+}
+
+.dissertative-admin-answer-title {
+  font-size: 1rem;
+  color: var(--accent-dark);
+}
+
+.dissertative-admin-answer-prompt {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.dissertative-admin-answer-text {
+  color: var(--text);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
 .profile-estandes-list {
   list-style: none;
   margin: 0;

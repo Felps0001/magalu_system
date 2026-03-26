@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ranking de pontuacao</title>
+  <title>Respostas dissertativas</title>
   <meta name="theme-color" content="#0086ff">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -16,17 +16,17 @@
 </head>
 <body class="profile-mobile-body" data-requires-ranking-access="true">
   <main class="feed-mobile-shell profile-mobile-shell">
-    <button id="ranking-drawer-backdrop" class="feed-backdrop" type="button" hidden aria-label="Fechar menu"></button>
+    <button id="dissertative-admin-drawer-backdrop" class="feed-backdrop" type="button" hidden aria-label="Fechar menu"></button>
 
-    <aside id="ranking-drawer" class="feed-drawer" aria-hidden="true" hidden>
+    <aside id="dissertative-admin-drawer" class="feed-drawer" aria-hidden="true" hidden>
       <div class="feed-drawer-header">
         <img class="feed-drawer-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
-        <button id="ranking-close-drawer" class="feed-drawer-close" type="button" aria-label="Fechar menu">x</button>
+        <button id="dissertative-admin-close-drawer" class="feed-drawer-close" type="button" aria-label="Fechar menu">x</button>
       </div>
 
       <div class="feed-drawer-user">
-        <strong id="ranking-drawer-user-name">Carregando ranking...</strong>
-        <p id="ranking-drawer-user-role">Acesso restrito ao time administrativo.</p>
+        <strong id="dissertative-admin-drawer-user-name">Carregando respostas...</strong>
+        <p id="dissertative-admin-drawer-user-role">Acesso restrito ao time administrativo.</p>
       </div>
 
       <nav class="feed-drawer-nav" aria-label="Navegacao principal">
@@ -43,22 +43,22 @@
         <a class="feed-drawer-link" href="../linktree/">Home</a>
         <a class="feed-drawer-link" href="../agenda/">Agenda</a>
         <a class="feed-drawer-link" href="../estandes/">Estandes</a>
-        <a class="feed-drawer-link feed-drawer-link--current" href="../ranking/" aria-current="page" data-ranking-access hidden>Ranking</a>
-        <a class="feed-drawer-link" href="../respostas-dissertativas/" data-ranking-access hidden>Respostas</a>
+        <a class="feed-drawer-link" href="../ranking/" data-ranking-access hidden>Ranking</a>
+        <a class="feed-drawer-link feed-drawer-link--current" href="../respostas-dissertativas/" aria-current="page" data-ranking-access hidden>Respostas</a>
         <a class="feed-drawer-link" href="../feed/">Feed</a>
       </nav>
 
       <div class="feed-drawer-actions">
-        <button id="logout-button" class="feed-drawer-button feed-drawer-button--ghost" type="button">Sair</button>
+        <button id="dissertative-admin-logout-button" class="feed-drawer-button feed-drawer-button--ghost" type="button">Sair</button>
       </div>
     </aside>
 
-    <section class="feed-top-panel" aria-label="Ranking de pontuacao">
-      <img class="feed-top-image" src="../assets/img/layer-topo.png" alt="Ranking Magalu">
+    <section class="feed-top-panel" aria-label="Respostas dissertativas">
+      <img class="feed-top-image" src="../assets/img/layer-topo.png" alt="Respostas dissertativas Magalu">
       <div class="feed-top-content">
         <div class="feed-top-bar">
           <img class="feed-top-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
-          <button id="ranking-menu-button" class="feed-top-menu" type="button" aria-controls="ranking-drawer" aria-expanded="false" aria-label="Abrir menu">
+          <button id="dissertative-admin-menu-button" class="feed-top-menu" type="button" aria-controls="dissertative-admin-drawer" aria-expanded="false" aria-label="Abrir menu">
             <span></span>
             <span></span>
             <span></span>
@@ -66,27 +66,27 @@
         </div>
 
         <div class="feed-top-copy">
-          <h1 class="feed-top-title">Ranking</h1>
-          <p class="feed-top-subtitle">Pontuacao consolidada do evento.</p>
+          <h1 class="feed-top-title">Respostas</h1>
+          <p class="feed-top-subtitle">Consulta das perguntas dissertativas enviadas.</p>
           <div class="feed-top-user">
-            <strong id="ranking-user-name">Carregando...</strong>
-            <p id="ranking-user-role">Somente administracao visualiza esta tela.</p>
+            <strong id="dissertative-admin-user-name">Carregando...</strong>
+            <p id="dissertative-admin-user-role">Somente administracao visualiza esta tela.</p>
           </div>
         </div>
       </div>
     </section>
 
     <section class="profile-mobile-panel">
-      <p id="ranking-status" class="form-message feed-mobile-message" aria-live="polite">Carregando ranking...</p>
+      <p id="dissertative-admin-status" class="form-message feed-mobile-message" aria-live="polite">Carregando respostas...</p>
 
-      <section class="profile-stats-grid" aria-label="Resumo do ranking">
+      <section class="profile-stats-grid" aria-label="Resumo das respostas">
         <article class="profile-stat-card">
           <span class="profile-stat-label">Participantes</span>
-          <strong id="ranking-total-participants">0</strong>
+          <strong id="dissertative-admin-total-submissions">0</strong>
         </article>
         <article class="profile-stat-card">
-          <span class="profile-stat-label">Maior pontuacao</span>
-          <strong id="ranking-leader-score">0</strong>
+          <span class="profile-stat-label">Respostas salvas</span>
+          <strong id="dissertative-admin-total-answers">0</strong>
         </article>
       </section>
 
@@ -94,14 +94,25 @@
         <div class="profile-section-header">
           <div>
             <p class="profile-section-kicker">Gestao</p>
-            <h2 class="profile-section-title">Classificacao geral</h2>
-            <p id="ranking-updated-at" class="linktree-card-copy">Atualizacao pendente</p>
+            <h2 class="profile-section-title">Consulta rapida</h2>
+            <p id="dissertative-admin-updated-at" class="linktree-card-copy">Atualizacao pendente</p>
           </div>
-          <button id="ranking-refresh-button" class="secondary-button" type="button">Atualizar</button>
+          <button id="dissertative-admin-refresh-button" class="secondary-button" type="button">Atualizar</button>
         </div>
+
+        <form id="dissertative-admin-search-form" class="dissertative-admin-search-form">
+          <select id="dissertative-admin-question-filter" class="first-access-mobile-input" aria-label="Filtrar por pergunta">
+            <option value="">Todas as perguntas</option>
+            <option value="luiza">Luiza</option>
+            <option value="fred">Fred</option>
+            <option value="palestra">Palestra</option>
+          </select>
+          <input id="dissertative-admin-search-input" class="first-access-mobile-input" type="search" placeholder="Buscar por nome ou id_magalu" autocomplete="off">
+          <button class="primary-button" type="submit">Buscar</button>
+        </form>
       </article>
 
-      <section id="ranking-list" class="feed-mobile-list" aria-live="polite"></section>
+      <section id="dissertative-admin-list" class="feed-mobile-list" aria-live="polite"></section>
     </section>
   </main>
 
@@ -112,6 +123,6 @@
   <script src="../js/popup.js"></script>
   <script src="../js/ranking-menu.js"></script>
   <script src="../js/drawer-dropdown.js"></script>
-  <script src="../js/ranking.js"></script>
+  <script src="../js/dissertative-answers.js"></script>
 </body>
 </html>

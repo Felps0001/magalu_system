@@ -141,6 +141,14 @@ router.get('/ranking', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'ranking.html'));
 });
 
+router.get('/respostas-dissertativas', noStore(), (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'dissertative-answers.html'));
+});
+
+router.get('/respostas-dissertativas.html', noStore(), (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'dissertative-answers.html'));
+});
+
 router.get('/perguntas-dissertativas-luiza', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'perguntas-dissertativas-luiza.html'));
 });

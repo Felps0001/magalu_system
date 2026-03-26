@@ -16,6 +16,7 @@ const {
 const {
   createDissertativeAnswerHandler,
   getDissertativeAnswerStatusHandler,
+  listDissertativeAnswersHandler,
 } = require('../controllers/dissertativeAnswerController');
 const { noStore } = require('../http/cacheControl');
 
@@ -27,6 +28,7 @@ router.get('/sessions/qrcode', getQuestionSessionQrCodeHandler);
 router.post('/sessions/end', endQuestionSessionHandler);
 router.post('/sessions/attendance', createQuestionSessionAttendanceHandler);
 router.post('/sessions/start', startQuestionSessionHandler);
+router.get('/dissertative/submissions', noStore(), listDissertativeAnswersHandler);
 router.get('/dissertative/status', noStore(), getDissertativeAnswerStatusHandler);
 router.post('/dissertative', noStore(), createDissertativeAnswerHandler);
 router.get('/', listQuestionsHandler);
