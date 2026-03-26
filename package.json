@@ -8,9 +8,12 @@
     "dev": "node --watch server.js",
     "import:users-csv": "node scripts/import-users-csv.js",
     "import:users-kit-extra-csv": "node scripts/import-users-kit-extra-csv.js",
+    "import:estandes": "node scripts/import-estandes.js",
     "report:users-kit-extra-db-status": "node scripts/report-users-kit-extra-db-status.js",
     "report:users-kit-extra-not-found": "node scripts/report-users-kit-extra-not-found.js",
     "migrate:users-schema": "node scripts/migrate-users-schema.js",
+    "quiz:export-estandes": "node scripts/export-estandes-quiz-data.js",
+    "quiz:generate-pages": "node scripts/generate-quiz-pages.js",
     "build:pages": "gulp build-pages",
     "watch:pages": "gulp watch"
   },

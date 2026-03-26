@@ -45,6 +45,14 @@ router.get('/logistica', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'logistica.html'));
 });
 
+router.get('/boas-praticas', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'boas-praticas.html'));
+});
+
+router.get('/boas-praticas.html', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'boas-praticas.html'));
+});
+
 for (let palcoNumber = 1; palcoNumber <= 5; palcoNumber += 1) {
   const palcoRoute = `/palco-${palcoNumber}`;
   const perguntasPalcoRoute = `/perguntas-palco-${palcoNumber}`;

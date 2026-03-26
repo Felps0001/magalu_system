@@ -15,7 +15,7 @@ const quizWelcomeTitle = document.getElementById('quiz-welcome-title');
 const quizWelcomeDescription = document.getElementById('quiz-welcome-description');
 const quizStartButton = document.getElementById('quiz-start-button');
 const quizQuestionTitle = document.getElementById('quiz-question-title');
-const quizOptionButtons = Array.from(document.querySelectorAll('.quiz-option-button'));
+const quizOptionsContainer = document.querySelector('.quiz-options');
 const quizResultTitle = document.getElementById('quiz-result-title');
 const quizResultDescription = document.getElementById('quiz-result-description');
 const quizFinalScore = document.getElementById('quiz-final-score');
@@ -25,15 +25,23 @@ const quizConfig = window.MAGALU_QUIZ_CONFIG || {};
 const resolvedEstandeId = quizConfig.allowQueryParamEstandeId
   ? (new URLSearchParams(window.location.search).get('estandeId') || quizConfig.estandeId || '')
   : (quizConfig.estandeId || '');
-const quizQuestions = Array.isArray(quizConfig.questions) ? quizConfig.questions : [];
+const quizQuestions = Array.isArray(quizConfig.questions)
+  ? quizConfig.questions
+  : (quizConfig.question && Array.isArray(quizConfig.options)
+    ? [{ question: quizConfig.question, options: quizConfig.options }]
+    : []);
+const basePoints = Number.isFinite(Number(quizConfig.basePoints))
+  ? Number(quizConfig.basePoints)
+  : 0;
 
 let currentStep = 0;
-let score = 0;
+let score = basePoints;
 let quizStartedAt = null;
 let totalTimeInSeconds = 0;
 let hasCompletedCurrentQuiz = false;
 let isAnswering = false;
 let drawerCloseTimer = null;
+let quizOptionButtons = [];
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
@@ -148,12 +156,24 @@ function renderQuestion() {
   }
 
   quizQuestionTitle.textContent = currentQuestion.question;
-  quizOptionButtons.forEach((button, index) => {
-    const option = currentQuestion.options[index];
-    button.hidden = !option;
-    button.disabled = !option;
-    button.textContent = option ? option.text : '';
-  });
+
+  if (quizOptionsContainer) {
+    quizOptionsContainer.innerHTML = '';
+    quizOptionButtons = (Array.isArray(currentQuestion.options) ? currentQuestion.options : []).map((option, index) => {
+      const button = document.createElement('button');
+      button.className = 'quiz-btn quiz-option-button';
+      button.type = 'button';
+      button.dataset.optionIndex = String(index);
+      button.textContent = option ? option.text : '';
+      button.disabled = !option;
+      button.addEventListener('click', async () => {
+        await answer(index);
+      });
+      quizOptionsContainer.appendChild(button);
+      return button;
+    });
+  }
+
   setStepVisibility('question');
 }
 
@@ -333,6 +353,7 @@ async function initializeQuiz() {
 
   quizStartButton.disabled = false;
   quizStartButton.textContent = 'Iniciar';
+  score = basePoints;
   renderQuiz();
 }
 
@@ -342,12 +363,6 @@ quizStartButton.addEventListener('click', () => {
   }
 
   nextStep();
-});
-
-quizOptionButtons.forEach((button) => {
-  button.addEventListener('click', async () => {
-    await answer(Number(button.dataset.optionIndex));
-  });
 });
 
 quizMenuButton.addEventListener('click', () => {

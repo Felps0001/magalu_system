@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Oxford - Magalu System</title>
+  <meta name="theme-color" content="#0086ff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Posicionamento Magalu 2026">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../icons/icon-192.png?v=2" type="image/png">
+  <link rel="icon" href="../icons/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../icons/icon-192.png?v=2">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="quiz-mobile-body">
+  <main class="feed-mobile-shell quiz-mobile-shell">
+    <button id="quiz-drawer-backdrop" class="feed-backdrop" type="button" hidden aria-label="Fechar menu"></button>
+
+    <aside id="quiz-drawer" class="feed-drawer" aria-hidden="true" hidden>
+      <div class="feed-drawer-header">
+        <img class="feed-drawer-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
+        <button id="quiz-close-drawer" class="feed-drawer-close" type="button" aria-label="Fechar menu">×</button>
+      </div>
+
+      <div class="feed-drawer-user">
+        <strong id="quiz-drawer-user-name">Carregando usuario...</strong>
+        <p id="quiz-drawer-user-role">Quiz de treinamento do evento.</p>
+      </div>
+
+      <nav class="feed-drawer-nav" aria-label="Navegacao principal">
+        <a class="feed-drawer-link" href="../perfil/">Perfil</a>
+        <a class="feed-drawer-link" href="../agenda/">Agenda</a>
+        <a class="feed-drawer-link" href="../estandes/">Estandes</a>
+        <a class="feed-drawer-link" href="../feed/">Feed</a>
+      </nav>
+
+      <div class="feed-drawer-actions">
+        <button id="install-button" class="feed-drawer-button" type="button" hidden>Instalar app</button>
+        <button id="logout-button" class="feed-drawer-button feed-drawer-button--ghost" type="button">Sair</button>
+      </div>
+    </aside>
+
+    <section class="feed-top-panel" aria-label="Quiz Oxford">
+      <img class="feed-top-image" src="../assets/img/layer-topo.png" alt="Quiz Oxford">
+      <div class="feed-top-content">
+        <div class="feed-top-bar">
+          <img class="feed-top-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
+          <div class="feed-top-actions">
+            <button id="update-button" class="feed-top-icon-button" type="button" aria-label="Atualizar app" title="Atualizar app" data-update-icon-only="true">
+              <span class="sr-only update-button-label">Atualizar app</span>
+              <span class="feed-top-icon feed-top-icon--update" aria-hidden="true"></span>
+            </button>
+            <button id="quiz-menu-button" class="feed-top-menu" type="button" aria-controls="quiz-drawer" aria-expanded="false" aria-label="Abrir menu">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="feed-top-copy">
+          <h1 class="feed-top-title">Quiz</h1>
+          <p id="quiz-brand-subtitle" class="feed-top-subtitle">Responda a pergunta e acumule pontos no estande Oxford.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="quiz-mobile-panel">
+      <p id="update-message" class="form-message profile-mobile-update" hidden></p>
+      <section class="quiz-mobile-card">
+        <div id="quiz" class="quiz-container">
+          <section id="quiz-welcome-step" class="quiz-step">
+            <div class="quiz-header">
+              <p class="profile-section-kicker">Desafio interativo</p>
+              <h2 id="quiz-welcome-title" class="quiz-title">Bem-vindo ao Quiz Oxford!</h2>
+              <p id="quiz-welcome-description" class="quiz-description">Leia a pergunta, escolha uma alternativa e conclua seu check-in.</p>
+            </div>
+            <button id="quiz-start-button" class="quiz-btn" type="button">Iniciar</button>
+          </section>
+
+          <section id="quiz-question-step" class="quiz-step" hidden>
+            <div class="quiz-header">
+              <h2 id="quiz-question-title" class="quiz-title">Pergunta</h2>
+            </div>
+            <div class="quiz-options">
+              <button class="quiz-btn quiz-option-button" type="button" data-option-index="0">Opcao 1</button>
+              <button class="quiz-btn quiz-option-button" type="button" data-option-index="1">Opcao 2</button>
+              <button class="quiz-btn quiz-option-button" type="button" data-option-index="2">Opcao 3</button>
+            </div>
+          </section>
+
+          <section id="quiz-result-step" class="quiz-step" hidden>
+            <div class="quiz-header">
+              <p class="profile-section-kicker">Resultado final</p>
+              <h2 id="quiz-result-title" class="quiz-title">Obrigado pela participacao!</h2>
+              <p id="quiz-result-description" class="quiz-description">Seu check-in foi registrado.</p>
+            </div>
+            <div class="quiz-summary">
+              <div>
+                <span class="quiz-summary-label">Pontuacao</span>
+                <strong id="quiz-final-score">0 pontos</strong>
+              </div>
+              <div>
+                <span class="quiz-summary-label">Tempo total</span>
+                <strong id="quiz-final-time">0s</strong>
+              </div>
+            </div>
+            <div class="quiz-footer">Magalu System</div>
+          </section>
+        </div>
+      </section>
+      <a href="../perfil/" class="secondary-button quiz-back-link">Voltar para perfil</a>
+    </section>
+  </main>
+  <script src="../js/runtime-config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/pwa.js"></script>
+  <script src="../js/popup-config.js"></script>
+  <script src="../js/popup.js"></script>
+  <script>
+    window.MAGALU_QUIZ_CONFIG = {
+  "brandName": "Oxford",
+  "brandSubtitle": "Responda a pergunta e acumule pontos no estande Oxford.",
+  "brandDescription": "Valide seus conhecimentos e registre seu check-in ao final.",
+  "welcomeTitle": "Bem-vindo ao Quiz Oxford!",
+  "welcomeDescription": "Leia a pergunta, escolha uma alternativa e conclua seu check-in.",
+  "resultTitle": "Obrigado pela participacao!",
+  "resultDescription": "Seu check-in foi registrado.",
+  "quizOrigin": "quiz-oxford",
+  "estandeId": "69c4a9a80343759bac557258",
+  "basePoints": 1,
+  "questions": [
+    {
+      "question": "Qual o processo utilizado para fazer as decorações exclusivas Magalu?",
+      "options": [
+        {
+          "text": "TAMPOGRAFIA",
+          "points": 4
+        },
+        {
+          "text": "decalque",
+          "points": 0
+        },
+        {
+          "text": "digital",
+          "points": 0
+        },
+        {
+          "text": "manual",
+          "points": 0
+        }
+      ]
+    }
+  ]
+};
+  </script>
+  <script src="../js/quiz.js"></script>
+</body>
+</html>

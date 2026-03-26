@@ -32,7 +32,7 @@
       <nav class="feed-drawer-nav" aria-label="Navegacao principal">
         <a class="feed-drawer-link" href="../perfil/">Perfil</a>
         <a class="feed-drawer-link" href="../agenda/">Agenda</a>
-        <a class="feed-drawer-link" href="../scanner/">Scanner</a>
+        <a class="feed-drawer-link" href="../estandes/">Estandes</a>
         <a class="feed-drawer-link" href="../feed/">Feed</a>
       </nav>
 
@@ -62,7 +62,7 @@
 
         <div class="feed-top-copy">
           <h1 class="feed-top-title">Quiz</h1>
-          <p id="quiz-brand-subtitle" class="feed-top-subtitle">Responda as perguntas e acumule pontos no estande Samsung.</p>
+          <p id="quiz-brand-subtitle" class="feed-top-subtitle">Responda a pergunta e acumule pontos no estande Samsung.</p>
         </div>
       </div>
     </section>
@@ -75,7 +75,7 @@
             <div class="quiz-header">
               <p class="profile-section-kicker">Desafio interativo</p>
               <h2 id="quiz-welcome-title" class="quiz-title">Bem-vindo ao Quiz Samsung!</h2>
-              <p id="quiz-welcome-description" class="quiz-description">Responda as perguntas e ganhe pontos. Boa sorte!</p>
+              <p id="quiz-welcome-description" class="quiz-description">Leia a pergunta, escolha uma alternativa e conclua seu check-in.</p>
             </div>
             <button id="quiz-start-button" class="quiz-btn" type="button">Iniciar</button>
           </section>
@@ -121,50 +121,40 @@
   <script src="../js/popup.js"></script>
   <script>
     window.MAGALU_QUIZ_CONFIG = {
-      brandName: 'Samsung',
-      brandSubtitle: 'Responda as perguntas e acumule pontos no estande Samsung.',
-      brandDescription: 'Valide seus conhecimentos e registre seu check-in ao final.',
-      welcomeTitle: 'Bem-vindo ao Quiz Samsung!',
-      welcomeDescription: 'Responda as perguntas e ganhe pontos. Boa sorte!',
-      resultTitle: 'Obrigado pela participacao!',
-      resultDescription: 'Seu check-in foi registrado.',
-      quizOrigin: 'quiz-samsung',
-      estandeId: '69b96dccb6bf57ee026bda76',
-      questions: [
+  "brandName": "Samsung",
+  "brandSubtitle": "Responda a pergunta e acumule pontos no estande Samsung.",
+  "brandDescription": "Valide seus conhecimentos e registre seu check-in ao final.",
+  "welcomeTitle": "Bem-vindo ao Quiz Samsung!",
+  "welcomeDescription": "Leia a pergunta, escolha uma alternativa e conclua seu check-in.",
+  "resultTitle": "Obrigado pela participacao!",
+  "resultDescription": "Seu check-in foi registrado.",
+  "quizOrigin": "quiz-samsung",
+  "estandeId": "69c4a9a80343759bac557260",
+  "basePoints": 1,
+  "questions": [
+    {
+      "question": "Qual é a tecnologia de tela exclusiva mais associada às TVs premium da Samsung?",
+      "options": [
         {
-          question: 'Qual e a tecnologia de tela exclusiva da Samsung?',
-          options: [
-            { text: 'OLED', points: 0 },
-            { text: 'QLED', points: 2 },
-            { text: 'LCD', points: 0 }
-          ]
+          "text": "OLED",
+          "points": 0
         },
         {
-          question: 'Qual linha de smartphones Samsung e voltada para alta performance?',
-          options: [
-            { text: 'Galaxy A', points: 0 },
-            { text: 'Galaxy S', points: 2 },
-            { text: 'Galaxy M', points: 0 }
-          ]
+          "text": "QLED",
+          "points": 4
         },
         {
-          question: 'Qual recurso exclusivo da linha Galaxy Note?',
-          options: [
-            { text: 'S Pen', points: 4 },
-            { text: 'Camera tripla', points: 0 },
-            { text: 'Tela curva', points: 0 }
-          ]
+          "text": "LCD",
+          "points": 0
         },
         {
-          question: 'Qual e o sistema operacional dos smartphones Samsung?',
-          options: [
-            { text: 'Android', points: 2 },
-            { text: 'iOS', points: 0 },
-            { text: 'HarmonyOS', points: 0 }
-          ]
+          "text": "Plasma",
+          "points": 0
         }
       ]
-    };
+    }
+  ]
+};
   </script>
   <script src="../js/quiz.js"></script>
 </body>

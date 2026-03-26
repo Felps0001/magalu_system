@@ -1,0 +1,2523 @@
+{
+  "generatedAt": "2026-03-26T03:54:43.105Z",
+  "scoring": {
+    "scanPoints": 1,
+    "correctAnswerPoints": 4,
+    "maxPoints": 5
+  },
+  "estandes": [
+    {
+      "slug": "3-coracoes",
+      "nome": "3 Corações",
+      "estandeId": "69c4a9a80343759bac557265",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-3-coracoes",
+      "pagePath": "/quiz/3-coracoes.html",
+      "question": "Quantos sabores de capsulas tem a marca Tres?",
+      "options": [
+        {
+          "text": "1 - 25 sabores",
+          "isCorrect": false
+        },
+        {
+          "text": "2 - 30 sabores",
+          "isCorrect": false
+        },
+        {
+          "text": "3 - 45 sabores",
+          "isCorrect": false
+        },
+        {
+          "text": "4 - mais de 50 sabores",
+          "isCorrect": true
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "TRES CORACOES A",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "acer",
+      "nome": "Acer",
+      "estandeId": "69c4a9a70343759bac557224",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-acer",
+      "pagePath": "/quiz/acer.html",
+      "question": "Quantas linhas gamer há em exposição?",
+      "options": [
+        {
+          "text": "3 linhas",
+          "isCorrect": false
+        },
+        {
+          "text": "2 linhas",
+          "isCorrect": true
+        },
+        {
+          "text": "1 linha",
+          "isCorrect": false
+        },
+        {
+          "text": "Nenhuma",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "ACER (AGP)",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "aiwa",
+      "nome": "Aiwa",
+      "estandeId": "69c4a9a70343759bac557225",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-aiwa",
+      "pagePath": "/quiz/aiwa.html",
+      "question": "Qual é a principal diferença entre a Boombox BBS-01-B Aiwa e a Torre de som T2W02?",
+      "options": [
+        {
+          "text": "Não há diferença",
+          "isCorrect": true
+        },
+        {
+          "text": "A Boombox é fixa",
+          "isCorrect": false
+        },
+        {
+          "text": "A T2W02 possui bateria",
+          "isCorrect": false
+        },
+        {
+          "text": "A Boombox AWS-BBS-01-B possui 200W de potência, enquanto a Torre T2W02 entrega 2300W de potência",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "AIWA",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "aoc-estande-philips-aoc",
+      "nome": "AOC (estande Philips | AOC)",
+      "estandeId": "69c4a9a70343759bac557226",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-aoc-estande-philips-aoc",
+      "pagePath": "/quiz/aoc-estande-philips-aoc.html",
+      "question": "Qual as principais features da TV 50' AOC?",
+      "options": [
+        {
+          "text": "Soundbar embutido, Android TV",
+          "isCorrect": false
+        },
+        {
+          "text": "4K, Sem bordas, ROKU TV",
+          "isCorrect": true
+        },
+        {
+          "text": "Ambilight, ROKU TV",
+          "isCorrect": false
+        },
+        {
+          "text": "Ambilight, Full HD, Android TV",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "AOC",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "apple",
+      "nome": "Apple",
+      "estandeId": "69c4a9a70343759bac557227",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-apple",
+      "pagePath": "/quiz/apple.html",
+      "question": "Qual é o modelo de iPhone mais recente entre os lançamentos da Apple?",
+      "options": [
+        {
+          "text": "iPhone 17",
+          "isCorrect": true
+        },
+        {
+          "text": "iPhone 17e",
+          "isCorrect": false
+        },
+        {
+          "text": "iPhone 17 Pro Max",
+          "isCorrect": false
+        },
+        {
+          "text": "iPhone Air",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "APPLE",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "araplac",
+      "nome": "Araplac",
+      "estandeId": "69c4a9a70343759bac557228",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-araplac",
+      "pagePath": "/quiz/araplac.html",
+      "question": "Qual é o principal ramo de atuação e o tipo de produto fabricado pela Araplac Indústria?",
+      "options": [
+        {
+          "text": "Produtos alimentícios, como biscoitos, massas e laticínios",
+          "isCorrect": false
+        },
+        {
+          "text": "Móveis de madeira (como MDF e MDP), com grande foco em guarda-roupas, cômodas e móveis para dormitórios",
+          "isCorrect": true
+        },
+        {
+          "text": "Materiais de construção pesada, como cimento, areia e tijolos",
+          "isCorrect": false
+        },
+        {
+          "text": "Cosméticos e produtos de higiene pessoal",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "ARAPLAC INDUSTR",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "asus",
+      "nome": "ASUS",
+      "estandeId": "69c4a9a70343759bac557223",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-asus",
+      "pagePath": "/quiz/asus.html",
+      "question": "Qual a linha de notebooks é líder de vendas no Magazine Luiza?",
+      "options": [
+        {
+          "text": "1 ASUS Vivobook",
+          "isCorrect": false
+        },
+        {
+          "text": "2 Lenovo Ideapad",
+          "isCorrect": true
+        },
+        {
+          "text": "3 Dell Inspiron",
+          "isCorrect": false
+        },
+        {
+          "text": "4 Acer Aspire",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "ACBZ (ASUS)",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "atlas-dako",
+      "nome": "Atlas | Dako",
+      "estandeId": "69c4a9a70343759bac557229",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-atlas-dako",
+      "pagePath": "/quiz/atlas-dako.html",
+      "question": "Além dos famosos fogões de piso, a Atlas investe pesado em qual destes itens modernos que viraram tendência nas cozinhas planejadas?",
+      "options": [
+        {
+          "text": "Máquinas de lavar louça de 14 serviços",
+          "isCorrect": false
+        },
+        {
+          "text": "Cooktops (aqueles fogões de mesa em vidro temperado",
+          "isCorrect": true
+        },
+        {
+          "text": "Ares-condicionados split",
+          "isCorrect": false
+        },
+        {
+          "text": "Aspiradores de pó robô",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "ATLAS INDUSTRIA",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "bencorp",
+      "nome": "BenCorp",
+      "estandeId": "69c4a9a70343759bac55722a",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-bencorp",
+      "pagePath": "/quiz/bencorp.html",
+      "question": "O que é o Programa de Saúde Intregal da BenCorp?",
+      "options": [
+        {
+          "text": "Cuidado Preventivo de Saúde",
+          "isCorrect": true
+        },
+        {
+          "text": "Programa de pontos",
+          "isCorrect": false
+        },
+        {
+          "text": "Coach",
+          "isCorrect": false
+        },
+        {
+          "text": "Assessoria Financeira",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "BENCORP",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "bnp-paribas-cardif",
+      "nome": "BNP Paribas Cardif",
+      "estandeId": "69c4a9a70343759bac557231",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-bnp-paribas-cardif",
+      "pagePath": "/quiz/bnp-paribas-cardif.html",
+      "question": "Quais são os serviços abordados no estande Foca em Serviços?",
+      "options": [
+        {
+          "text": "Casa Protegida, Proteção Bem-Estar e Superprotegido.****",
+          "isCorrect": true
+        },
+        {
+          "text": "Casa Protegida, Garantia Estendida e Compra Segura",
+          "isCorrect": false
+        },
+        {
+          "text": "Proteção Roubo e Furto, Garantia Estendida e Casa Protegida",
+          "isCorrect": false
+        },
+        {
+          "text": "Proteção Bem-Estar, Superprotegido e Garantia Estendida.\nA opção A é a",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "CARDIF",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "brastemp-estande-brastemp-consul",
+      "nome": "Brastemp (estande Brastemp | Consul)",
+      "estandeId": "69c4a9a80343759bac557268",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-brastemp-estande-brastemp-consul",
+      "pagePath": "/quiz/brastemp-estande-brastemp-consul.html",
+      "question": "Sobre os modelos Brastemp BRM62 e BRE66, qual é o novo diferencial tecnológico que otimiza o consumo de energia e a conservação dos alimentos?",
+      "options": [
+        {
+          "text": "Tecnologia Xpert Inverter e Tecnologia B=Smart A",
+          "isCorrect": true
+        },
+        {
+          "text": "Sistema de degelo seco manual",
+          "isCorrect": false
+        },
+        {
+          "text": "Smart Cold e Frost Free",
+          "isCorrect": false
+        },
+        {
+          "text": "Prateleiras internas de acrílico",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "WHIRLPOOL S.A.",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "brinox",
+      "nome": "Brinox",
+      "estandeId": "69c4a9a70343759bac55722c",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-brinox",
+      "pagePath": "/quiz/brinox.html",
+      "question": "Qual é o mais novo jogo de panelas queridinho dos consumidores?",
+      "options": [
+        {
+          "text": "Vanilla",
+          "isCorrect": true
+        },
+        {
+          "text": "Carbon",
+          "isCorrect": false
+        },
+        {
+          "text": "Stone Wood",
+          "isCorrect": false
+        },
+        {
+          "text": "Olive",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "BRINOX",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "brinquedos-bandeirante",
+      "nome": "Brinquedos Bandeirante",
+      "estandeId": "69c4a9a70343759bac55722d",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-brinquedos-bandeirante",
+      "pagePath": "/quiz/brinquedos-bandeirante.html",
+      "question": "Como é o sistema para liberação da roda dianteira do triciclo Velobaby?",
+      "options": [
+        {
+          "text": "Fixo",
+          "isCorrect": false
+        },
+        {
+          "text": "Dispositivo de Roda Livre",
+          "isCorrect": true
+        },
+        {
+          "text": "Com parafuso",
+          "isCorrect": false
+        },
+        {
+          "text": "Sistema aperta e soltaB - Dispositivo de Roda livre",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "BRINQUEDOS BAND",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "britania-estande-britania-philco",
+      "nome": "Britânia (estande Britânia | Philco)",
+      "estandeId": "69c4a9a70343759bac55722e",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-britania-estande-britania-philco",
+      "pagePath": "/quiz/britania-estande-britania-philco.html",
+      "question": "A Britânia está presente em milhões de casas pelo Brasil. Qual é o percentual de lares que possuem pelo menos 1 produto da marca?",
+      "options": [
+        {
+          "text": "70%",
+          "isCorrect": true
+        },
+        {
+          "text": "50%",
+          "isCorrect": false
+        },
+        {
+          "text": "40%",
+          "isCorrect": false
+        },
+        {
+          "text": "98%",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "BRITANIA ELETRO",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "caemmun",
+      "nome": "Caemmun",
+      "estandeId": "69c4a9a70343759bac55722f",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-caemmun",
+      "pagePath": "/quiz/caemmun.html",
+      "question": "Qual é o principal tipo de produto fabricado e vendido pela marca Caemmun?",
+      "options": [
+        {
+          "text": "Roupas e calçados esportivos",
+          "isCorrect": false
+        },
+        {
+          "text": "Alimentos e bebidas",
+          "isCorrect": false
+        },
+        {
+          "text": "Móveis (como racks, estantes e painéis para TV",
+          "isCorrect": true
+        },
+        {
+          "text": "Carros e peças automotivas",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "Caemmun",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "candide",
+      "nome": "Candide",
+      "estandeId": "69c4a9a70343759bac557230",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-candide",
+      "pagePath": "/quiz/candide.html",
+      "question": "Quais são os jogadores brasileiros presentes na coleção FIFA World Cup 2026™ Ballers?",
+      "options": [
+        {
+          "text": "Casemiro, Gabriel Magalhães e Alisson Becker certa",
+          "isCorrect": true
+        },
+        {
+          "text": "Neymar Jr., Vinícius Jr. e Rodrygo",
+          "isCorrect": false
+        },
+        {
+          "text": "Ronaldo, Ronaldinho e Kaká",
+          "isCorrect": false
+        },
+        {
+          "text": "Pelé, Zico e Romário",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "CANDIDE",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "colli",
+      "nome": "Colli",
+      "estandeId": "69c4a9a70343759bac557232",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-colli",
+      "pagePath": "/quiz/colli.html",
+      "question": "A Colli Bikes é uma fabricante 100% brasileira que se tornou uma das maiores marcas de ciclismo do país. Em qual estado brasileiro a empresa foi fundada e possui suas fábricas?",
+      "options": [
+        {
+          "text": "Zona Franca de Manaus (Amazonas",
+          "isCorrect": false
+        },
+        {
+          "text": "Sarandi e Fazenda Rio Grande (Paraná",
+          "isCorrect": true
+        },
+        {
+          "text": "São Bernardo do Campo (São Paulo",
+          "isCorrect": false
+        },
+        {
+          "text": "Joinville (Santa Catarina",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "COLLI BIKES",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "colormaq",
+      "nome": "Colormaq",
+      "estandeId": "69c4a9a70343759bac557233",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-colormaq",
+      "pagePath": "/quiz/colormaq.html",
+      "question": "Qual é o nome da nova linha de purificadores e bebedouros de água da Colormaq apresentada no evento?",
+      "options": [
+        {
+          "text": "Linha Color LIFE",
+          "isCorrect": true
+        },
+        {
+          "text": "Linha PURELife",
+          "isCorrect": false
+        },
+        {
+          "text": "Linha PRO",
+          "isCorrect": false
+        },
+        {
+          "text": "Linha FRESH",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "COLORMAQ",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "consorcio-magalu",
+      "nome": "Consórcio Magalu",
+      "estandeId": "69c4a9a70343759bac557234",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-consorcio-magalu",
+      "pagePath": "/quiz/consorcio-magalu.html",
+      "question": "O que dá para realizar com o Consórcio Magalu hoje?",
+      "options": [
+        {
+          "text": "Comprar o primeiro carro ou trocar o da garagem",
+          "isCorrect": false
+        },
+        {
+          "text": "Conquistar a casa própria ou investir em imóveis",
+          "isCorrect": false
+        },
+        {
+          "text": "Planejar a compra da sua próxima moto",
+          "isCorrect": false
+        },
+        {
+          "text": "Todas as anteriores! No Magalu, tem consórcio pra tudo",
+          "isCorrect": true
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "CONSÓRCIO MAGALU",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "consul-estande-brastemp-consul",
+      "nome": "Consul (estande Brastemp | Consul)",
+      "estandeId": "69c4a9a80343759bac557269",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-consul-estande-brastemp-consul",
+      "pagePath": "/quiz/consul-estande-brastemp-consul.html",
+      "question": "Sobre os modelos Brastemp BRM62 e BRE66, qual é o novo diferencial tecnológico que otimiza o consumo de energia e a conservação dos alimentos?",
+      "options": [
+        {
+          "text": "Tecnologia Xpert Inverter e Tecnologia B=Smart A",
+          "isCorrect": true
+        },
+        {
+          "text": "Sistema de degelo seco manual",
+          "isCorrect": false
+        },
+        {
+          "text": "Smart Cold e Frost Free",
+          "isCorrect": false
+        },
+        {
+          "text": "Prateleiras internas de acrílico",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "WHIRLPOOL S.A.",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "coop-luiza",
+      "nome": "Coop Luiza",
+      "estandeId": "69c4a9a70343759bac557235",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-coop-luiza",
+      "pagePath": "/quiz/coop-luiza.html",
+      "question": "O que é a CoopLuiza e a qual público principal ela atende?",
+      "options": [
+        {
+          "text": "Uma rede de supermercados e farmácias cooperativos com atendimento aberto ao público em geral",
+          "isCorrect": false
+        },
+        {
+          "text": "Uma cooperativa de crédito exclusiva, criada para oferecer soluções financeiras (como empréstimos e investimentos) aos colaboradores do Magazine Luiza e de suas empresas coligadas",
+          "isCorrect": true
+        },
+        {
+          "text": "Uma marca própria do Magazine Luiza focada apenas na fabricação e venda de móveis e artigos de decoração",
+          "isCorrect": false
+        },
+        {
+          "text": "Uma empresa de logística parceira, responsável por realizar as entregas rápidas das compras feitas no aplicativo do Magalu",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "COOP LUIZA",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "cosco-kids",
+      "nome": "Cosco Kids",
+      "estandeId": "69c4a9a70343759bac557239",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-cosco-kids",
+      "pagePath": "/quiz/cosco-kids.html",
+      "question": "Qual diferencial torna o Lummy Trio Isofix um destaque no portfólio da Cosco Kids?",
+      "options": [
+        {
+          "text": "É o primeiro Travel System da Cosco Kids que soma carrinho moisés e base veicular ISOFIX",
+          "isCorrect": true
+        },
+        {
+          "text": "É um carrinho guarda-chuva ultracompacto para cabine de avião",
+          "isCorrect": false
+        },
+        {
+          "text": "Possui sistema automático de balanço no assento",
+          "isCorrect": false
+        },
+        {
+          "text": "Pode ser usado como cadeira de refeição portátil:",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "DOREL",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "cozinhas-itatiaia",
+      "nome": "Cozinhas Itatiaia",
+      "estandeId": "69c4a9a70343759bac557244",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-cozinhas-itatiaia",
+      "pagePath": "/quiz/cozinhas-itatiaia.html",
+      "question": "Em qual cidade brasileira foi fundada a Itatiaia, hoje uma das maiores fabricantes de cozinhas de aço do mundo?",
+      "options": [
+        {
+          "text": "São Paulo (SP",
+          "isCorrect": false
+        },
+        {
+          "text": "Ubá (MG",
+          "isCorrect": true
+        },
+        {
+          "text": "Curitiba (PR",
+          "isCorrect": false
+        },
+        {
+          "text": "Joinville (SC",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "ITATIAIA ELETRO",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "dell-technologies",
+      "nome": "DELL Technologies",
+      "estandeId": "69c4a9a70343759bac557236",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-dell-technologies",
+      "pagePath": "/quiz/dell-technologies.html",
+      "question": "A Dell é a melhor marca de notebook pois seus produtos tem...",
+      "options": [
+        {
+          "text": "Design com estilo",
+          "isCorrect": false
+        },
+        {
+          "text": "Muita performance",
+          "isCorrect": false
+        },
+        {
+          "text": "Processadores Intel Core",
+          "isCorrect": false
+        },
+        {
+          "text": "Todas ass acima",
+          "isCorrect": true
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "DELL",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "demobile",
+      "nome": "Demóbile",
+      "estandeId": "69c4a9a70343759bac557237",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-demobile",
+      "pagePath": "/quiz/demobile.html",
+      "question": "Qual é a principal área de especialização e o tipo de produtos fabricados pela marca Demóbile?",
+      "options": [
+        {
+          "text": "Equipamentos eletrónicos de última geração, como smartphones, relógios inteligentes e tablets",
+          "isCorrect": false
+        },
+        {
+          "text": "Mobiliário em painéis de madeira (como MDP e MDF), sendo muito reconhecida pelos seus roupeiros, cómodas e móveis para o quarto",
+          "isCorrect": true
+        },
+        {
+          "text": "Artigos desportivos, focando-se no fabrico de calçado, mochilas e vestuário para atividades ao ar livre",
+          "isCorrect": false
+        },
+        {
+          "text": "Eletrodomésticos de grande porte, como máquinas de lavar roupa, secadoras e frigoríficos",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "DEMOBILE",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "dj-moveis",
+      "nome": "DJ Móveis",
+      "estandeId": "69c4a9a70343759bac557238",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-dj-moveis",
+      "pagePath": "/quiz/dj-moveis.html",
+      "question": "Qual é a principal área de especialização e o tipo de produtos fabricados pela marca DJ Móveis?",
+      "options": [
+        {
+          "text": "Eletrodomésticos para a cozinha, como frigoríficos, fogões e micro-ondas",
+          "isCorrect": false
+        },
+        {
+          "text": "Mobiliário em MDF e MDP, com grande destaque para peças de sala de estar (painéis de TV, móveis para a televisão) e sala de jantar (mesas, cadeiras e aparadores",
+          "isCorrect": true
+        },
+        {
+          "text": "Equipamentos informáticos e cadeiras exclusivamente dedicadas ao público gamer",
+          "isCorrect": false
+        },
+        {
+          "text": "Vestuário de cama, mesa e banho, e pequenos artigos de decoração em cerâmica",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "DJ MOVEIS",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "electrolux",
+      "nome": "Electrolux",
+      "estandeId": "69c4a9a70343759bac55723a",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-electrolux",
+      "pagePath": "/quiz/electrolux.html",
+      "question": "O que diferencia a Electrolux como a marca mais confiável e inovadora entre os fabricantes de eletrodomésticos no Brasil?",
+      "options": [
+        {
+          "text": "Ausência de produtos de linha branca. (errada",
+          "isCorrect": true
+        },
+        {
+          "text": "Foco apenas em eletroportáteis. (errada",
+          "isCorrect": false
+        },
+        {
+          "text": "Portfólio exclusivamente de utensílios. (errada",
+          "isCorrect": false
+        },
+        {
+          "text": "100 anos de inovação, portfólio completo e liderança em vendas de eletrodomésticos no país",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "ELECTROLUX DO B",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "epoca-cosmeticos",
+      "nome": "Época Cosméticos",
+      "estandeId": "69c4a9a70343759bac55723b",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-epoca-cosmeticos",
+      "pagePath": "/quiz/epoca-cosmeticos.html",
+      "question": "Qual é o principal setor de atuação e o tipo de produtos comercializados pela Época Cosméticos?",
+      "options": [
+        {
+          "text": "Produtos alimentares e suplementos vitamínicos para desportistas",
+          "isCorrect": false
+        },
+        {
+          "text": "Produtos de beleza, como perfumes importados, maquilhagem, dermocosméticos e artigos para o cuidado do cabelo",
+          "isCorrect": true
+        },
+        {
+          "text": "Vestuário de alta-costura, calçado em pele e acessórios de moda",
+          "isCorrect": false
+        },
+        {
+          "text": "Artigos de papelaria, livros e material de escritório",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "ÉPOCA COSMÉTICOS",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "epson",
+      "nome": "Epson",
+      "estandeId": "69c4a9a70343759bac55723c",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-epson",
+      "pagePath": "/quiz/epson.html",
+      "question": "Qual linha de impressoras é 100% sem cartucho e líder de mercado?",
+      "options": [
+        {
+          "text": "Deskjet",
+          "isCorrect": true
+        },
+        {
+          "text": "Ecotank",
+          "isCorrect": false
+        },
+        {
+          "text": "Laserjet",
+          "isCorrect": false
+        },
+        {
+          "text": "Officejet",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "EPSON DO BRASIL",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "esmaltec",
+      "nome": "Esmaltec",
+      "estandeId": "69c4a9a70343759bac55723d",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-esmaltec",
+      "pagePath": "/quiz/esmaltec.html",
+      "question": "Qual é a nova linha de Fogões da Esmaltec?",
+      "options": [
+        {
+          "text": "Diamante",
+          "isCorrect": false
+        },
+        {
+          "text": "Pop",
+          "isCorrect": false
+        },
+        {
+          "text": "Ideal",
+          "isCorrect": true
+        },
+        {
+          "text": "Superletra C – Ideal",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "ESMALTEC",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "estante-virtual",
+      "nome": "Estante Virtual",
+      "estandeId": "69c4a9a70343759bac55723e",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-estante-virtual",
+      "pagePath": "/quiz/estante-virtual.html",
+      "question": "Em 2020, a Estante Virtual, famosa por reunir o acervo de milhares de alfarrabistas (sebos) e pequenas livrarias, foi adquirida e passou a integrar o ecossistema de qual gigante do retalho brasileiro?",
+      "options": [
+        {
+          "text": "Amazon Brasil",
+          "isCorrect": false
+        },
+        {
+          "text": "Mercado Livre",
+          "isCorrect": false
+        },
+        {
+          "text": "Magazine Luiza (Magalu",
+          "isCorrect": true
+        },
+        {
+          "text": "B2W Digital (Americanas",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "ESTANTE VIRTUAL",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "ga-ma-italy",
+      "nome": "GA.MA Italy",
+      "estandeId": "69c4a9a70343759bac55722b",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-ga-ma-italy",
+      "pagePath": "/quiz/ga-ma-italy.html",
+      "question": "Qual a potência do modelador UniQ?",
+      "options": [
+        {
+          "text": "300W\nB",
+          "isCorrect": true
+        },
+        {
+          "text": "500W (certa)\nC - 1800W\nC",
+          "isCorrect": false
+        },
+        {
+          "text": "000W",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "BRASITECH INDUS (Gama)",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "gazin",
+      "nome": "Gazin",
+      "estandeId": "69c4a9a70343759bac55723f",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-gazin",
+      "pagePath": "/quiz/gazin.html",
+      "question": "Qual é o principal setor de atuação e os produtos de maior destaque comercializados e fabricados pelo Grupo Gazin?",
+      "options": [
+        {
+          "text": "Produtos de higiene, cosméticos e maquilhagem, vendidos exclusivamente através de consultoras ao domicílio",
+          "isCorrect": false
+        },
+        {
+          "text": "Venda a retalho de mobiliário, eletrodomésticos e eletrónicos, destacando-se também como um dos maiores fabricantes de colchões do Brasil",
+          "isCorrect": true
+        },
+        {
+          "text": "Equipamentos pesados, tratores e maquinaria direcionada exclusivamente para a indústria agropecuária",
+          "isCorrect": false
+        },
+        {
+          "text": "Vestuário de alta-costura, calçado em pele e acessórios de moda de luxo",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "GAZIN",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "goodyear",
+      "nome": "Goodyear",
+      "estandeId": "69c4a9a70343759bac557240",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-goodyear",
+      "pagePath": "/quiz/goodyear.html",
+      "question": "Quais benefícios a familia Goodyear Direction 2 oferece?",
+      "options": [
+        {
+          "text": "Maior durabilidade",
+          "isCorrect": false
+        },
+        {
+          "text": "Menor consumo de combustível",
+          "isCorrect": false
+        },
+        {
+          "text": "Menor distância de frenagem",
+          "isCorrect": false
+        },
+        {
+          "text": "Todas as anteriores",
+          "isCorrect": true
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "GOODYEAR DO BRA",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "gree",
+      "nome": "Gree",
+      "estandeId": "69c4a9a70343759bac557241",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-gree",
+      "pagePath": "/quiz/gree.html",
+      "question": "Qual empresa é lider mundial em vendas de Ar-Condicionado?",
+      "options": [
+        {
+          "text": "Gree",
+          "isCorrect": true
+        },
+        {
+          "text": "Midea - Errada",
+          "isCorrect": false
+        },
+        {
+          "text": "Samsung - errada",
+          "isCorrect": false
+        },
+        {
+          "text": "LG - errada",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "GREE",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "hp",
+      "nome": "HP",
+      "estandeId": "69c4a9a70343759bac557242",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-hp",
+      "pagePath": "/quiz/hp.html",
+      "question": "Quantas páginas consigo imprimir com as garrafas de tinta que acompanham a HP Tank 581?",
+      "options": [
+        {
+          "text": "Até 4500 páginas em preto ou 7500 páginas em cores",
+          "isCorrect": true
+        },
+        {
+          "text": "Até 12000 páginas em preto ou 6000 páginas em cores",
+          "isCorrect": false
+        },
+        {
+          "text": "Até 6000 páginas em preto ou 7500 páginas em cores",
+          "isCorrect": false
+        },
+        {
+          "text": "Até 8000 páginas em preto ou 6000 páginas em cores",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "HP",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "jbl",
+      "nome": "JBL",
+      "estandeId": "69c4a9a70343759bac557222",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-jbl",
+      "pagePath": "/quiz/jbl.html",
+      "question": "Quais são as novas cores da Boombox 4 JBL (no Brasil)?",
+      "options": [
+        {
+          "text": "1 PRETA E CAMUFLADA",
+          "isCorrect": true
+        },
+        {
+          "text": "2 AZUL, PRETA E CAMUFLADA",
+          "isCorrect": false
+        },
+        {
+          "text": "3 BRANCA, LARANJA, MARROM E AZUL",
+          "isCorrect": false
+        },
+        {
+          "text": "4 BRANCA, PRETA, LARANJA, MARROM E AZUL",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "(JBL) HARMAN",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "jovi",
+      "nome": "Jovi",
+      "estandeId": "69c4a9a70343759bac557245",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-jovi",
+      "pagePath": "/quiz/jovi.html",
+      "question": "Quantos mega pixels tem a câmera principal do JOVI V70?",
+      "options": [
+        {
+          "text": "32MP",
+          "isCorrect": true
+        },
+        {
+          "text": "50MP",
+          "isCorrect": false
+        },
+        {
+          "text": "100MP",
+          "isCorrect": false
+        },
+        {
+          "text": "200MP",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "JOVI",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "kabum",
+      "nome": "KaBuM!",
+      "estandeId": "69c4a9a70343759bac557246",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-kabum",
+      "pagePath": "/quiz/kabum.html",
+      "question": "Qual o maior e-commerce de tecnologia e games da America Latina?",
+      "options": [
+        {
+          "text": "KaBuM!",
+          "isCorrect": true
+        },
+        {
+          "text": "Ninja Bames",
+          "isCorrect": false
+        },
+        {
+          "text": "Barum e Jobum",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "KABUM",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "lego",
+      "nome": "LEGO",
+      "estandeId": "69c4a9a70343759bac557247",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-lego",
+      "pagePath": "/quiz/lego.html",
+      "question": "Quais são os principais beneficios dos produtos LEGO®?",
+      "options": [
+        {
+          "text": "Desenvolve habilidades do século 21",
+          "isCorrect": false
+        },
+        {
+          "text": "são itens de qualidade e duráveis",
+          "isCorrect": false
+        },
+        {
+          "text": "gera um bem-estar emocional",
+          "isCorrect": false
+        },
+        {
+          "text": "todas ass anteriores",
+          "isCorrect": true
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "LEGO",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "lenovo",
+      "nome": "Lenovo",
+      "estandeId": "69c4a9a70343759bac557248",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-lenovo",
+      "pagePath": "/quiz/lenovo.html",
+      "question": "A Lenovo é patrocinador Oficial de qual grande evento ?",
+      "options": [
+        {
+          "text": "Campeonato Brasileiro ?",
+          "isCorrect": false
+        },
+        {
+          "text": "Copinha ?",
+          "isCorrect": false
+        },
+        {
+          "text": "Libertadores ?",
+          "isCorrect": false
+        },
+        {
+          "text": "Copa do Mundo FIFA 2026 ?",
+          "isCorrect": true
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "LENOVO",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "lev",
+      "nome": "Lev",
+      "estandeId": "69c4a9a70343759bac557249",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-lev",
+      "pagePath": "/quiz/lev.html",
+      "question": "Qual modelo da bike mais potente da LEV entrará em linha no Magalu?",
+      "options": [
+        {
+          "text": "P500",
+          "isCorrect": false
+        },
+        {
+          "text": "P1000",
+          "isCorrect": false
+        },
+        {
+          "text": "Cruiser",
+          "isCorrect": true
+        },
+        {
+          "text": "Cruiser C",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "LEV Bikes",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "lg",
+      "nome": "LG",
+      "estandeId": "69c4a9a70343759bac55724a",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-lg",
+      "pagePath": "/quiz/lg.html",
+      "question": "Em 2026 a LG comemora quantos anos de presença no Brasil?",
+      "options": [
+        {
+          "text": "20 anos",
+          "isCorrect": true
+        },
+        {
+          "text": "25 anos",
+          "isCorrect": false
+        },
+        {
+          "text": "30 anos",
+          "isCorrect": false
+        },
+        {
+          "text": "40 anos",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "LG ELECTRONICS",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "luizacred",
+      "nome": "Luizacred",
+      "estandeId": "69c4a9a80343759bac55724b",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-luizacred",
+      "pagePath": "/quiz/luizacred.html",
+      "question": "O CARTÃO LUIZA oferece ao cliente um programa de recompensas com mais de 100 benefícios. Qual é o nome deste programa?",
+      "options": [
+        {
+          "text": "Programa Pontua Tudo",
+          "isCorrect": false
+        },
+        {
+          "text": "Programa Pontos Sem Limite",
+          "isCorrect": false
+        },
+        {
+          "text": "Clube do Pontinho",
+          "isCorrect": false
+        },
+        {
+          "text": "Mastercard Surpreenda",
+          "isCorrect": true
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "LUIZA CRED",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "luizzi",
+      "nome": "Luizzi",
+      "estandeId": "69c4a9a80343759bac55724c",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-luizzi",
+      "pagePath": "/quiz/luizzi.html",
+      "question": "O que garante mais conforto e sustentação no assento do Sofá Milano?",
+      "options": [
+        {
+          "text": "Apenas espuma simples",
+          "isCorrect": false
+        },
+        {
+          "text": "Molas espirais e molas pocket",
+          "isCorrect": true
+        },
+        {
+          "text": "Estrutura de ferro",
+          "isCorrect": false
+        },
+        {
+          "text": "Apenas percintas rígidas\n: B",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "LUIZZI INDUSTRI",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "magalu-marketplace",
+      "nome": "Magalu Marketplace",
+      "estandeId": "69c4a9a80343759bac55724d",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-magalu-marketplace",
+      "pagePath": "/quiz/magalu-marketplace.html",
+      "question": "Um cliente entra na sua loja procurando um item específico, por exemplo, itens de petshop, que não está disponível no estoque local e nem no CD do Magalu. Para garantir a satisfação do cliente e não perder a venda, qual deve ser a sua ação ou orientação à equipe?",
+      "options": [
+        {
+          "text": "Informar que não vende o produto na loja e sugerir que o cliente retorne em outra oportunidade",
+          "isCorrect": true
+        },
+        {
+          "text": "Orientar o cliente a baixar o SuperApp e tentar buscar o produto por conta própria em casa",
+          "isCorrect": false
+        },
+        {
+          "text": "Sugerir que o cliente procure em lojas de departamentos vizinhas que possam trabalhar com o produto",
+          "isCorrect": false
+        },
+        {
+          "text": "Utilizar o Mobile Vendas para buscar o produto, oferecendo a variedade de lojistas parceiros (sellers) com a conveniência de pagar ali mesmo na loja",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "MAGALU MARKETPLACE",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "master-comfort",
+      "nome": "Master Comfort",
+      "estandeId": "69c4a9a80343759bac55724e",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-master-comfort",
+      "pagePath": "/quiz/master-comfort.html",
+      "question": "Qual é a principal categoria de produtos da marca Master Comfort, amplamente vendida em grandes sites e redes de varejo?",
+      "options": [
+        {
+          "text": "Fogões e eletrodomésticos de cozinha",
+          "isCorrect": false
+        },
+        {
+          "text": "Móveis planejados para escritórios",
+          "isCorrect": false
+        },
+        {
+          "text": "Itens de cama e banho (como travesseiros, protetores de colchão e mantas",
+          "isCorrect": true
+        },
+        {
+          "text": "Calçados esportivos de alta performance",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "MASTER COMFORT",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "matrix",
+      "nome": "Matrix",
+      "estandeId": "69c4a9a80343759bac55724f",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-matrix",
+      "pagePath": "/quiz/matrix.html",
+      "question": "No mercado de móveis brasileiro, a Matrix é amplamente conhecida por ser especialista em qual destes produtos para relaxar na sala ou no quarto?",
+      "options": [
+        {
+          "text": "Mesas de vidro para jantar",
+          "isCorrect": true
+        },
+        {
+          "text": "Beliches e treliches de madeira",
+          "isCorrect": false
+        },
+        {
+          "text": "Poltronas (especialmente as do \"Papai\") e Sofás-Cama",
+          "isCorrect": false
+        },
+        {
+          "text": "Guarda-roupas de 8 portas",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "MATRIX",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "mattel",
+      "nome": "Mattel",
+      "estandeId": "69c4a9a80343759bac557250",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-mattel",
+      "pagePath": "/quiz/mattel.html",
+      "question": "Qual foi o brinquedo lançado em 1959 que revolucionou a Mattel e se tornou o item mais vendido da história da empresa até hoje?",
+      "options": [
+        {
+          "text": "Hot Wheels (Carrinhos de metal",
+          "isCorrect": false
+        },
+        {
+          "text": "Barbie (Boneca fashion",
+          "isCorrect": true
+        },
+        {
+          "text": "Masters of the Universe (He-Man",
+          "isCorrect": false
+        },
+        {
+          "text": "Fisher-Price (Brinquedos educativos",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "MATTEL",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "midea",
+      "nome": "Midea",
+      "estandeId": "69c4a9a80343759bac557262",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-midea",
+      "pagePath": "/quiz/midea.html",
+      "question": "Quais são as características da Geladeira Frost Free Duplex 394L Inverter Midea?",
+      "options": [
+        {
+          "text": "Frost Free, Compartimento para garrafas, Prateleiras de Vidro, Gaveta Hortifruti",
+          "isCorrect": false
+        },
+        {
+          "text": "Frost Free, Compartimento extra frio, Prateleiras de Vidro, Gaveta Hortifruti",
+          "isCorrect": true
+        },
+        {
+          "text": "Frost Free, Compartimento extra frio, Prateleiras de plástico, Gaveta Hortifruti",
+          "isCorrect": false
+        },
+        {
+          "text": "Frost Free, Compartimento para garrafas, Prateleiras de Plástico, Gaveta Hortifruti",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "SPRINGER CARRIE (MIDEA)",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "mondial",
+      "nome": "Mondial",
+      "estandeId": "69c4a9a80343759bac557251",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-mondial",
+      "pagePath": "/quiz/mondial.html",
+      "question": "Qual é a Air Fryer da Mondial mais vendida no Magazine Luiza?",
+      "options": [
+        {
+          "text": "Air Fryer Mondial AFN-40-BI 4L",
+          "isCorrect": true
+        },
+        {
+          "text": "Air Fryer Mondial AF-36-BI Pratic 3,6L",
+          "isCorrect": false
+        },
+        {
+          "text": "Air Fryer Mondial Forno Oven 12L AFON-12L-BI",
+          "isCorrect": false
+        },
+        {
+          "text": "Air Fryer Mondial AFN-80-BI 8L:",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "MONDIAL",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "motorola",
+      "nome": "Motorola",
+      "estandeId": "69c4a9a80343759bac557252",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-motorola",
+      "pagePath": "/quiz/motorola.html",
+      "question": "Qual é o produto mais premium da Motorola em 2026? O Mais novo flagship da marca?",
+      "options": [
+        {
+          "text": "Motorola Signature",
+          "isCorrect": true
+        },
+        {
+          "text": "Motorola Razr",
+          "isCorrect": false
+        },
+        {
+          "text": "Motorola Edge",
+          "isCorrect": false
+        },
+        {
+          "text": "Moto G",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "MOTOROLA",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "nesher",
+      "nome": "Nesher",
+      "estandeId": "69c4a9a70343759bac557243",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-nesher",
+      "pagePath": "/quiz/nesher.html",
+      "question": "Qual é a principal área de especialização e o tipo de produtos fabricados pela Indústria de Móveis Nesher?",
+      "options": [
+        {
+          "text": "Mobiliário de escritório corporativo, como secretárias ergonómicas, arquivos e cadeiras giratórias",
+          "isCorrect": false
+        },
+        {
+          "text": "Móveis para a cozinha, destacando-se pela produção de armários, módulos e bancadas com um design moderno",
+          "isCorrect": true
+        },
+        {
+          "text": "Mobiliário de exterior e jardim, fabricado predominantemente em alumínio, madeira rústica e vime sintético",
+          "isCorrect": false
+        },
+        {
+          "text": "Estofos e sofás de luxo revestidos a pele natural para salas de estar e de cinema em casa",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "INDUSTRIA DE MOVEIS NESHER",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "netshoes",
+      "nome": "Netshoes",
+      "estandeId": "69c4a9a80343759bac557253",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-netshoes",
+      "pagePath": "/quiz/netshoes.html",
+      "question": "Onde foi aberta a primeira loja física da Netshoes em 2000?",
+      "options": [
+        {
+          "text": "Dentro de um shopping center em São Paulo (SP",
+          "isCorrect": true
+        },
+        {
+          "text": "Em uma garagem no interior de Minas Gerais",
+          "isCorrect": false
+        },
+        {
+          "text": "Em uma pequena sobreloja no centro de Curitiba (PR",
+          "isCorrect": false
+        },
+        {
+          "text": "No estacionamento de uma academia no Rio de Janeiro (RJ",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "NETSHOES",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "oppo",
+      "nome": "OPPO",
+      "estandeId": "69c4a9a80343759bac557256",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-oppo",
+      "pagePath": "/quiz/oppo.html",
+      "question": "A OPPO pertence a um conglomerado chinês chamado BBK Electronics. Qual destas outras marcas de smartphones também faz parte do mesmo grupo?",
+      "options": [
+        {
+          "text": "Xiaomi",
+          "isCorrect": false
+        },
+        {
+          "text": "Vivo (a marca de aparelhos, não a operadora",
+          "isCorrect": true
+        },
+        {
+          "text": "Huawei",
+          "isCorrect": false
+        },
+        {
+          "text": "Motorola",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "OPPO",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "oster-cadence",
+      "nome": "Oster / Cadence",
+      "estandeId": "69c4a9a80343759bac557257",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-oster-cadence",
+      "pagePath": "/quiz/oster-cadence.html",
+      "question": "Cadence e Oster são marcas que se destacam no mercado de eletroportáteis, cada uma com sua identidade própria. Ambas têm em comum o objetivo de oferecer soluções que transformam o dia a dia  dos consumidores, mas se diferenciam na forma como traduzem esse propósito em seus produtos e posicionamento.\nE agora é com vocês, Cadence x Oster: qual alternativa define melhor cada marca?",
+      "options": [
+        {
+          "text": "Cadence: Atual, acessível e inovadora / Oster: Versátil, sofisticada e tecnológica",
+          "isCorrect": false
+        },
+        {
+          "text": "Cadence: Premium, moderna e decorativa /  Oster: Popular,  básica e versátil ❌",
+          "isCorrect": false
+        },
+        {
+          "text": "Cadence: Divertida e simples / Oster: Cara e decorativa",
+          "isCorrect": true
+        },
+        {
+          "text": "Cadence: Prática e básica /  Oster: Premium e moderna ❌",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "OSTER",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "oxford",
+      "nome": "Oxford",
+      "estandeId": "69c4a9a80343759bac557258",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-oxford",
+      "pagePath": "/quiz/oxford.html",
+      "question": "Qual o processo utilizado para fazer as decorações exclusivas Magalu?",
+      "options": [
+        {
+          "text": "TAMPOGRAFIA",
+          "isCorrect": true
+        },
+        {
+          "text": "decalque",
+          "isCorrect": false
+        },
+        {
+          "text": "digital",
+          "isCorrect": false
+        },
+        {
+          "text": "manual",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "OXFORD",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "philco-estande-britania-philco",
+      "nome": "Philco (estande Britânia | Philco)",
+      "estandeId": "69c4a9a80343759bac557259",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-philco-estande-britania-philco",
+      "pagePath": "/quiz/philco-estande-britania-philco.html",
+      "question": "A Philco é uma marca conhecida por qualidade e inovação, com mais de 90 anos de história. Qual dessas afirmações é verdadeira?",
+      "options": [
+        {
+          "text": "Possui portfólio de TV's apenas com sistema Roku TV",
+          "isCorrect": false
+        },
+        {
+          "text": "Oferece Fast Smart TV's com velocidade de50% mais rápida",
+          "isCorrect": true
+        },
+        {
+          "text": "Possui portfólio de TV's apenas com sistema Android TV",
+          "isCorrect": false
+        },
+        {
+          "text": "Não oferece opções de Smart TV, Full HD, 4k, LED, QLED",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "PHILCO",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "philips",
+      "nome": "Philips",
+      "estandeId": "69c4a9a80343759bac55725a",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-philips",
+      "pagePath": "/quiz/philips.html",
+      "question": "Qual o produto que raspa, apara e contorna a barba sem cortes, arranhões e que a lâmina tem duração de até 4 meses?",
+      "options": [
+        {
+          "text": "Aparador de barba",
+          "isCorrect": true
+        },
+        {
+          "text": "Barbeador elétrico",
+          "isCorrect": false
+        },
+        {
+          "text": "Bodygroom",
+          "isCorrect": false
+        },
+        {
+          "text": "OneBlade",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "PHILIPS",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "philips-estande-philips-aoc",
+      "nome": "Philips (estande Philips | AOC)",
+      "estandeId": "69c4a9a80343759bac55725b",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-philips-estande-philips-aoc",
+      "pagePath": "/quiz/philips-estande-philips-aoc.html",
+      "question": "Qual a TV foco para 2026?",
+      "options": [
+        {
+          "text": "58PUG7019",
+          "isCorrect": true
+        },
+        {
+          "text": "32PHG6910",
+          "isCorrect": false
+        },
+        {
+          "text": "75PML9118",
+          "isCorrect": false
+        },
+        {
+          "text": "43PFG6910",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "PHILIPS ENVISION",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "philips-walita",
+      "nome": "Philips Walita",
+      "estandeId": "69c4a9a80343759bac55725c",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-philips-walita",
+      "pagePath": "/quiz/philips-walita.html",
+      "question": "Qual é a principal tecnologia das Airfryers Philips Walita que faz com que os alimentos fiquem mais crocantes por fora e mais macios por dentro?",
+      "options": [
+        {
+          "text": "01 - RapidAir",
+          "isCorrect": true
+        },
+        {
+          "text": "02 - PlusAir",
+          "isCorrect": false
+        },
+        {
+          "text": "03 - TurboAir",
+          "isCorrect": false
+        },
+        {
+          "text": "04 - PowerAir",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "PHILIPS WALITA (Versuni)",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "plumatex",
+      "nome": "Plumatex",
+      "estandeId": "69c4a9a80343759bac55725d",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-plumatex",
+      "pagePath": "/quiz/plumatex.html",
+      "question": "Qual é o principal produto fabricado pela Plumatex, que a tornou uma das maiores indústrias do setor na América Latina?",
+      "options": [
+        {
+          "text": "Toalhas de banho e roupões de luxo",
+          "isCorrect": true
+        },
+        {
+          "text": "Colchões (de espuma e molas) e conjuntos de cama box",
+          "isCorrect": false
+        },
+        {
+          "text": "Plásticos bolha e embalagens industriais",
+          "isCorrect": false
+        },
+        {
+          "text": "Móveis de madeira para jardins e áreas externas",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "PLUMATEX",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "porto-servico",
+      "nome": "Porto Serviço",
+      "estandeId": "69c4a9a80343759bac55725e",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-porto-servico",
+      "pagePath": "/quiz/porto-servico.html",
+      "question": "Qual o grande lançamento da Porto Serviço  no Magalu em 2026?",
+      "options": [
+        {
+          "text": "A - Magalu Cloud",
+          "isCorrect": true
+        },
+        {
+          "text": "B - Magalu Ads",
+          "isCorrect": false
+        },
+        {
+          "text": "C - Magalu Play",
+          "isCorrect": false
+        },
+        {
+          "text": "D - Magalu Pay",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "PORTO SERVIÇO",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "positivo",
+      "nome": "Positivo",
+      "estandeId": "69c4a9a80343759bac55725f",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-positivo",
+      "pagePath": "/quiz/positivo.html",
+      "question": "No notebook Positivo Vision C15M, quais são as funcionalidades oferecidas pela Minitela e qual o papel da MIA?",
+      "options": [
+        {
+          "text": "A Minitela permite visualizar mensagens do WhatsApp, conferir o clima, lembretes, anotações e o status do notebook, podendo ser personalizada com imagens ou GIFs animados, enquanto a MIA atua como uma assistente pessoal baseada em inteligência artificial",
+          "isCorrect": true
+        },
+        {
+          "text": "A Minitela serve exclusivamente para controlar a intensidade da iluminação da Lumina Bar e não permite a visualização de notificações de aplicativos externos",
+          "isCorrect": false
+        },
+        {
+          "text": "A assistente de inteligência artificial é uma ferramenta voltada apenas para a expansão de armazenamento SSD e não possui integração com as funções da Minitela",
+          "isCorrect": false
+        },
+        {
+          "text": "A Minitela é um acessório externo que deve ser adquirido separadamente para permitir o uso do Xbox Game Pass no modo portátil",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "POSITIVO",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "samsung",
+      "nome": "Samsung",
+      "estandeId": "69c4a9a80343759bac557260",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-samsung",
+      "pagePath": "/quiz/samsung.html",
+      "question": "Qual é a tecnologia de tela exclusiva mais associada às TVs premium da Samsung?",
+      "options": [
+        {
+          "text": "OLED",
+          "isCorrect": false
+        },
+        {
+          "text": "QLED",
+          "isCorrect": true
+        },
+        {
+          "text": "LCD",
+          "isCorrect": false
+        },
+        {
+          "text": "Plasma",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "SAMSUNG ELETRON",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "sharkninja",
+      "nome": "SharkNinja",
+      "estandeId": "69c4a9a80343759bac557254",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-sharkninja",
+      "pagePath": "/quiz/sharkninja.html",
+      "question": "Qual o numero de funções pré-programadas da Ninja Creami?",
+      "options": [
+        {
+          "text": "7",
+          "isCorrect": true
+        },
+        {
+          "text": "6",
+          "isCorrect": false
+        },
+        {
+          "text": "8",
+          "isCorrect": false
+        },
+        {
+          "text": "4",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "NINJA",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "somopar",
+      "nome": "Somopar",
+      "estandeId": "69c4a9a80343759bac557261",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-somopar",
+      "pagePath": "/quiz/somopar.html",
+      "question": "A Somopar é reconhecida no mercado brasileiro por ser uma das maiores especialistas na fabricação de qual desses itens para a casa?",
+      "options": [
+        {
+          "text": "Geladeiras e fogões de embutir",
+          "isCorrect": false
+        },
+        {
+          "text": "Estofados (sofás) e poltronas",
+          "isCorrect": true
+        },
+        {
+          "text": "Pneus para caminhões e tratores",
+          "isCorrect": false
+        },
+        {
+          "text": "Telhas de amianto para coberturas industriais",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "SOMOPAR",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "starlink",
+      "nome": "Starlink",
+      "estandeId": "69c4a9a80343759bac557255",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-starlink",
+      "pagePath": "/quiz/starlink.html",
+      "question": "Qual é um dos principais objetivos da Starlink?",
+      "options": [
+        {
+          "text": "Fornecer internet apenas para grandes cidades",
+          "isCorrect": false
+        },
+        {
+          "text": "Substituir completamente as redes de celular",
+          "isCorrect": false
+        },
+        {
+          "text": "Levar internet rápida para regiões com pouca ou nenhuma infraestrutura",
+          "isCorrect": true
+        },
+        {
+          "text": "Oferecer serviços de TV por assinatura: C",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "OPECO (STARLINK)",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "tcl-semp",
+      "nome": "TCL / Semp",
+      "estandeId": "69c4a9a80343759bac557263",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-tcl-semp",
+      "pagePath": "/quiz/tcl-semp.html",
+      "question": "Qual é a tecnologia de painel presente no modelo TCL QD-Mini LED TV C6K?",
+      "options": [
+        {
+          "text": "A - QLED e Mini LED",
+          "isCorrect": true
+        },
+        {
+          "text": "B - Apenas QLED",
+          "isCorrect": false
+        },
+        {
+          "text": "C - Apenas Mini LED",
+          "isCorrect": false
+        },
+        {
+          "text": "D - LCD Simples",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "TCL",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "tramontina",
+      "nome": "Tramontina",
+      "estandeId": "69c4a9a80343759bac557264",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-tramontina",
+      "pagePath": "/quiz/tramontina.html",
+      "question": "Qual a nova linha de panelas Tramontina com revestimento cerâmico que será sucesso em 2026?",
+      "options": [
+        {
+          "text": "a - Monaco",
+          "isCorrect": true
+        },
+        {
+          "text": "b - Veronese",
+          "isCorrect": false
+        },
+        {
+          "text": "c - Solar",
+          "isCorrect": false
+        },
+        {
+          "text": "Vancouver",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "TRAMONTINA",
+        "notes": ""
+      }
+    },
+    {
+      "slug": "umaflex",
+      "nome": "Umaflex",
+      "estandeId": "69c4a9a80343759bac557266",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-umaflex",
+      "pagePath": "/quiz/umaflex.html",
+      "question": "A Umaflex é uma empresa líder em duas categorias principais de produtos para a casa. Quais são elas?",
+      "options": [
+        {
+          "text": "Geladeiras e Máquinas de Lavar",
+          "isCorrect": false
+        },
+        {
+          "text": "Mesas de Jantar e Cristaleiras",
+          "isCorrect": false
+        },
+        {
+          "text": "Estofados (Sofás) e Colchões",
+          "isCorrect": true
+        },
+        {
+          "text": "Pias de Cozinha e Armários de Aço",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "UMAFLEX INDUSTR",
+        "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "wap",
+      "nome": "Wap",
+      "estandeId": "69c4a9a80343759bac557267",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-wap",
+      "pagePath": "/quiz/wap.html",
+      "question": "Quantas receitas pré programadas temos na panela de pressão elétrica touch WAP?",
+      "options": [
+        {
+          "text": "10 receitas",
+          "isCorrect": false
+        },
+        {
+          "text": "20 receitas",
+          "isCorrect": true
+        },
+        {
+          "text": "3 receitas",
+          "isCorrect": false
+        },
+        {
+          "text": "12 receitas",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "WAP",
+        "notes": ""
+      }
+    }
+  ],
+  "generatedFromWorkbook": "Cópia de Perguntas Fornecedores - Posicionamento 2026 (respostas).xlsx"
+}

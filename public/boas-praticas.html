@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boas práticas</title>
+  <meta name="theme-color" content="#0086ff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Posicionamento Magalu 2026">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../icons/icon-192.png?v=2" type="image/png">
+  <link rel="icon" href="../icons/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../icons/icon-192.png?v=2">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="feed-mobile-body">
+  <main class="feed-mobile-shell">
+    <button id="boas-praticas-drawer-backdrop" class="feed-backdrop" type="button" hidden aria-label="Fechar menu"></button>
+
+    <aside id="boas-praticas-drawer" class="feed-drawer" aria-hidden="true" hidden>
+      <div class="feed-drawer-header">
+        <img class="feed-drawer-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
+        <button id="boas-praticas-close-drawer" class="feed-drawer-close" type="button" aria-label="Fechar menu">×</button>
+      </div>
+
+      <div class="feed-drawer-user">
+        <strong id="boas-praticas-drawer-user-name">Magalu System</strong>
+        <p id="boas-praticas-drawer-user-role">Um guia rápido para circular melhor no evento.</p>
+      </div>
+
+      <nav class="feed-drawer-nav" aria-label="Navegação principal">
+        <details class="feed-drawer-group">
+          <summary class="feed-drawer-link">Perfil</summary>
+          <div class="feed-drawer-subnav">
+            <a class="feed-drawer-sublink" href="../perfil/">Dados</a>
+            <p class="feed-drawer-subtitle">Logística</p>
+            <a class="feed-drawer-sublink" href="../logistica/#rota">Rota</a>
+            <a class="feed-drawer-sublink" href="../logistica/#aereo">Aéreo</a>
+            <a class="feed-drawer-sublink" href="../logistica/#hospedagem">Hospedagem</a>
+          </div>
+        </details>
+        <a class="feed-drawer-link" href="../linktree/">Home</a>
+        <a class="feed-drawer-link" href="../agenda/">Agenda</a>
+        <a class="feed-drawer-link" href="../estandes/">Estandes</a>
+        <a class="feed-drawer-link feed-drawer-link--current" href="../boas-praticas/" aria-current="page">Boas práticas</a>
+        <button class="feed-drawer-link" id="boas-praticas-open-kit-code-menu" type="button">Retirada Kit</button>
+        <a class="feed-drawer-link" href="../feed/">Feed</a>
+      </nav>
+
+      <div class="feed-drawer-actions">
+        <button id="install-button" class="feed-drawer-button" type="button" hidden>Instalar app</button>
+        <button id="logout-button" class="feed-drawer-button feed-drawer-button--ghost" type="button">Sair</button>
+      </div>
+    </aside>
+
+    <section class="feed-top-panel" aria-label="Boas práticas do evento">
+      <img class="feed-top-image" src="../assets/img/layer-topo.png" alt="Boas práticas Magalu">
+      <div class="feed-top-content">
+        <div class="feed-top-bar">
+          <img class="feed-top-logo" src="../assets/img/magalu-logo-white.png" alt="Magalu">
+          <div class="feed-top-actions">
+            <button id="update-button" class="feed-top-icon-button" type="button" aria-label="Atualizar app" title="Atualizar app" data-update-icon-only="true">
+              <span class="sr-only update-button-label">Atualizar app</span>
+              <span class="feed-top-icon feed-top-icon--update" aria-hidden="true"></span>
+            </button>
+            <button id="boas-praticas-menu-button" class="feed-top-menu" type="button" aria-controls="boas-praticas-drawer" aria-expanded="false" aria-label="Abrir menu">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="feed-top-copy">
+          <h1 class="feed-top-title">Boas práticas</h1>
+          
+          <div class="feed-top-user">
+            <strong id="boas-praticas-user-name">Carregando perfil...</strong>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="feed-mobile-panel boas-praticas-panel">
+      <article class="boas-praticas-hero">
+        <p class="boas-praticas-hero-kicker">Guia rápido</p>
+        <h2 class="boas-praticas-hero-title">Planeje melhor o seu dia e aproveite mais o evento.</h2>
+        <p class="boas-praticas-hero-copy">Essas recomendações ajudam a reduzir filas, evitar imprevistos e tornar a experiência no evento mais confortável.</p>
+
+        <div class="boas-praticas-highlight-row">
+          <div class="boas-praticas-highlight">
+            <strong>Chegue com antecedência</strong>
+            <p>Evita fila e dá margem para encontrar o espaço com calma.</p>
+          </div>
+          <div class="boas-praticas-highlight">
+            <strong>Use o app como guia</strong>
+            <p>Agenda, avisos e QR Code ficam centralizados no mesmo fluxo.</p>
+          </div>
+        </div>
+      </article>
+
+      <div class="boas-praticas-cta-row" aria-label="Acessos rápidos">
+        <a class="boas-praticas-cta" href="../agenda/">
+          <strong>Ver agenda</strong>
+          <span>Confira os horários antes dos conteúdos principais.</span>
+        </a>
+        <button id="boas-praticas-open-kit-code-card" class="boas-praticas-cta" type="button">
+          <strong>Retirada de kit</strong>
+          <span>Abra seu QR Code e deixe um print salvo no celular.</span>
+        </button>
+      </div>
+
+      <div class="boas-praticas-grid">
+        <article class="boas-praticas-card">
+          <div class="boas-praticas-card-header">
+            <span class="boas-praticas-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 11 12 4l9 7"></path>
+                <path d="M5 10v9h14v-9"></path>
+                <path d="M9 19v-5h6v5"></path>
+              </svg>
+            </span>
+            <div>
+              <h3 class="boas-praticas-card-title">Chegada e credenciamento</h3>
+              <p class="boas-praticas-card-copy">Os primeiros minutos do dia definem o ritmo da experiência.</p>
+            </div>
+          </div>
+          <ul class="boas-praticas-list">
+            <li>Chegue com antecedência para evitar filas e garantir uma entrada mais tranquila.</li>
+            <li>Evite deixar a chegada para muito perto dos conteúdos principais.</li>
+          </ul>
+        </article>
+
+        <article class="boas-praticas-card">
+          <div class="boas-praticas-card-header">
+            <span class="boas-praticas-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 7h16"></path>
+                <path d="M7 4v6"></path>
+                <path d="M17 4v6"></path>
+                <rect x="4" y="7" width="16" height="13" rx="2"></rect>
+                <path d="m9 14 2 2 4-4"></path>
+              </svg>
+            </span>
+            <div>
+              <h3 class="boas-praticas-card-title">Retirada de kit</h3>
+              <p class="boas-praticas-card-copy">Uma ação simples aqui evita atrito ao longo do dia.</p>
+            </div>
+          </div>
+          <ul class="boas-praticas-list">
+            <li>Tire um print do QR Code de Retirada de Kit no menu principal para manter o acesso mesmo com internet instável.</li>
+            <li>A retirada fica disponível ao longo de todo o dia 26, então vale priorizar horários com menos movimento.</li>
+            <li>Se você já retirou seu kit no hotel Holiday Inn, não precisa entrar novamente nessa fila.</li>
+          </ul>
+        </article>
+
+        <article class="boas-praticas-card">
+          <div class="boas-praticas-card-header">
+            <span class="boas-praticas-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 21s7-4.35 7-10V5l-7-2-7 2v6c0 5.65 7 10 7 10Z"></path>
+                <path d="M9.5 12.5 11 14l3.5-3.5"></path>
+              </svg>
+            </span>
+            <div>
+              <h3 class="boas-praticas-card-title">Durante a convenção</h3>
+              <p class="boas-praticas-card-copy">Antecipação melhora circulação e aproveitamento.</p>
+            </div>
+          </div>
+          <ul class="boas-praticas-list">
+            <li>Confira sua agenda com antecedência dentro do app.</li>
+            <li>Chegue alguns minutos antes na plenária para garantir um bom lugar.</li>
+            <li>Explore a feira e as ativações, porque sempre há algo acontecendo.</li>
+            <li>Aproveite os momentos de networking ao longo do evento.</li>
+          </ul>
+        </article>
+
+        <article class="boas-praticas-card">
+          <div class="boas-praticas-card-header">
+            <span class="boas-praticas-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 4h8"></path>
+                <path d="M9 4v4l-4 7a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 15l-4-7V4"></path>
+              </svg>
+            </span>
+            <div>
+              <h3 class="boas-praticas-card-title">O que vestir</h3>
+              <p class="boas-praticas-card-copy">Conforto em primeiro lugar para sustentar o dia inteiro.</p>
+            </div>
+          </div>
+          <ul class="boas-praticas-list">
+            <li>Use calçados confortáveis, porque o deslocamento ao longo do dia será intenso.</li>
+            <li>Prefira roupas leves e práticas.</li>
+            <li>Leve um casaco leve, especialmente se você sente frio com ar-condicionado.</li>
+            <li>Evite peças que possam incomodar durante muitas horas em pé ou em movimento.</li>
+          </ul>
+        </article>
+
+        <article class="boas-praticas-card">
+          <div class="boas-praticas-card-header">
+            <span class="boas-praticas-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3v18"></path>
+                <path d="M3 12h18"></path>
+                <path d="m6.5 6.5 11 11"></path>
+                <path d="m17.5 6.5-11 11"></path>
+              </svg>
+            </span>
+            <div>
+              <h3 class="boas-praticas-card-title">Dicas extras</h3>
+              <p class="boas-praticas-card-copy">Pequenos cuidados evitam interrupções desnecessárias.</p>
+            </div>
+          </div>
+          <ul class="boas-praticas-list">
+            <li>Mantenha o celular carregado; se puder, leve um power bank.</li>
+            <li>Use o app como seu guia principal durante o evento.</li>
+            <li>Fique atento aos avisos e atualizações em tempo real.</li>
+            <li>Hidrate-se e faça pausas quando necessário.</li>
+          </ul>
+          <p class="boas-praticas-footnote">Se o sinal oscilar, tenha print do QR Code de kit e abra a agenda antes dos momentos mais disputados.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="boas-praticas-kit-code-modal" class="profile-qrcode-modal" role="dialog" aria-modal="true" aria-labelledby="boas-praticas-kit-code-title" hidden>
+      <button id="boas-praticas-kit-code-backdrop" class="feed-modal-backdrop" type="button" aria-label="Fechar retirada de kit"></button>
+      <div class="profile-qrcode-panel">
+        <div class="profile-qrcode-header">
+          <div>
+            <p class="profile-section-kicker">Retirada de kit</p>
+            <h2 id="boas-praticas-kit-code-title" class="profile-section-title">Apresente este código</h2>
+          </div>
+          <button id="boas-praticas-close-kit-code" class="feed-modal-close" type="button" aria-label="Fechar">×</button>
+        </div>
+        <div id="boas-praticas-kit-code-preview" class="profile-qrcode-preview" aria-live="polite"></div>
+        <div class="profile-qrcode-actions">
+          <button id="boas-praticas-generate-kit-code-button" class="primary-button" type="button">Atualizar código</button>
+          <button id="boas-praticas-close-kit-code-secondary" class="secondary-button" type="button">Fechar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../js/runtime-config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/pwa.js"></script>
+  <script src="../js/popup-config.js"></script>
+  <script src="../js/popup.js"></script>
+  <script src="../js/drawer-dropdown.js"></script>
+  <script src="../js/boas-praticas.js"></script>
+</body>
+</html>

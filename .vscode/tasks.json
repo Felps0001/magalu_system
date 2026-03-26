@@ -11,6 +11,39 @@
 			],
 			"isBackground": false,
 			"group": "build"
+		},
+		{
+			"label": "build pages",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build:pages"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "build pages",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build:pages"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "build pages",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build:pages"
+			],
+			"isBackground": false,
+			"group": "build"
 		}
 	]
 }
