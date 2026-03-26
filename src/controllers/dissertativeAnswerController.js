@@ -1,7 +1,7 @@
 const { ObjectId } = require('mongodb');
 
 const { getDissertativeAnswersCollection, getUsersCollection } = require('../config/collections');
-const { buildCacheKey, deleteCacheByPrefix, deleteCacheKeys } = require('../services/cache');
+const { buildCacheKey, deleteCacheKeys } = require('../services/cache');
 const {
   DISSERTATIVE_ACTIVITY_CODE,
   DISSERTATIVE_ACTIVITY_POINTS,
@@ -303,8 +303,10 @@ async function createDissertativeAnswerHandler(req, res) {
 
     await deleteCacheKeys([
       buildCacheKey(['auth', 'login', user.id_magalu]),
+      buildCacheKey(['users', 'list']),
+      buildCacheKey(['users', 'ranking']),
+      buildCacheKey(['users', String(user._id), 'details']),
     ]);
-    await deleteCacheByPrefix('users:');
 
     res.status(201).json({
       alreadySubmitted: false,

@@ -236,19 +236,7 @@ function nextStep() {
 }
 
 async function refreshStoredUser(userId) {
-  const response = await fetch(window.magaluApi.buildApiUrl('/api/users'), window.magaluApi.withApiDefaults());
-
-  if (!response.ok) {
-    return null;
-  }
-
-  const users = await window.magaluApi.parseApiResponse(response);
-
-  if (!Array.isArray(users)) {
-    return null;
-  }
-
-  const updatedUser = users.find((item) => item && item._id === userId);
+  const updatedUser = await window.magaluApi.fetchUserById(userId);
 
   if (updatedUser) {
     window.magaluApi.storeUser(updatedUser);

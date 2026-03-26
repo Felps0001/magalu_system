@@ -1,5 +1,31 @@
 
 require('dotenv').config();
+const cluster = require('node:cluster');
+const os = require('node:os');
+
+const WORKER_COUNT = Math.min(
+  Number(process.env.CLUSTER_WORKERS) || os.availableParallelism?.() || os.cpus().length,
+  os.cpus().length
+);
+const CLUSTER_ENABLED = (process.env.CLUSTER_ENABLED || 'true').trim().toLowerCase() !== 'false'
+  && WORKER_COUNT > 1;
+
+if (CLUSTER_ENABLED && cluster.isPrimary) {
+  console.log(`Primary ${process.pid} iniciando ${WORKER_COUNT} workers...`);
+
+  for (let i = 0; i < WORKER_COUNT; i++) {
+    cluster.fork();
+  }
+
+  cluster.on('exit', (worker, code) => {
+    console.warn(`Worker ${worker.process.pid} encerrado (code ${code}). Reiniciando...`);
+    cluster.fork();
+  });
+} else {
+  startWorker();
+}
+
+function startWorker() {
 const cors = require('cors');
 
 const { connectToMongoDB, closeMongoDBConnection } = require('./src/config/mongodb');
@@ -131,3 +157,4 @@ process.on('SIGTERM', () => {
 });
 
 startServer();
+} // end startWorker

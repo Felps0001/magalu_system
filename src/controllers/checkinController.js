@@ -1,6 +1,6 @@
 const { getCheckinsCollection, getUsersCollection } = require('../config/collections');
 const { createCheckin } = require('../models/checkin');
-const { buildCacheKey, deleteCacheByPrefix, deleteCacheKeys, getOrSetJsonCache } = require('../services/cache');
+const { buildCacheKey, deleteCacheKeys, getOrSetJsonCache } = require('../services/cache');
 
 const CHECKINS_CACHE_KEY = buildCacheKey(['checkins', 'list']);
 const CHECKINS_CACHE_TTL_SECONDS = Number(process.env.REDIS_TTL_CHECKINS_SECONDS || 30);
@@ -31,12 +31,15 @@ async function createCheckinHandler(req, res) {
       { projection: { id_magalu: 1 } }
     );
 
+    const userId = String(checkin.userId);
     await deleteCacheKeys([
       CHECKINS_CACHE_KEY,
       buildCacheKey(['auth', 'login', user && user.id_magalu]),
+      buildCacheKey(['users', 'list']),
+      buildCacheKey(['users', 'ranking']),
+      buildCacheKey(['users', userId, 'details']),
+      buildCacheKey(['estandes', 'list']),
     ]);
-    await deleteCacheByPrefix('users:');
-    await deleteCacheByPrefix('estandes:');
 
     res.status(201).json({
       _id: result.insertedId,

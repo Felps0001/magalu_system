@@ -1,3 +1,4 @@
+const compression = require('compression');
 const express = require('express');
 const path = require('path');
 
@@ -16,6 +17,7 @@ function createApp(options = {}) {
   preRouteMiddlewares.forEach((middleware) => {
     app.use(middleware);
   });
+  app.use(compression());
   app.use(express.json());
   app.use(webRoutes);
   app.use(express.static(publicDirectory, {

@@ -6,14 +6,17 @@ const { createAereo, normalizeAereoPayload } = require('../models/aereo');
 const { createRota, normalizeRotaPayload } = require('../models/rota');
 const { buildUserQrData, createUser, createUserQrPayload, normalizeUserLegacyFields } = require('../models/user');
 const { buildCacheKey, deleteCacheByPrefix, deleteCacheKeys, getOrSetJsonCache } = require('../services/cache');
-const { buildUserAccessPipeline } = require('../services/userAccessPipeline');
+const { buildUserAccessPipeline, buildUserSummaryPipeline } = require('../services/userAccessPipeline');
 
 const USERS_CACHE_KEY = buildCacheKey(['users', 'list']);
 const USERS_AGENDA_CACHE_KEY = buildCacheKey(['users', 'agenda']);
+const USERS_RANKING_CACHE_KEY = buildCacheKey(['users', 'ranking']);
 const USERS_CACHE_TTL_SECONDS = Number(process.env.REDIS_TTL_USERS_SECONDS || 30);
 const USERS_AGENDA_CACHE_TTL_SECONDS = Number(process.env.REDIS_TTL_AGENDA_SECONDS || 60);
+const USERS_RANKING_CACHE_TTL_SECONDS = Number(process.env.REDIS_TTL_USERS_RANKING_SECONDS || 20);
 const USER_KIT_CACHE_TTL_SECONDS = Number(process.env.REDIS_TTL_USER_KIT_SECONDS || 45);
 const USER_QRCODE_CACHE_TTL_SECONDS = Number(process.env.REDIS_TTL_USER_QRCODE_SECONDS || 300);
+const USER_DETAILS_CACHE_TTL_SECONDS = Number(process.env.REDIS_TTL_USER_DETAILS_SECONDS || 20);
 
 async function findUserWithAccessData(usersCollection, matchStage) {
   return usersCollection.aggregate(buildUserAccessPipeline(matchStage, { limitOne: true })).next();
@@ -173,10 +176,16 @@ function buildUserQrCodeCacheKey(userId) {
   return buildCacheKey(['users', userId, 'qrcode']);
 }
 
+function buildUserDetailsCacheKey(userId) {
+  return buildCacheKey(['users', userId, 'details']);
+}
+
 async function invalidateUserCaches({ userId, idMagalu }) {
   await deleteCacheKeys([
     USERS_CACHE_KEY,
     USERS_AGENDA_CACHE_KEY,
+    USERS_RANKING_CACHE_KEY,
+    buildUserDetailsCacheKey(userId),
     buildUserKitCacheKey(userId),
     buildUserQrCodeCacheKey(userId),
     buildCacheKey(['auth', 'login', idMagalu]),
@@ -371,7 +380,11 @@ async function getUserByIdHandler(req, res) {
     }
 
     const usersCollection = await getUsersCollection();
-    const user = await findUserWithAccessData(usersCollection, { _id: new ObjectId(userId) });
+    const user = await getOrSetJsonCache({
+      key: buildUserDetailsCacheKey(userId),
+      ttlSeconds: USER_DETAILS_CACHE_TTL_SECONDS,
+      loader: () => findUserWithAccessData(usersCollection, { _id: new ObjectId(userId) }),
+    });
 
     if (!user) {
       res.status(404).json({ error: 'Usuario nao encontrado.' });
@@ -575,6 +588,39 @@ async function upsertUserAereoHandler(req, res) {
 
 async function listUsersHandler(req, res) {
   try {
+    const requestedView = typeof req.query.view === 'string'
+      ? req.query.view.trim().toLowerCase()
+      : '';
+
+    if (requestedView === 'ranking') {
+      const rankingLimit = parsePositiveInteger(req.query.limit);
+      const rankingUsers = await getOrSetJsonCache({
+        key: rankingLimit
+          ? buildCacheKey(['users', 'ranking', String(rankingLimit)])
+          : USERS_RANKING_CACHE_KEY,
+        ttlSeconds: USERS_RANKING_CACHE_TTL_SECONDS,
+        loader: async () => {
+          const usersCollection = await getUsersCollection();
+
+          return usersCollection.aggregate(
+            buildUserSummaryPipeline({}, {
+              sortRanking: true,
+              limit: rankingLimit,
+            })
+          ).toArray();
+        },
+      });
+
+      const normalizedRankingUsers = normalizeUserResponseList(rankingUsers)
+        .map((user, index) => ({
+          ...user,
+          rankingPosition: index + 1,
+        }));
+
+      res.json(normalizedRankingUsers);
+      return;
+    }
+
     const users = await getOrSetJsonCache({
       key: USERS_CACHE_KEY,
       ttlSeconds: USERS_CACHE_TTL_SECONDS,
@@ -586,22 +632,6 @@ async function listUsersHandler(req, res) {
     });
 
     const normalizedUsers = normalizeUserResponseList(users);
-    const requestedView = typeof req.query.view === 'string'
-      ? req.query.view.trim().toLowerCase()
-      : '';
-
-    if (requestedView === 'ranking') {
-      const rankingLimit = parsePositiveInteger(req.query.limit);
-      const rankingUsers = [...normalizedUsers]
-        .sort(compareUsersByRanking)
-        .map((user, index) => ({
-          ...user,
-          rankingPosition: index + 1,
-        }));
-
-      res.json(rankingLimit ? rankingUsers.slice(0, rankingLimit) : rankingUsers);
-      return;
-    }
 
     res.json(normalizedUsers);
   } catch (error) {

@@ -1,6 +1,6 @@
 const { getEstandesCollection } = require('../config/collections');
 const { createEstande } = require('../models/estande');
-const { buildCacheKey, deleteCacheByPrefix, getOrSetJsonCache } = require('../services/cache');
+const { buildCacheKey, deleteCacheKeys, getOrSetJsonCache } = require('../services/cache');
 
 const ESTANDES_CACHE_KEY = buildCacheKey(['estandes', 'list']);
 const ESTANDES_CACHE_TTL_SECONDS = Number(process.env.REDIS_TTL_ESTANDES_SECONDS || 45);
@@ -10,9 +10,11 @@ async function createEstandeHandler(req, res) {
     const estandesCollection = await getEstandesCollection();
     const estande = createEstande(req.body);
     const result = await estandesCollection.insertOne(estande);
-    await deleteCacheByPrefix('estandes:');
-    await deleteCacheByPrefix('users:');
-    await deleteCacheByPrefix('auth:login:');
+    await deleteCacheKeys([
+      buildCacheKey(['estandes', 'list']),
+      buildCacheKey(['users', 'list']),
+      buildCacheKey(['users', 'ranking']),
+    ]);
 
     res.status(201).json({
       _id: result.insertedId,

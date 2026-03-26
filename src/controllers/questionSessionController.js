@@ -7,7 +7,7 @@ const {
 } = require('../config/collections');
 const { createQuestionSessionCheckin, SESSION_ATTENDANCE_POINTS } = require('../models/questionSessionCheckin');
 const { normalizePalestraId } = require('../models/question');
-const { buildCacheKey, deleteCacheByPrefix, deleteCacheKeys } = require('../services/cache');
+const { buildCacheKey, deleteCacheKeys } = require('../services/cache');
 const {
   endActiveSessionForPalestra,
   getActiveSessionAttendanceQrByPalestra,
@@ -201,8 +201,10 @@ async function createQuestionSessionAttendanceHandler(req, res) {
 
     await deleteCacheKeys([
       buildCacheKey(['auth', 'login', user.id_magalu]),
+      buildCacheKey(['users', 'list']),
+      buildCacheKey(['users', 'ranking']),
+      buildCacheKey(['users', String(userId), 'details']),
     ]);
-    await deleteCacheByPrefix('users:');
 
     res.status(201).json({
       _id: String(insertResult.insertedId),

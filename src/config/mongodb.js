@@ -46,7 +46,13 @@ async function connectToMongoDB() {
     throw new Error('A variavel MONGODB_DB_NAME nao foi definida no arquivo .env.');
   }
 
-  client = new MongoClient(mongoUri);
+  client = new MongoClient(mongoUri, {
+    maxPoolSize: Number(process.env.MONGODB_MAX_POOL_SIZE) || 50,
+    minPoolSize: Number(process.env.MONGODB_MIN_POOL_SIZE) || 5,
+    maxIdleTimeMS: 30000,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+  });
   await client.connect();
   database = client.db(dbName);
 

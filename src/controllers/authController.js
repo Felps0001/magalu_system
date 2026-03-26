@@ -2,7 +2,7 @@ const { getUsersCollection } = require('../config/collections');
 const { buildCacheKey, getOrSetJsonCache } = require('../services/cache');
 const { canPublishToFeed } = require('../services/feedAccess');
 const { verifyPassword } = require('../services/password');
-const { buildUserAccessPipeline } = require('../services/userAccessPipeline');
+const { buildUserSummaryPipeline } = require('../services/userAccessPipeline');
 
 const AUTH_LOGIN_CACHE_TTL_SECONDS = Number(process.env.REDIS_TTL_AUTH_SECONDS || 30);
 
@@ -53,7 +53,7 @@ async function loginHandler(req, res) {
       key: buildCacheKey(['auth', 'login', id_magalu]),
       ttlSeconds: AUTH_LOGIN_CACHE_TTL_SECONDS,
       loader: () => usersCollection.aggregate(
-        buildUserAccessPipeline(
+        buildUserSummaryPipeline(
           {
             id_magalu,
           },
@@ -90,7 +90,7 @@ async function startFirstAccessHandler(req, res) {
 
     const usersCollection = await getUsersCollection();
     const user = await usersCollection.aggregate(
-      buildUserAccessPipeline(
+      buildUserSummaryPipeline(
         {
           id_magalu,
         },
