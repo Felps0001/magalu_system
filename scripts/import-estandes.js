@@ -76,6 +76,8 @@ const ESTANDES = [
   { nome: 'Wap' },
   { nome: 'Brastemp (estande Brastemp | Consul)' },
   { nome: 'Consul (estande Brastemp | Consul)' },
+  { nome: 'BRTEST+' },
+  { nome: 'Mercado Magalu' },
 ];
 
 function normalizeName(name) {

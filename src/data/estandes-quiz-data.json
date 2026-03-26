@@ -427,6 +427,41 @@
       }
     },
     {
+      "slug": "brtest",
+      "nome": "BRTEST+",
+      "estandeId": "69c54728cead3a4e7f150447",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-brtest",
+      "pagePath": "/quiz/brtest.html",
+      "question": "Como o balcao de servicos da BR Test contribui com as lojas do Magalu?",
+      "options": [
+        {
+          "text": "1 - Com a diminuicao de trocas indevidas!",
+          "isCorrect": false
+        },
+        {
+          "text": "2 - Com o aumento do indice de satisfacao do cliente.",
+          "isCorrect": false
+        },
+        {
+          "text": "3 - Com a melhora da experiencia do cliente no atendimento de pos vendas.",
+          "isCorrect": false
+        },
+        {
+          "text": "4 - Todas as alternativas estao corretas",
+          "isCorrect": true
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "BRTEST+",
+        "notes": "Adicionado manualmente"
+      }
+    },
+    {
       "slug": "brinquedos-bandeirante",
       "nome": "Brinquedos Bandeirante",
       "estandeId": "69c4a9a70343759bac55722d",
@@ -1606,6 +1641,37 @@
       "source": {
         "workbookMatchedName": "MAGALU MARKETPLACE",
         "notes": "Criado pelo time de T&D"
+      }
+    },
+    {
+      "slug": "mercado-magalu",
+      "nome": "Mercado Magalu",
+      "estandeId": "69c54728cead3a4e7f150448",
+      "pontos": {
+        "scan": 1,
+        "correct": 4,
+        "max": 5
+      },
+      "quizOrigin": "quiz-mercado-magalu",
+      "pagePath": "/quiz/mercado-magalu.html",
+      "question": "Da gerencia de mercado, qual o depto que mais vende?",
+      "options": [
+        {
+          "text": "A - Bebidas",
+          "isCorrect": true
+        },
+        {
+          "text": "B - Higiene e Beleza",
+          "isCorrect": false
+        },
+        {
+          "text": "C - Mercearia ou Limpeza",
+          "isCorrect": false
+        }
+      ],
+      "source": {
+        "workbookMatchedName": "MERCADO MAGALU",
+        "notes": "Adicionado manualmente"
       }
     },
     {
