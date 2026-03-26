@@ -22,6 +22,9 @@ function createApp(options = {}) {
     setHeaders: applyStaticCacheHeaders,
   }));
   app.use('/api', routes);
+  app.use('/api', (req, res) => {
+    res.status(404).json({ error: 'Rota da API nao encontrada.' });
+  });
 
   return app;
 }

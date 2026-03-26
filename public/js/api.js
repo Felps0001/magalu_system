@@ -239,6 +239,20 @@ async function parseApiResponse(response) {
   }
 
   const text = await response.text();
+  const normalizedText = typeof text === 'string' ? text.trim() : '';
+  const isHtmlResponse = contentType.includes('text/html')
+    || /^<!doctype html/i.test(normalizedText)
+    || /^<html/i.test(normalizedText);
+
+  if (isHtmlResponse) {
+    return {
+      error: response.ok
+        ? 'O servidor retornou HTML inesperado para esta operacao.'
+        : 'O servidor retornou uma pagina inesperada. Tente novamente em instantes.',
+      rawText: text,
+      isHtmlResponse: true,
+    };
+  }
 
   return {
     error: text,
