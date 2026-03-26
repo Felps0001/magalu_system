@@ -70,6 +70,21 @@ function write404Page() {
   fs.writeFileSync(notFoundPath, content, 'utf8');
 }
 
+function writeQuizRoutes() {
+  const quizDir = path.join(publicDir, 'quiz');
+
+  if (!fs.existsSync(quizDir)) {
+    return;
+  }
+
+  const quizFiles = fs.readdirSync(quizDir).filter((file) => file.endsWith('.html'));
+
+  quizFiles.forEach((file) => {
+    const slug = file.replace(/\.html$/, '');
+    writeRouteIndex(`quiz/${slug}`, `quiz/${file}`);
+  });
+}
+
 function writePagesRoutes(done) {
   writeRouteIndex('login', 'index.html');
   writeRouteIndex('primeiro-acesso', 'first-access.html');
@@ -118,6 +133,7 @@ function writePagesRoutes(done) {
   writeRouteIndex('perguntas-dissertativas-fred', 'perguntas-dissertativas-fred.html');
   writeRouteIndex('perguntas-dissertativas-palestra', 'perguntas-dissertativas-palestra.html');
   writeRouteIndex('scanner', 'perfil.html');
+  writeQuizRoutes();
   writeRootIndex();
   write404Page();
   console.log('Build estatico gerado em dist/ para Cloudflare Pages.');

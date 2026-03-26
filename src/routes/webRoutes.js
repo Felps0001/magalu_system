@@ -173,12 +173,22 @@ router.get('/perguntas-dissertativas-palestra.html', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'perguntas-dissertativas-palestra.html'));
 });
 
-router.get('/quiz/nasher', noStore(), (req, res) => {
-  res.sendFile(path.join(publicDirectory, 'quiz', 'nesher.html'));
-});
+router.get('/quiz/:slug', noStore(), (req, res) => {
+  const slug = req.params.slug.replace(/\.html$/, '');
+  const sanitizedSlug = slug.replace(/[^a-z0-9-]/gi, '');
 
-router.get('/quiz/nasher.html', noStore(), (req, res) => {
-  res.sendFile(path.join(publicDirectory, 'quiz', 'nesher.html'));
+  if (!sanitizedSlug || sanitizedSlug !== slug) {
+    res.status(404).send('Quiz nao encontrado.');
+    return;
+  }
+
+  const quizPath = path.join(publicDirectory, 'quiz', `${sanitizedSlug}.html`);
+
+  res.sendFile(quizPath, (err) => {
+    if (err) {
+      res.status(404).send('Quiz nao encontrado.');
+    }
+  });
 });
 
 router.get('/scanner', noStore(), (req, res) => {

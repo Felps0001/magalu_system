@@ -45,7 +45,9 @@ let drawerCloseTimer = null;
 let quizOptionButtons = [];
 
 function redirectToLogin() {
-  window.location.replace(window.magaluApi.buildAppUrl('/'));
+  window.location.replace(
+    window.magaluApi.buildLoginUrlWithReturnTo(window.magaluApi.getProtectedPageReturnTo())
+  );
 }
 
 function redirectToFirstAccess() {

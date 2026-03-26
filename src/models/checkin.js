@@ -5,6 +5,10 @@ function toObjectId(value, fieldName) {
     throw new Error(`O campo ${fieldName} e obrigatorio.`);
   }
 
+  if (!ObjectId.isValid(value)) {
+    throw new Error(`O campo ${fieldName} e invalido.`);
+  }
+
   return new ObjectId(value);
 }
 
