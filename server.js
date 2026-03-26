@@ -52,6 +52,10 @@ function buildAllowedOriginPatterns() {
     'http://localhost:3000',
     'http://127.0.0.1:3000',
   ];
+  const renderExternalUrl = String(process.env.RENDER_EXTERNAL_URL || '').trim();
+  if (renderExternalUrl) {
+    defaultExactOrigins.push(renderExternalUrl);
+  }
   const configuredOrigins = parseCsvEnvList(process.env.CORS_ALLOWED_ORIGINS);
   const exactOrigins = new Set([...defaultExactOrigins, ...configuredOrigins]);
   const configuredPagesProject = String(process.env.CLOUDFLARE_PAGES_PROJECT || '').trim();

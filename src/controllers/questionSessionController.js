@@ -96,7 +96,8 @@ async function getQuestionSessionQrCodeHandler(req, res) {
       return;
     }
 
-    const attendanceUrl = new URL(session.attendancePath, `${buildRequestOrigin(req)}/`).toString();
+    const frontendOrigin = process.env.FRONTEND_ORIGIN || buildRequestOrigin(req);
+    const attendanceUrl = new URL(session.attendancePath, `${frontendOrigin}/`).toString();
 
     const qrCodeSvg = await QRCode.toString(attendanceUrl, {
       type: 'svg',
