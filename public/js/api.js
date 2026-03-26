@@ -21,10 +21,15 @@ function buildApiUrl(path) {
 
 function getAppRootUrl() {
   const routeNames = new Set(['login', 'primeiro-acesso', 'cadastro-users', 'cadastro-usuarios', 'perfil', 'linktree', 'logistica', 'boas-praticas', 'perguntas-palestra-1', 'questions-palestra-1', 'perguntas-palestra-2', 'questions-palestra-2', 'perguntas-palestra-3', 'questions-palestra-3', 'perguntas-palco-1', 'questions-palco-1', 'palco-1', 'perguntas-palco-2', 'questions-palco-2', 'palco-2', 'perguntas-palco-3', 'questions-palco-3', 'palco-3', 'perguntas-palco-4', 'questions-palco-4', 'palco-4', 'perguntas-palco-5', 'questions-palco-5', 'palco-5', 'moderacao-perguntas', 'questions-moderation', 'question-moderation', 'perguntas-aprovadas', 'questions-approved', 'qrcode-presenca-palco', 'questions-session-qrcode', 'checkin-presenca-palco', 'questions-session-checkin', 'perguntas-dissertativas-luiza', 'perguntas-dissertativas-fred', 'perguntas-dissertativas-palestra', 'respostas-dissertativas', 'teste', 'agenda', 'feed', 'estandes', 'ranking', 'scanner', 'scanner-kit', 'quiz']);
+  const nestedRouteRoots = new Set(['quiz']);
   const currentUrl = new URL(window.location.href);
   const segments = currentUrl.pathname.split('/').filter(Boolean);
 
   if (segments.length === 0) {
+    return `${currentUrl.origin}/`;
+  }
+
+  if (nestedRouteRoots.has(segments[0])) {
     return `${currentUrl.origin}/`;
   }
 

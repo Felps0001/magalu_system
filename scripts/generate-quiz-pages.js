@@ -43,6 +43,7 @@ function buildQuizPageHtml(estande) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quiz ${escapeHtml(estande.nome)} - Magalu System</title>
   <meta name="theme-color" content="#0086ff">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Posicionamento Magalu 2026">
@@ -127,6 +128,7 @@ function buildQuizPageHtml(estande) {
               <button class="quiz-btn quiz-option-button" type="button" data-option-index="1">Opcao 2</button>
               <button class="quiz-btn quiz-option-button" type="button" data-option-index="2">Opcao 3</button>
             </div>
+            <p id="quiz-action-message" class="form-message feed-mobile-message" aria-live="polite"></p>
           </section>
 
           <section id="quiz-result-step" class="quiz-step" hidden>

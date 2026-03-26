@@ -16,6 +16,7 @@ const quizWelcomeDescription = document.getElementById('quiz-welcome-description
 const quizStartButton = document.getElementById('quiz-start-button');
 const quizQuestionTitle = document.getElementById('quiz-question-title');
 const quizOptionsContainer = document.querySelector('.quiz-options');
+const quizActionMessage = document.getElementById('quiz-action-message');
 const quizResultTitle = document.getElementById('quiz-result-title');
 const quizResultDescription = document.getElementById('quiz-result-description');
 const quizFinalScore = document.getElementById('quiz-final-score');
@@ -89,6 +90,37 @@ function formatDuration(totalSeconds) {
   return `${minutes}min ${String(seconds).padStart(2, '0')}s`;
 }
 
+function setQuizActionMessage(message, type) {
+  if (!quizActionMessage) {
+    return;
+  }
+
+  quizActionMessage.textContent = message || '';
+  quizActionMessage.className = type
+    ? `form-message feed-mobile-message ${type}`
+    : 'form-message feed-mobile-message';
+}
+
+function setOptionButtonsDisabled(disabled, selectedIndex = null, loadingLabel = 'Carregando...') {
+  quizOptionButtons.forEach((button, index) => {
+    button.disabled = disabled;
+
+    if (disabled && selectedIndex === index) {
+      button.dataset.originalLabel = button.textContent;
+      button.textContent = loadingLabel;
+      button.setAttribute('aria-busy', 'true');
+      return;
+    }
+
+    if (button.dataset.originalLabel) {
+      button.textContent = button.dataset.originalLabel;
+      delete button.dataset.originalLabel;
+    }
+
+    button.removeAttribute('aria-busy');
+  });
+}
+
 function setStepVisibility(stepName) {
   quizWelcomeStep.hidden = stepName !== 'welcome';
   quizQuestionStep.hidden = stepName !== 'question';
@@ -156,6 +188,7 @@ function renderQuestion() {
   }
 
   quizQuestionTitle.textContent = currentQuestion.question;
+  setQuizActionMessage('', '');
 
   if (quizOptionsContainer) {
     quizOptionsContainer.innerHTML = '';
@@ -232,50 +265,57 @@ async function doCheckin(user) {
     };
   }
 
-  const response = await fetch(
-    window.magaluApi.buildApiUrl('/api/checkins'),
-    window.magaluApi.withApiDefaults({
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: user._id,
-        estandeId: resolvedEstandeId,
-        pontos: score,
-        tempo: totalTimeInSeconds,
-        origem: quizConfig.quizOrigin || 'quiz',
-      }),
-    })
-  );
+  try {
+    const response = await fetch(
+      window.magaluApi.buildApiUrl('/api/checkins'),
+      window.magaluApi.withApiDefaults({
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user._id,
+          estandeId: resolvedEstandeId,
+          pontos: score,
+          tempo: totalTimeInSeconds,
+          origem: quizConfig.quizOrigin || 'quiz',
+        }),
+      })
+    );
 
-  const responseData = await window.magaluApi.parseApiResponse(response);
+    const responseData = await window.magaluApi.parseApiResponse(response);
 
-  if (response.ok) {
-    await refreshStoredUser(user._id);
-    return {
-      ok: true,
-      message: quizConfig.resultDescription || 'Seu check-in foi registrado.',
-    };
-  }
+    if (response.ok) {
+      await refreshStoredUser(user._id);
+      return {
+        ok: true,
+        message: quizConfig.resultDescription || 'Seu check-in foi registrado.',
+      };
+    }
 
-  if (response.status === 409) {
-    await refreshStoredUser(user._id);
+    if (response.status === 409) {
+      await refreshStoredUser(user._id);
+      return {
+        ok: false,
+        alreadyCompleted: true,
+        message: responseData && responseData.error
+          ? responseData.error
+          : 'Este usuario ja respondeu o quiz deste estande.',
+      };
+    }
+
     return {
       ok: false,
-      alreadyCompleted: true,
       message: responseData && responseData.error
         ? responseData.error
-        : 'Este usuario ja respondeu o quiz deste estande.',
+        : 'Nao foi possivel registrar o resultado do quiz.',
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      message: 'Nao foi possivel enviar o quiz agora. Tente novamente em instantes.',
     };
   }
-
-  return {
-    ok: false,
-    message: responseData && responseData.error
-      ? responseData.error
-      : 'Nao foi possivel registrar o resultado do quiz.',
-  };
 }
 
 async function answer(index) {
@@ -290,35 +330,40 @@ async function answer(index) {
   }
 
   isAnswering = true;
-  quizOptionButtons.forEach((button) => {
-    button.disabled = true;
-  });
+  setQuizActionMessage('Enviando resposta...', 'info-message');
+  setOptionButtonsDisabled(true, index);
 
-  score += currentQuestion.options[index].points;
-  currentStep += 1;
+  try {
+    score += currentQuestion.options[index].points;
+    currentStep += 1;
 
-  const user = window.magaluApi.readStoredUser();
+    const user = window.magaluApi.readStoredUser();
 
-  if (currentStep > quizQuestions.length) {
-    totalTimeInSeconds = Math.round((Date.now() - (quizStartedAt || Date.now())) / 1000);
+    if (currentStep > quizQuestions.length) {
+      totalTimeInSeconds = Math.round((Date.now() - (quizStartedAt || Date.now())) / 1000);
 
-    if (user && user._id) {
-      const checkinResult = await doCheckin(user);
+      if (user && user._id) {
+        const checkinResult = await doCheckin(user);
 
-      if (checkinResult.ok) {
-        quizResultDescription.textContent = checkinResult.message;
-      } else if (checkinResult.alreadyCompleted) {
-        quizResultTitle.textContent = quizConfig.completedTitle || 'Quiz ja respondido';
-        quizResultDescription.textContent = checkinResult.message;
-        hasCompletedCurrentQuiz = true;
-      } else {
-        quizResultDescription.textContent = checkinResult.message;
+        if (checkinResult.ok) {
+          quizResultDescription.textContent = checkinResult.message;
+        } else if (checkinResult.alreadyCompleted) {
+          quizResultTitle.textContent = quizConfig.completedTitle || 'Quiz ja respondido';
+          quizResultDescription.textContent = checkinResult.message;
+          hasCompletedCurrentQuiz = true;
+        } else {
+          quizResultTitle.textContent = quizConfig.resultTitle || 'Envio pendente';
+          quizResultDescription.textContent = checkinResult.message;
+        }
       }
     }
-  }
 
-  renderQuiz();
-  isAnswering = false;
+    renderQuiz();
+  } finally {
+    setOptionButtonsDisabled(false);
+    setQuizActionMessage('', '');
+    isAnswering = false;
+  }
 }
 
 applyQuizConfig();
