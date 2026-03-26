@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 
 const routes = require('./routes');
+const { applyStaticCacheHeaders } = require('./http/cacheControl');
 const webRoutes = require('./routes/webRoutes');
 
 function createApp(options = {}) {
@@ -17,7 +18,9 @@ function createApp(options = {}) {
   });
   app.use(express.json());
   app.use(webRoutes);
-  app.use(express.static(publicDirectory));
+  app.use(express.static(publicDirectory, {
+    setHeaders: applyStaticCacheHeaders,
+  }));
   app.use('/api', routes);
 
   return app;

@@ -1,55 +1,57 @@
 const express = require('express');
 const path = require('path');
 
+const { noStore } = require('../http/cacheControl');
+
 const router = express.Router();
 
 const publicDirectory = path.join(__dirname, '..', '..', 'public');
 
-router.get('/', (req, res) => {
+router.get('/', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'index.html'));
 });
 
-router.get('/login', (req, res) => {
+router.get('/login', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'index.html'));
 });
 
-router.get('/primeiro-acesso', (req, res) => {
+router.get('/primeiro-acesso', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'first-access.html'));
 });
 
-router.get('/users-register.html', (req, res) => {
+router.get('/users-register.html', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'users-register.html'));
 });
 
-router.get('/users-register', (req, res) => {
+router.get('/users-register', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'users-register.html'));
 });
 
-router.get('/cadastro-users', (req, res) => {
+router.get('/cadastro-users', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'users-register.html'));
 });
 
-router.get('/cadastro-usuarios', (req, res) => {
+router.get('/cadastro-usuarios', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'users-register.html'));
 });
 
-router.get('/perfil', (req, res) => {
+router.get('/perfil', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'perfil.html'));
 });
 
-router.get('/linktree', (req, res) => {
+router.get('/linktree', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'linktree.html'));
 });
 
-router.get('/logistica', (req, res) => {
+router.get('/logistica', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'logistica.html'));
 });
 
-router.get('/boas-praticas', (req, res) => {
+router.get('/boas-praticas', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'boas-praticas.html'));
 });
 
-router.get('/boas-praticas.html', (req, res) => {
+router.get('/boas-praticas.html', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'boas-praticas.html'));
 });
 
@@ -58,15 +60,15 @@ for (let palcoNumber = 1; palcoNumber <= 5; palcoNumber += 1) {
   const perguntasPalcoRoute = `/perguntas-palco-${palcoNumber}`;
   const questionsPalcoRoute = `/questions-palco-${palcoNumber}`;
 
-  router.get(palcoRoute, (req, res) => {
+  router.get(palcoRoute, noStore(), (req, res) => {
     res.sendFile(path.join(publicDirectory, 'questions-stage.html'));
   });
 
-  router.get(perguntasPalcoRoute, (req, res) => {
+  router.get(perguntasPalcoRoute, noStore(), (req, res) => {
     res.sendFile(path.join(publicDirectory, 'questions-stage.html'));
   });
 
-  router.get(questionsPalcoRoute, (req, res) => {
+  router.get(questionsPalcoRoute, noStore(), (req, res) => {
     res.sendFile(path.join(publicDirectory, 'questions-stage.html'));
   });
 }
@@ -83,39 +85,39 @@ for (let palestraNumber = 1; palestraNumber <= 3; palestraNumber += 1) {
   });
 }
 
-router.get('/moderacao-perguntas', (req, res) => {
+router.get('/moderacao-perguntas', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'questions-moderation.html'));
 });
 
-router.get('/questions-moderation', (req, res) => {
+router.get('/questions-moderation', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'questions-moderation.html'));
 });
 
-router.get('/question-moderation', (req, res) => {
+router.get('/question-moderation', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'questions-moderation.html'));
 });
 
-router.get('/perguntas-aprovadas', (req, res) => {
+router.get('/perguntas-aprovadas', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'questions-approved.html'));
 });
 
-router.get('/questions-approved', (req, res) => {
+router.get('/questions-approved', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'questions-approved.html'));
 });
 
-router.get('/qrcode-presenca-palco', (req, res) => {
+router.get('/qrcode-presenca-palco', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'questions-session-qrcode.html'));
 });
 
-router.get('/questions-session-qrcode', (req, res) => {
+router.get('/questions-session-qrcode', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'questions-session-qrcode.html'));
 });
 
-router.get('/checkin-presenca-palco', (req, res) => {
+router.get('/checkin-presenca-palco', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'questions-session-checkin.html'));
 });
 
-router.get('/questions-session-checkin', (req, res) => {
+router.get('/questions-session-checkin', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'questions-session-checkin.html'));
 });
 
@@ -123,23 +125,31 @@ router.get('/teste', (req, res) => {
   res.redirect('/perfil/');
 });
 
-router.get('/agenda', (req, res) => {
+router.get('/agenda', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'agenda.html'));
 });
 
-router.get('/feed', (req, res) => {
+router.get('/feed', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'feed.html'));
 });
 
-router.get('/estandes', (req, res) => {
+router.get('/estandes', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'estandes.html'));
 });
 
-router.get('/ranking', (req, res) => {
+router.get('/ranking', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'ranking.html'));
 });
 
-router.get('/scanner', (req, res) => {
+router.get('/quiz/nasher', noStore(), (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'quiz', 'nesher.html'));
+});
+
+router.get('/quiz/nasher.html', noStore(), (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'quiz', 'nesher.html'));
+});
+
+router.get('/scanner', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'scanner.html'));
 });
 

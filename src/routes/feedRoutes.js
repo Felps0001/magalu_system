@@ -1,6 +1,8 @@
 const express = require('express');
 const multer = require('multer');
 
+const { edgeCache, noStore } = require('../http/cacheControl');
+
 const {
   createFeedHandler,
   createFeedUploadUrlHandler,
@@ -16,8 +18,8 @@ const upload = multer({
   },
 });
 
-router.get('/', listFeedHandler);
-router.get('/publish-access', getFeedPublishAccessHandler);
+router.get('/', edgeCache({ maxAgeSeconds: 15, sMaxAgeSeconds: 30, staleWhileRevalidateSeconds: 60 }), listFeedHandler);
+router.get('/publish-access', noStore(), getFeedPublishAccessHandler);
 router.post('/upload-url', createFeedUploadUrlHandler);
 router.post('/', upload.single('imagem'), createFeedHandler);
 
