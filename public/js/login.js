@@ -8,7 +8,7 @@ const firstAccessButton = document.getElementById('first-access-button');
 const existingSession = window.magaluApi.readStoredUser();
 
 if (existingSession) {
-  window.location.replace(window.magaluApi.getAuthenticatedHomeUrl(existingSession));
+  window.location.replace(window.magaluApi.getPostLoginUrl(existingSession));
 }
 
 function setMessage(message, type) {
@@ -72,7 +72,7 @@ loginForm.addEventListener('submit', async (event) => {
     setMessage('Login efetuado. Redirecionando...', 'success');
 
     window.setTimeout(() => {
-      window.location.href = window.magaluApi.getAuthenticatedHomeUrl(data.user);
+      window.location.href = window.magaluApi.getPostLoginUrl(data.user);
     }, 400);
   } catch (error) {
     setMessage(error.message, 'error');

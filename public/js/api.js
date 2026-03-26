@@ -124,6 +124,35 @@ function buildAppUrl(path = '/') {
   return new URL(normalizedPath, rootUrl).toString();
 }
 
+function getSafeReturnToPath() {
+  const currentUrl = new URL(window.location.href);
+  const rawReturnTo = currentUrl.searchParams.get('returnTo');
+
+  if (!rawReturnTo || !rawReturnTo.startsWith('/')) {
+    return null;
+  }
+
+  if (rawReturnTo.startsWith('//')) {
+    return null;
+  }
+
+  return rawReturnTo;
+}
+
+function buildLoginUrlWithReturnTo(returnToPath) {
+  const loginUrl = new URL(buildAppUrl('/'));
+
+  if (typeof returnToPath === 'string' && returnToPath.startsWith('/')) {
+    loginUrl.searchParams.set('returnTo', returnToPath);
+  }
+
+  return loginUrl.toString();
+}
+
+function getProtectedPageReturnTo() {
+  return `${window.location.pathname}${window.location.search}${window.location.hash}`;
+}
+
 function normalizeStoredUser(user) {
   if (!user || typeof user !== 'object') {
     return user;
@@ -218,6 +247,16 @@ function requiresFirstAccess(user) {
 
 function getAuthenticatedHomeUrl(user) {
   return buildAppUrl(requiresFirstAccess(user) ? '/primeiro-acesso/' : '/perfil/');
+}
+
+function getPostLoginUrl(user) {
+  const safeReturnToPath = getSafeReturnToPath();
+
+  if (safeReturnToPath && !requiresFirstAccess(user)) {
+    return buildAppUrl(safeReturnToPath);
+  }
+
+  return getAuthenticatedHomeUrl(user);
 }
 
 function withApiDefaults(options = {}) {
@@ -351,6 +390,7 @@ async function fetchUserById(userId) {
 window.magaluApi = {
   buildAppUrl,
   buildApiUrl,
+  buildLoginUrlWithReturnTo,
   canAccessRanking,
   clearStoredUser,
   fetchUserAereo,
@@ -359,6 +399,9 @@ window.magaluApi = {
   fetchUserRota,
   getAuthenticatedHomeUrl,
   getAppRootUrl,
+  getPostLoginUrl,
+  getProtectedPageReturnTo,
+  getSafeReturnToPath,
   hasPendingKit,
   mergeUserKitStatus,
   parseApiResponse,

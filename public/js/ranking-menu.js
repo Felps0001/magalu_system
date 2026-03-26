@@ -10,7 +10,9 @@
 
   if (requiresRankingAccess) {
     if (!currentUser) {
-      window.location.replace(window.magaluApi.buildAppUrl('/'));
+      window.location.replace(
+        window.magaluApi.buildLoginUrlWithReturnTo(window.magaluApi.getProtectedPageReturnTo())
+      );
       return;
     }
 
