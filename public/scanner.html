@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Leitor de kit para scanner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0086ff">
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    .scanner-page {
+      min-height: 100vh;
+      padding: 32px 20px;
+      background: linear-gradient(180deg, #f5f9ff 0%, #ffffff 100%);
+    }
+
+    .scanner-page-shell {
+      width: min(100%, 1040px);
+      margin: 0 auto;
+      display: grid;
+      gap: 22px;
+    }
+
+    .scanner-hero-card,
+    .scanner-panel-card,
+    .scanner-output-card {
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid rgba(0, 89, 214, 0.12);
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 18px 34px rgba(0, 89, 214, 0.08);
+    }
+
+    .scanner-hero-card {
+      color: #ffffff;
+      background: linear-gradient(135deg, #0086ff 0%, #0051c7 100%);
+      box-shadow: 0 24px 46px rgba(0, 89, 214, 0.24);
+    }
+
+    .scanner-hero-card h1,
+    .scanner-hero-card p {
+      margin: 0;
+    }
+
+    .scanner-hero-card {
+      display: grid;
+      gap: 10px;
+    }
+
+    .scanner-page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .scanner-panel-card,
+    .scanner-output-card {
+      display: grid;
+      gap: 18px;
+    }
+
+    .scanner-form-row {
+      display: grid;
+      gap: 8px;
+    }
+
+    .scanner-form-row label {
+      font-weight: 700;
+      color: #0d2142;
+    }
+
+    .scanner-form-row input {
+      min-height: 48px;
+      padding: 0 14px;
+      border: 1px solid rgba(0, 89, 214, 0.14);
+      border-radius: 14px;
+      font: inherit;
+      background: #ffffff;
+      color: #0d2142;
+    }
+
+    .scanner-form-row input:focus {
+      outline: 2px solid rgba(0, 134, 255, 0.28);
+      outline-offset: 2px;
+      border-color: rgba(0, 89, 214, 0.28);
+    }
+
+    .scanner-empty-state {
+      margin: 0;
+      color: #4a5d7a;
+      line-height: 1.55;
+    }
+
+    .scanner-output-card h2,
+    .scanner-panel-card h2 {
+      margin: 0;
+      font-size: 1.15rem;
+      color: #0d2142;
+    }
+
+    .scanner-actions .secondary-button[disabled],
+    .scanner-actions .primary-button[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .scanner-output-meta {
+      margin: 0;
+      color: #4a5d7a;
+      line-height: 1.55;
+      white-space: pre-line;
+    }
+
+    .scanner-input-hint {
+      margin: 0;
+      color: #4a5d7a;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 900px) {
+      .scanner-page-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .scanner-page {
+        padding: 20px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="scanner-page">
+    <div class="scanner-page-shell">
+      <section class="scanner-hero-card" aria-label="Scanner de kit">
+        <p class="profile-section-kicker">Ferramenta</p>
+        <h1>Scanner de kit</h1>
+        <p>Use um leitor físico conectado ao notebook para escanear o QR do participante, consultar o status e dar baixa do kit direto nesta tela.</p>
+      </section>
+
+      <section class="scanner-page-grid">
+        <section class="scanner-panel-card" aria-labelledby="scanner-panel-title">
+          <h2 id="scanner-panel-title">Leitor físico</h2>
+
+          <div class="scanner-form-row">
+            <label for="scanner-input">Entrada do scanner</label>
+            <input id="scanner-input" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Aguardando leitura do scanner">
+          </div>
+
+          <p class="scanner-input-hint">A maioria dos scanners envia o conteúdo e finaliza com Enter. Mantenha o campo ativo e leia o QR normalmente.</p>
+
+          <p id="scanner-status" class="form-message info-message">Pronto para escanear.</p>
+
+          <div class="scanner-actions">
+            <button id="focus-scan-button" class="primary-button" type="button">Ativar leitura</button>
+            <button id="process-scan-button" class="secondary-button" type="button">Processar leitura</button>
+            <button id="clear-scan-button" class="secondary-button" type="button">Limpar</button>
+          </div>
+        </section>
+
+        <aside class="scanner-output-card" aria-labelledby="scanner-output-title">
+          <h2 id="scanner-output-title">Status do kit</h2>
+          <div class="scanner-result">
+            <div id="scanner-result" class="scanner-result-value">Nenhum QR lido.</div>
+          </div>
+          <p id="scanner-output-summary" class="scanner-output-meta">Nenhum participante consultado.</p>
+          <p id="scanner-output-meta" class="scanner-output-meta">Escaneie um QR do app para consultar e baixar o kit.</p>
+          <p class="scanner-empty-state">Dica: se o scanner estiver configurado como teclado, clique em Ativar leitura antes de começar a operar.</p>
+        </aside>
+      </section>
+    </div>
+  </main>
+
+  <script src="./js/runtime-config.js"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/popup-config.js"></script>
+  <script src="./js/popup.js"></script>
+  <script src="./js/scanner.js"></script>
+</body>
+</html>

@@ -140,7 +140,7 @@ router.get('/ranking', (req, res) => {
 });
 
 router.get('/scanner', (req, res) => {
-  res.redirect('/perfil/');
+  res.sendFile(path.join(publicDirectory, 'scanner.html'));
 });
 
 module.exports = router;
