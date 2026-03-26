@@ -59,6 +59,29 @@
       gap: 18px;
     }
 
+    .scanner-output-card {
+      transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+    }
+
+    .scanner-output-card--neutral {
+      border-color: rgba(0, 89, 214, 0.12);
+      background: rgba(255, 255, 255, 0.94);
+    }
+
+    .scanner-output-card--ready {
+      border-color: rgba(17, 148, 92, 0.32);
+      background: linear-gradient(180deg, rgba(235, 255, 246, 0.98), rgba(220, 250, 237, 0.96));
+      box-shadow: 0 22px 42px rgba(17, 148, 92, 0.16);
+      transform: translateY(-2px);
+    }
+
+    .scanner-output-card--blocked {
+      border-color: rgba(214, 54, 56, 0.28);
+      background: linear-gradient(180deg, rgba(255, 240, 240, 0.98), rgba(255, 228, 228, 0.96));
+      box-shadow: 0 22px 42px rgba(214, 54, 56, 0.14);
+      transform: translateY(-2px);
+    }
+
     .scanner-form-row {
       display: grid;
       gap: 8px;
@@ -111,6 +134,34 @@
       white-space: pre-line;
     }
 
+    .scanner-output-summary {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #0d2142;
+    }
+
+    .scanner-output-card--ready .scanner-output-summary,
+    .scanner-output-card--ready #scanner-output-title {
+      color: #0f7d4f;
+    }
+
+    .scanner-output-card--blocked .scanner-output-summary,
+    .scanner-output-card--blocked #scanner-output-title {
+      color: #b42318;
+    }
+
+    .scanner-output-card--ready .scanner-result-value {
+      background: rgba(17, 148, 92, 0.1);
+      border-color: rgba(17, 148, 92, 0.18);
+      color: #0f7d4f;
+    }
+
+    .scanner-output-card--blocked .scanner-result-value {
+      background: rgba(214, 54, 56, 0.08);
+      border-color: rgba(214, 54, 56, 0.16);
+      color: #b42318;
+    }
+
     .scanner-input-hint {
       margin: 0;
       color: #4a5d7a;
@@ -157,12 +208,12 @@
           </div>
         </section>
 
-        <aside class="scanner-output-card" aria-labelledby="scanner-output-title">
+        <aside id="scanner-output-card" class="scanner-output-card scanner-output-card--neutral" aria-labelledby="scanner-output-title">
           <h2 id="scanner-output-title">Status do kit</h2>
           <div class="scanner-result">
             <div id="scanner-result" class="scanner-result-value">Nenhum QR lido.</div>
           </div>
-          <p id="scanner-output-summary" class="scanner-output-meta">Nenhum participante consultado.</p>
+          <p id="scanner-output-summary" class="scanner-output-meta scanner-output-summary">Nenhum participante consultado.</p>
           <p id="scanner-output-meta" class="scanner-output-meta">Escaneie um QR do app para consultar e baixar o kit.</p>
           <p class="scanner-empty-state">Dica: se o scanner estiver configurado como teclado, clique em Ativar leitura antes de começar a operar.</p>
         </aside>

@@ -1,5 +1,6 @@
 const scannerStatus = document.getElementById('scanner-status');
 const scannerResult = document.getElementById('scanner-result');
+const scannerOutputCard = document.getElementById('scanner-output-card');
 const scannerOutputSummary = document.getElementById('scanner-output-summary');
 const scannerOutputMeta = document.getElementById('scanner-output-meta');
 const scannerInput = document.getElementById('scanner-input');
@@ -23,7 +24,28 @@ function updateResult(value) {
   scannerResult.textContent = value || 'Nenhum QR lido.';
 }
 
-function updateKitStatus(summary, metaText) {
+function setOutputState(state) {
+  scannerOutputCard.classList.remove(
+    'scanner-output-card--neutral',
+    'scanner-output-card--ready',
+    'scanner-output-card--blocked'
+  );
+
+  if (state === 'ready') {
+    scannerOutputCard.classList.add('scanner-output-card--ready');
+    return;
+  }
+
+  if (state === 'blocked') {
+    scannerOutputCard.classList.add('scanner-output-card--blocked');
+    return;
+  }
+
+  scannerOutputCard.classList.add('scanner-output-card--neutral');
+}
+
+function updateKitStatus(summary, metaText, state = 'neutral') {
+  setOutputState(state);
   scannerOutputSummary.textContent = summary;
   scannerOutputMeta.textContent = metaText;
 }
@@ -81,15 +103,15 @@ async function processarKit(userId) {
   const meta = `ID Magalu: ${user.id_magalu || '-'}\nFilial: ${user.filial || '-'}\nRegional: ${user.regional || '-'}\nCargo: ${user.cargo || '-'}${extraInfo}`;
 
   if (user.kit) {
-    updateKitStatus(`Kit ja retirado por ${user.nome || 'usuario'}.`, meta);
+    updateKitStatus(`Kit ja retirado por ${user.nome || 'usuario'}.`, meta, 'blocked');
     setScannerStatus('Este usuario ja retirou o kit.', 'success');
     return;
   }
 
-  updateKitStatus(`Kit pendente para ${user.nome || 'usuario'}.`, meta);
+  updateKitStatus(`Kit liberado para ${user.nome || 'usuario'}.`, meta, 'ready');
   setScannerStatus('Kit pendente. Marcando retirada...', 'info-message');
   await marcarKit(userId);
-  updateKitStatus(`Kit retirado por ${user.nome || 'usuario'}.`, meta);
+  updateKitStatus(`Kit retirado por ${user.nome || 'usuario'}.`, meta, 'ready');
   setScannerStatus('Kit marcado com sucesso!', 'success');
 }
 
@@ -119,7 +141,7 @@ async function processScannedValue(rawValue) {
   const userId = extractUserIdFromPayload(normalizedValue);
 
   if (!userId) {
-    updateKitStatus('QR invalido para kit.', 'O conteudo lido nao corresponde ao QR de participante do app.');
+    updateKitStatus('QR invalido para kit.', 'O conteudo lido nao corresponde ao QR de participante do app.', 'blocked');
     setScannerStatus('QR invalido para kit.', 'error');
     return;
   }
@@ -135,7 +157,7 @@ async function processScannedValue(rawValue) {
   try {
     await processarKit(userId);
   } catch (error) {
-    updateKitStatus('Falha ao consultar usuario.', 'Verifique se o QR pertence ao ambiente publicado e se o usuario existe no banco.');
+    updateKitStatus('Falha ao consultar usuario.', 'Verifique se o QR pertence ao ambiente publicado e se o usuario existe no banco.', 'blocked');
     setScannerStatus(`Falha ao consultar kit: ${error.message}`, 'error');
   } finally {
     isHandlingScan = false;
@@ -156,7 +178,7 @@ processScanButton.addEventListener('click', async () => {
 
 clearScanButton.addEventListener('click', () => {
   updateResult('Nenhum QR lido.');
-  updateKitStatus('Nenhum participante consultado.', 'Escaneie um QR do app para consultar e baixar o kit.');
+  updateKitStatus('Nenhum participante consultado.', 'Escaneie um QR do app para consultar e baixar o kit.', 'neutral');
   setScannerStatus('Campo limpo. Aguardando nova leitura.', 'info-message');
   resetScannerInput();
 });
@@ -187,4 +209,4 @@ document.addEventListener('click', (event) => {
   }
 });
 
-updateKitStatus('Nenhum participante consultado.', 'Escaneie um QR do app para consultar e baixar o kit.');
+updateKitStatus('Nenhum participante consultado.', 'Escaneie um QR do app para consultar e baixar o kit.', 'neutral');
