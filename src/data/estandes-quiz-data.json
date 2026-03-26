@@ -112,16 +112,19 @@
       }
     },
     {
-      "slug": "aoc-estande-philips-aoc",
-      "nome": "AOC (estande Philips | AOC)",
+      "slug": "aoc",
+      "nome": "AOC",
       "estandeId": "69c4a9a70343759bac557226",
+      "legacySlugs": [
+        "aoc-estande-philips-aoc"
+      ],
       "pontos": {
         "scan": 1,
         "correct": 4,
         "max": 5
       },
       "quizOrigin": "quiz-aoc-estande-philips-aoc",
-      "pagePath": "/quiz/aoc-estande-philips-aoc.html",
+      "pagePath": "/quiz/aoc.html",
       "question": "Qual as principais features da TV 50' AOC?",
       "options": [
         {
@@ -357,20 +360,23 @@
       }
     },
     {
-      "slug": "brastemp-estande-brastemp-consul",
-      "nome": "Brastemp (estande Brastemp | Consul)",
+      "slug": "brastemp",
+      "nome": "Brastemp",
       "estandeId": "69c4a9a80343759bac557268",
+      "legacySlugs": [
+        "brastemp-estande-brastemp-consul"
+      ],
       "pontos": {
         "scan": 1,
         "correct": 4,
         "max": 5
       },
       "quizOrigin": "quiz-brastemp-estande-brastemp-consul",
-      "pagePath": "/quiz/brastemp-estande-brastemp-consul.html",
+      "pagePath": "/quiz/brastemp.html",
       "question": "Sobre os modelos Brastemp BRM62 e BRE66, qual é o novo diferencial tecnológico que otimiza o consumo de energia e a conservação dos alimentos?",
       "options": [
         {
-          "text": "Tecnologia Xpert Inverter e Tecnologia B=Smart A",
+          "text": "Tecnologia Xpert Inverter e Tecnologia B-Smart",
           "isCorrect": true
         },
         {
@@ -497,16 +503,19 @@
       }
     },
     {
-      "slug": "britania-estande-britania-philco",
-      "nome": "Britânia (estande Britânia | Philco)",
+      "slug": "britania",
+      "nome": "Britânia",
       "estandeId": "69c4a9a70343759bac55722e",
+      "legacySlugs": [
+        "britania-estande-britania-philco"
+      ],
       "pontos": {
         "scan": 1,
         "correct": 4,
         "max": 5
       },
       "quizOrigin": "quiz-britania-estande-britania-philco",
-      "pagePath": "/quiz/britania-estande-britania-philco.html",
+      "pagePath": "/quiz/britania.html",
       "question": "A Britânia está presente em milhões de casas pelo Brasil. Qual é o percentual de lares que possuem pelo menos 1 produto da marca?",
       "options": [
         {
@@ -707,32 +716,35 @@
       }
     },
     {
-      "slug": "consul-estande-brastemp-consul",
-      "nome": "Consul (estande Brastemp | Consul)",
+      "slug": "consul",
+      "nome": "Consul",
       "estandeId": "69c4a9a80343759bac557269",
+      "legacySlugs": [
+        "consul-estande-brastemp-consul"
+      ],
       "pontos": {
         "scan": 1,
         "correct": 4,
         "max": 5
       },
       "quizOrigin": "quiz-consul-estande-brastemp-consul",
-      "pagePath": "/quiz/consul-estande-brastemp-consul.html",
-      "question": "Sobre os modelos Brastemp BRM62 e BRE66, qual é o novo diferencial tecnológico que otimiza o consumo de energia e a conservação dos alimentos?",
+      "pagePath": "/quiz/consul.html",
+      "question": "Quais são os ciclos especiais presentes na lavadora Consul CWH13 e nas lavadoras CWN14 e CWN16?",
       "options": [
         {
-          "text": "Tecnologia Xpert Inverter e Tecnologia B=Smart A",
+          "text": "Ciclo Esporte e Ciclo Delicado | Ciclo Brancos e Ciclo Coloridos",
+          "isCorrect": false
+        },
+        {
+          "text": "Ciclo Jeans Pesado e Ciclo Vapor | Ciclo Lã e Ciclo Econômico",
+          "isCorrect": false
+        },
+        {
+          "text": "Ciclo Praia e Ciclo Uniforme | Ciclo Rede e Ciclo Rápido",
           "isCorrect": true
         },
         {
-          "text": "Sistema de degelo seco manual",
-          "isCorrect": false
-        },
-        {
-          "text": "Smart Cold e Frost Free",
-          "isCorrect": false
-        },
-        {
-          "text": "Prateleiras internas de acrílico",
+          "text": "Ciclo Tira Manchas Advanced",
           "isCorrect": false
         }
       ],
@@ -2060,16 +2072,19 @@
       }
     },
     {
-      "slug": "philco-estande-britania-philco",
-      "nome": "Philco (estande Britânia | Philco)",
+      "slug": "philco",
+      "nome": "Philco",
       "estandeId": "69c4a9a80343759bac557259",
+      "legacySlugs": [
+        "philco-estande-britania-philco"
+      ],
       "pontos": {
         "scan": 1,
         "correct": 4,
         "max": 5
       },
       "quizOrigin": "quiz-philco-estande-britania-philco",
-      "pagePath": "/quiz/philco-estande-britania-philco.html",
+      "pagePath": "/quiz/philco.html",
       "question": "A Philco é uma marca conhecida por qualidade e inovação, com mais de 90 anos de história. Qual dessas afirmações é verdadeira?",
       "options": [
         {
@@ -2077,7 +2092,7 @@
           "isCorrect": false
         },
         {
-          "text": "Oferece Fast Smart TV's com velocidade de50% mais rápida",
+          "text": "Oferece Fast Smart TV's com velocidade de resposta 50% mais rápida",
           "isCorrect": true
         },
         {
@@ -2109,7 +2124,7 @@
       "options": [
         {
           "text": "Aparador de barba",
-          "isCorrect": true
+          "isCorrect": false
         },
         {
           "text": "Barbeador elétrico",
@@ -2121,7 +2136,7 @@
         },
         {
           "text": "OneBlade",
-          "isCorrect": false
+          "isCorrect": true
         }
       ],
       "source": {
@@ -2130,16 +2145,19 @@
       }
     },
     {
-      "slug": "philips-estande-philips-aoc",
-      "nome": "Philips (estande Philips | AOC)",
+      "slug": "philips-envision",
+      "nome": "Philips Envision",
       "estandeId": "69c4a9a80343759bac55725b",
+      "legacySlugs": [
+        "philips-estande-philips-aoc"
+      ],
       "pontos": {
         "scan": 1,
         "correct": 4,
         "max": 5
       },
       "quizOrigin": "quiz-philips-estande-philips-aoc",
-      "pagePath": "/quiz/philips-estande-philips-aoc.html",
+      "pagePath": "/quiz/philips-envision.html",
       "question": "Qual a TV foco para 2026?",
       "options": [
         {

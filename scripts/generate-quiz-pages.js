@@ -166,6 +166,25 @@ function buildQuizPageHtml(estande) {
 `;
 }
 
+function buildQuizRedirectHtml(estande, legacySlug) {
+  const destinationPath = estande && estande.pagePath ? estande.pagePath : `/quiz/${estande.slug}.html`;
+  const destinationUrl = `./${path.basename(destinationPath)}`;
+
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0; url=${escapeHtml(destinationUrl)}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz ${escapeHtml(estande.nome)} - Redirecionando</title>
+</head>
+<body>
+  <p>Redirecionando para o quiz ${escapeHtml(estande.nome)}...</p>
+</body>
+</html>
+`;
+}
+
 function validateEstande(estande) {
   if (!estande || !estande.slug || !estande.nome || !estande.estandeId) {
     return false;
@@ -199,6 +218,16 @@ function main() {
     const html = buildQuizPageHtml(estande);
     const destination = path.join(OUTPUT_DIR, `${estande.slug}.html`);
     fs.writeFileSync(destination, html, 'utf8');
+
+    if (Array.isArray(estande.legacySlugs)) {
+      estande.legacySlugs
+        .filter((legacySlug) => legacySlug && legacySlug !== estande.slug)
+        .forEach((legacySlug) => {
+          const redirectHtml = buildQuizRedirectHtml(estande, legacySlug);
+          fs.writeFileSync(path.join(OUTPUT_DIR, `${legacySlug}.html`), redirectHtml, 'utf8');
+        });
+    }
+
     generatedCount += 1;
   });
 

@@ -18,10 +18,12 @@ NS = {
 }
 
 APP_NAME_ALIAS_MAP = {
-    "britania britani philco": "Britânia (estande Britânia | Philco)",
-    "aoc philips aoc": "AOC (estande Philips | AOC)",
-    "brastemp brastemp consul": "Brastemp (estande Brastemp | Consul)",
-    "consul brastemp consul": "Consul (estande Brastemp | Consul)",
+    "britania britani philco": "Britânia",
+    "philco britania philco": "Philco",
+    "aoc philips aoc": "AOC",
+    "philips philips aoc": "Philips Envision",
+    "brastemp brastemp consul": "Brastemp",
+    "consul brastemp consul": "Consul",
     "atlas dako": "Atlas | Dako",
 }
 
