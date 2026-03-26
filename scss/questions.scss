@@ -121,6 +121,26 @@
   gap: 12px;
 }
 
+.dissertative-textarea {
+  min-height: 180px;
+}
+
+.dissertative-form-footer {
+  align-items: center;
+}
+
+.dissertative-points-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(0, 134, 255, 0.12);
+  color: #0d2142;
+  font-weight: 700;
+}
+
 .question-counter {
   color: var(--muted);
   font-size: 0.82rem;

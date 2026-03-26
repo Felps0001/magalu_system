@@ -141,6 +141,30 @@ router.get('/ranking', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'ranking.html'));
 });
 
+router.get('/perguntas-dissertativas-luiza', noStore(), (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'perguntas-dissertativas-luiza.html'));
+});
+
+router.get('/perguntas-dissertativas-luiza.html', noStore(), (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'perguntas-dissertativas-luiza.html'));
+});
+
+router.get('/perguntas-dissertativas-fred', noStore(), (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'perguntas-dissertativas-fred.html'));
+});
+
+router.get('/perguntas-dissertativas-fred.html', noStore(), (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'perguntas-dissertativas-fred.html'));
+});
+
+router.get('/perguntas-dissertativas-palestra', noStore(), (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'perguntas-dissertativas-palestra.html'));
+});
+
+router.get('/perguntas-dissertativas-palestra.html', noStore(), (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'perguntas-dissertativas-palestra.html'));
+});
+
 router.get('/quiz/nasher', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'quiz', 'nesher.html'));
 });

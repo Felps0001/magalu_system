@@ -50,6 +50,11 @@ async function getQuestionSessionCheckinsCollection() {
   return database.collection('question_session_checkins');
 }
 
+async function getDissertativeAnswersCollection() {
+  const database = await connectToMongoDB();
+  return database.collection('dissertative_answers');
+}
+
 async function findDuplicateCheckinsByUserAndEstande() {
   const checkinsCollection = await getCheckinsCollection();
 
@@ -102,6 +107,7 @@ async function ensureDatabaseIndexes() {
   const questionsCollection = await getQuestionsCollection();
   const questionSessionsCollection = await getQuestionSessionsCollection();
   const questionSessionCheckinsCollection = await getQuestionSessionCheckinsCollection();
+  const dissertativeAnswersCollection = await getDissertativeAnswersCollection();
   const duplicateUserIds = await findDuplicateUserIds();
   const duplicateCheckins = await findDuplicateCheckinsByUserAndEstande();
 
@@ -232,6 +238,21 @@ async function ensureDatabaseIndexes() {
     }
   );
 
+  await dissertativeAnswersCollection.createIndex(
+    { userId: 1, activityCode: 1 },
+    {
+      unique: true,
+      name: 'dissertative_answers_user_activity_unique',
+    }
+  );
+
+  await dissertativeAnswersCollection.createIndex(
+    { activityCode: 1, createdAt: -1 },
+    {
+      name: 'dissertative_answers_activity_created_at_desc',
+    }
+  );
+
   return {
     warnings,
   };
@@ -248,5 +269,6 @@ module.exports = {
   getQuestionsCollection,
   getQuestionSessionsCollection,
   getQuestionSessionCheckinsCollection,
+  getDissertativeAnswersCollection,
   ensureDatabaseIndexes,
 };

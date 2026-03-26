@@ -23,11 +23,20 @@ function buildUserAccessPipeline(matchStage = {}, options = {}) {
       },
     },
     {
+      $lookup: {
+        from: 'dissertative_answers',
+        localField: '_id',
+        foreignField: 'userId',
+        as: 'dissertativeAnswers',
+      },
+    },
+    {
       $addFields: {
         pontos: {
           $add: [
             { $sum: '$checkins.pontos' },
             { $sum: '$sessionCheckins.pontos' },
+            { $sum: '$dissertativeAnswers.pontos' },
           ],
         },
         tempo: { $sum: '$checkins.tempo' },
@@ -35,6 +44,7 @@ function buildUserAccessPipeline(matchStage = {}, options = {}) {
           $add: [
             { $size: '$checkins' },
             { $size: '$sessionCheckins' },
+            { $size: '$dissertativeAnswers' },
           ],
         },
       },
@@ -63,6 +73,7 @@ function buildUserAccessPipeline(matchStage = {}, options = {}) {
         aereoCollection: 0,
         hospedagemCollection: 0,
         sessionCheckins: 0,
+        dissertativeAnswers: 0,
       },
     },
   ];
