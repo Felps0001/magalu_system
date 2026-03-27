@@ -75,7 +75,9 @@ async function exportSessionCheckins() {
 
   const headers = [
     'NOME',
+    'CPF',
     'ID_MAGALU',
+    'FILIAL',
     'CARGO',
     'REGIONAL',
     'DIRETORIA',
@@ -94,7 +96,9 @@ async function exportSessionCheckins() {
 
     lines.push(buildCsvLine([
       user.nome || '',
+      user.cpf || '',
       user.id_magalu || '',
+      user.filial || '',
       user.cargo || '',
       user.regional || '',
       user.diretoria || '',

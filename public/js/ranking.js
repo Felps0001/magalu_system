@@ -8,6 +8,7 @@ const rankingParticipants = document.getElementById('ranking-total-participants'
 const rankingLeaderScore = document.getElementById('ranking-leader-score');
 const rankingUpdatedAt = document.getElementById('ranking-updated-at');
 const rankingRefreshButton = document.getElementById('ranking-refresh-button');
+const rankingDiretoriaFilter = document.getElementById('ranking-diretoria-filter');
 const rankingMenuButton = document.getElementById('ranking-menu-button');
 const rankingDrawer = document.getElementById('ranking-drawer');
 const rankingDrawerBackdrop = document.getElementById('ranking-drawer-backdrop');
@@ -18,6 +19,7 @@ let currentUser = window.magaluRankingAccess && window.magaluRankingAccess.curre
   ? window.magaluRankingAccess.currentUser
   : null;
 let drawerCloseTimer = null;
+let fullRankingData = [];
 
 function redirectToLogin() {
   window.location.replace(window.magaluApi.buildAppUrl('/'));
@@ -155,11 +157,41 @@ function renderRanking(users) {
   rankingLeaderScore.textContent = String(Number(users[0].pontos || 0));
   rankingUpdatedAt.textContent = `Atualizado em ${formatUpdatedAt(new Date())}`;
 
-  users.forEach((user) => {
-    rankingList.appendChild(buildRankingCard(user));
+  users.forEach((user, index) => {
+    const displayUser = { ...user, rankingPosition: index + 1 };
+    rankingList.appendChild(buildRankingCard(displayUser));
   });
 
   setStatus(`${users.length} participantes carregados.`, 'success');
+}
+
+function populateDiretoriaFilter(users) {
+  const diretorias = [...new Set(
+    users.map((u) => u.diretoria).filter(Boolean)
+  )].sort();
+
+  const currentValue = rankingDiretoriaFilter.value;
+  rankingDiretoriaFilter.innerHTML = '<option value="">Geral (todas)</option>';
+
+  diretorias.forEach((d) => {
+    const option = document.createElement('option');
+    option.value = d;
+    option.textContent = d;
+    rankingDiretoriaFilter.appendChild(option);
+  });
+
+  if (currentValue && diretorias.includes(currentValue)) {
+    rankingDiretoriaFilter.value = currentValue;
+  }
+}
+
+function applyDiretoriaFilter() {
+  const selected = rankingDiretoriaFilter.value;
+  const filtered = selected
+    ? fullRankingData.filter((u) => u.diretoria === selected)
+    : fullRankingData;
+
+  renderRanking(filtered);
 }
 
 async function loadRanking() {
@@ -193,7 +225,9 @@ async function loadRanking() {
       throw new Error(data && data.error ? data.error : 'Nao foi possivel carregar o ranking.');
     }
 
-    renderRanking(data);
+    fullRankingData = data;
+    populateDiretoriaFilter(data);
+    applyDiretoriaFilter();
   } catch (error) {
     rankingList.innerHTML = '';
     rankingParticipants.textContent = '0';
@@ -221,6 +255,10 @@ if (!currentUser) {
 
 rankingRefreshButton.addEventListener('click', () => {
   loadRanking();
+});
+
+rankingDiretoriaFilter.addEventListener('change', () => {
+  applyDiretoriaFilter();
 });
 
 rankingMenuButton.addEventListener('click', () => {
