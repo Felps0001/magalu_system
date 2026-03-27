@@ -30,7 +30,7 @@ const agendaDay27Section = document.getElementById('agenda-day-27-section');
 const agendaDay27List = document.getElementById('agenda-day-27-list');
 const agendaDay27Note = document.getElementById('agenda-day-27-note');
 
-const FORCE_SHOW_DAY_27 = false;
+const FORCE_SHOW_DAY_27 = true;
 
 const REGIONAL_TO_DIRETORIA = {
   ARACAJU: 'N_NE',
