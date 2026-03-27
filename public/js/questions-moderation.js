@@ -7,6 +7,7 @@ const moderationSessionSummary = document.getElementById('questions-session-summ
 const moderationStartSessionButton = document.getElementById('questions-start-session-button');
 const moderationEndSessionButton = document.getElementById('questions-end-session-button');
 const moderationOpenQrButton = document.getElementById('questions-open-qrcode-button');
+const moderationDownloadCsvButton = document.getElementById('questions-download-csv-button');
 
 const { palestraLabels, palestraOrder, statusLabels, statusOrder } = window.magaluQuestions;
 const columnBodies = new Map();
@@ -451,6 +452,50 @@ async function endCurrentSession() {
   }
 }
 
+function escapeCsvField(value) {
+  const text = String(value == null ? '' : value);
+
+  if (text.includes(';') || text.includes('"') || text.includes('\n')) {
+    return `"${text.replace(/"/g, '""')}"`;
+  }
+
+  return text;
+}
+
+function downloadQuestionsCsv() {
+  if (questionsState.length === 0) {
+    setBoardStatus('Nenhuma pergunta para exportar.', 'error');
+    return;
+  }
+
+  const headers = ['PALCO', 'SESSAO', 'AUTOR', 'PERGUNTA', 'STATUS', 'CRIADA_EM', 'ATUALIZADA_EM'];
+  const lines = [headers.join(';')];
+
+  questionsState.forEach(function (question) {
+    lines.push([
+      escapeCsvField(palestraLabels[question.palestraId] || question.palestraId || ''),
+      escapeCsvField(question.sessionLabel || ''),
+      escapeCsvField(question.authorName || ''),
+      escapeCsvField(question.texto || ''),
+      escapeCsvField(statusLabels[question.status] || question.status || ''),
+      escapeCsvField(formatDateTime(question.createdAt)),
+      escapeCsvField(formatDateTime(question.updatedAt)),
+    ].join(';'));
+  });
+
+  var csvContent = '\uFEFF' + lines.join('\n');
+  var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  var url = URL.createObjectURL(blob);
+  var link = document.createElement('a');
+  link.href = url;
+  link.download = 'perguntas-sessao-' + new Date().toISOString().slice(0, 19).replace(/:/g, '-') + '.csv';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  setBoardStatus('CSV baixado com sucesso.', 'success');
+}
+
 buildFilterOptions();
 setupColumns();
 loadBoardData();
@@ -474,6 +519,10 @@ moderationEndSessionButton.addEventListener('click', () => {
 
 moderationOpenQrButton.addEventListener('click', () => {
   openAttendanceQrScreen();
+});
+
+moderationDownloadCsvButton.addEventListener('click', () => {
+  downloadQuestionsCsv();
 });
 
 window.setInterval(() => {
