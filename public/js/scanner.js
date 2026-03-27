@@ -172,7 +172,9 @@ function extractUserIdFromPayload(rawValue) {
 
 function resetScannerInput() {
   scannerInput.value = '';
-  focusScannerInput();
+  if (document.activeElement !== scannerIdInput) {
+    focusScannerInput();
+  }
 }
 
 async function processScannedValue(rawValue) {

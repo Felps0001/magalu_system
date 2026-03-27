@@ -195,4 +195,8 @@ router.get('/scanner', noStore(), (req, res) => {
   res.sendFile(path.join(publicDirectory, 'scanner.html'));
 });
 
+router.get('/scanner/', noStore(), (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'scanner.html'));
+});
+
 module.exports = router;
