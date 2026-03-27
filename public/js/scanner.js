@@ -244,6 +244,47 @@ scannerInput.addEventListener('input', () => {
   }
 });
 
+const scannerIdInput = document.getElementById('scanner-id-input');
+const searchIdButton = document.getElementById('search-id-button');
+
+async function processIdSearch() {
+  const rawId = scannerIdInput ? scannerIdInput.value.trim() : '';
+
+  if (!rawId || isHandlingScan) {
+    return;
+  }
+
+  isHandlingScan = true;
+  searchIdButton.disabled = true;
+  updateResult(rawId);
+  setScannerStatus('Consultando participante por ID...', 'info-message');
+
+  try {
+    await processarKit(rawId);
+  } catch (error) {
+    updateKitStatus('Falha ao consultar usuario.', 'Verifique se o ID esta correto e se o usuario existe no banco.', 'blocked');
+    setScannerStatus(`Falha ao consultar kit: ${error.message}`, 'error');
+  } finally {
+    isHandlingScan = false;
+    searchIdButton.disabled = false;
+  }
+}
+
+if (searchIdButton) {
+  searchIdButton.addEventListener('click', processIdSearch);
+}
+
+if (scannerIdInput) {
+  scannerIdInput.addEventListener('keydown', async (event) => {
+    if (event.key !== 'Enter') {
+      return;
+    }
+
+    event.preventDefault();
+    await processIdSearch();
+  });
+}
+
 window.addEventListener('load', () => {
   resetScannerInput();
   setScannerStatus('Pronto para escanear.', 'info-message');

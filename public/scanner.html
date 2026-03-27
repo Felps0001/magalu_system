@@ -168,6 +168,11 @@
       line-height: 1.55;
     }
 
+    .scanner-left-stack {
+      display: grid;
+      gap: 22px;
+    }
+
     @media (max-width: 900px) {
       .scanner-page-grid {
         grid-template-columns: 1fr;
@@ -189,24 +194,41 @@
       </section>
 
       <section class="scanner-page-grid">
-        <section class="scanner-panel-card" aria-labelledby="scanner-panel-title">
-          <h2 id="scanner-panel-title">Leitor físico</h2>
+        <div class="scanner-left-stack">
+          <section class="scanner-panel-card" aria-labelledby="scanner-panel-title">
+            <h2 id="scanner-panel-title">Leitor físico</h2>
 
-          <div class="scanner-form-row">
-            <label for="scanner-input">Entrada do scanner</label>
-            <input id="scanner-input" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Aguardando leitura do scanner">
-          </div>
+            <div class="scanner-form-row">
+              <label for="scanner-input">Entrada do scanner</label>
+              <input id="scanner-input" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Aguardando leitura do scanner">
+            </div>
 
-          <p class="scanner-input-hint">A maioria dos scanners envia o conteúdo e finaliza com Enter. Mantenha o campo ativo e leia o QR normalmente.</p>
+            <p class="scanner-input-hint">A maioria dos scanners envia o conteúdo e finaliza com Enter. Mantenha o campo ativo e leia o QR normalmente.</p>
 
-          <p id="scanner-status" class="form-message info-message">Pronto para escanear.</p>
+            <p id="scanner-status" class="form-message info-message">Pronto para escanear.</p>
 
-          <div class="scanner-actions">
-            <button id="focus-scan-button" class="primary-button" type="button">Ativar leitura</button>
-            <button id="process-scan-button" class="secondary-button" type="button">Processar leitura</button>
-            <button id="clear-scan-button" class="secondary-button" type="button">Limpar</button>
-          </div>
-        </section>
+            <div class="scanner-actions">
+              <button id="focus-scan-button" class="primary-button" type="button">Ativar leitura</button>
+              <button id="process-scan-button" class="secondary-button" type="button">Processar leitura</button>
+              <button id="clear-scan-button" class="secondary-button" type="button">Limpar</button>
+            </div>
+          </section>
+
+          <section class="scanner-panel-card" aria-labelledby="scanner-id-search-title">
+            <h2 id="scanner-id-search-title">Pesquisa por ID</h2>
+
+            <div class="scanner-form-row">
+              <label for="scanner-id-input">ID do participante</label>
+              <input id="scanner-id-input" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Digite o ID do participante">
+            </div>
+
+            <p class="scanner-input-hint">Cole ou digite o ID (MongoDB) do participante e clique em Consultar para verificar e dar baixa no kit.</p>
+
+            <div class="scanner-actions">
+              <button id="search-id-button" class="primary-button" type="button">Consultar</button>
+            </div>
+          </section>
+        </div>
 
         <aside id="scanner-output-card" class="scanner-output-card scanner-output-card--neutral" aria-labelledby="scanner-output-title">
           <h2 id="scanner-output-title">Status do kit</h2>
