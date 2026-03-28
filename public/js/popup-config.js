@@ -6,14 +6,15 @@
   const appRootUrl = new URL('../', scriptUrl);
 
   window.MAGALU_POPUP_CONFIG = {
-    enabled: false,
-    id: 'evento-demo-v1',
-    imageUrl: new URL('assets/img/check.png', appRootUrl).toString(),
-    imageAlt: 'Imagem de exemplo do comunicado',
-    imageLinkUrl: '',
+    enabled: true,
+    id: 'estandes-pontos-v1',
+    imageUrl: new URL('assets/img/popup-pontos.png', appRootUrl).toString(),
+    imageAlt: 'Corra! Veja os estandes que faltam e acumule mais pontos',
+    imageLinkUrl: new URL('estandes/', appRootUrl).toString(),
     dismissible: true,
     showOnce: false,
+    cooldownMinutes: 30,
     showOnPaths: [],
-    hideOnPaths: [],
+    hideOnPaths: ['estandes', 'scanner', 'ranking'],
   };
 })();

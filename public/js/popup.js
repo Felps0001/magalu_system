@@ -14,7 +14,7 @@
     ? config.storageKey.trim()
     : `magalu-popup:${popupId}`;
 
-  if (!shouldDisplayForCurrentPage(config) || wasDismissed(storageKey, config.showOnce === true)) {
+  if (!shouldDisplayForCurrentPage(config) || wasDismissed(storageKey, config.showOnce === true, config.cooldownMinutes)) {
     return;
   }
 
@@ -47,7 +47,7 @@
       media.href = config.imageLinkUrl;
       media.setAttribute('aria-label', typeof config.imageAlt === 'string' && config.imageAlt.trim() ? config.imageAlt.trim() : 'Abrir comunicado');
       media.addEventListener('click', () => {
-        markDismissed(storageKey, config.showOnce === true);
+        markDismissed(storageKey, config.showOnce === true, config.cooldownMinutes);
       });
     }
 
@@ -80,7 +80,7 @@
   closeButton.focus();
 
   function closePopup() {
-    markDismissed(storageKey, config.showOnce === true);
+    markDismissed(storageKey, config.showOnce === true, config.cooldownMinutes);
     document.removeEventListener('keydown', handleKeydown);
     document.body.classList.remove('global-event-popup-open');
     root.remove();
@@ -124,25 +124,45 @@
     return true;
   }
 
-  function wasDismissed(key, showOnce) {
-    if (!showOnce) {
-      return false;
-    }
-
+  function wasDismissed(key, showOnce, cooldownMinutes) {
     try {
-      return window.localStorage.getItem(key) === 'dismissed';
+      const stored = window.localStorage.getItem(key);
+
+      if (!stored) {
+        return false;
+      }
+
+      if (showOnce && stored === 'dismissed') {
+        return true;
+      }
+
+      const cooldown = Number(cooldownMinutes);
+
+      if (cooldown > 0) {
+        const dismissedAt = Number(stored);
+
+        if (!Number.isNaN(dismissedAt) && (Date.now() - dismissedAt) < cooldown * 60 * 1000) {
+          return true;
+        }
+      }
+
+      return false;
     } catch (error) {
       return false;
     }
   }
 
-  function markDismissed(key, showOnce) {
-    if (!showOnce) {
-      return;
-    }
-
+  function markDismissed(key, showOnce, cooldownMinutes) {
     try {
-      window.localStorage.setItem(key, 'dismissed');
+      if (showOnce) {
+        window.localStorage.setItem(key, 'dismissed');
+        return;
+      }
+
+      if (Number(cooldownMinutes) > 0) {
+        window.localStorage.setItem(key, String(Date.now()));
+        return;
+      }
     } catch (error) {
       // Ignora indisponibilidade do storage para nao bloquear o popup.
     }
