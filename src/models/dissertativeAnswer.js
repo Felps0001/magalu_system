@@ -3,6 +3,7 @@ const { ObjectId } = require('mongodb');
 const DISSERTATIVE_ACTIVITY_CODE = 'luiza-dia-a-dia-2026';
 const DISSERTATIVE_ACTIVITY_TITLE = 'Perguntas dissertativas da palestra da Luiza';
 const DISSERTATIVE_ACTIVITY_POINTS = 20;
+const DISSERTATIVE_POINTS_PER_QUESTION = 20;
 const MAX_DISSERTATIVE_ANSWER_LENGTH = 1200;
 const DISSERTATIVE_QUESTIONS = Object.freeze([
   Object.freeze({
@@ -140,12 +141,19 @@ function createDissertativeAnswer({ userId, authorName, authorIdMagalu }) {
   };
 }
 
+function calculateDissertativePontos(answers) {
+  const normalizedAnswers = normalizeExistingAnswers(answers);
+  return normalizedAnswers.length * DISSERTATIVE_POINTS_PER_QUESTION;
+}
+
 module.exports = {
   DISSERTATIVE_ACTIVITY_CODE,
   DISSERTATIVE_ACTIVITY_POINTS,
   DISSERTATIVE_ACTIVITY_TITLE,
+  DISSERTATIVE_POINTS_PER_QUESTION,
   DISSERTATIVE_QUESTIONS,
   MAX_DISSERTATIVE_ANSWER_LENGTH,
+  calculateDissertativePontos,
   createDissertativeAnswer,
   getQuestionByKey,
   isDissertativeActivityComplete,

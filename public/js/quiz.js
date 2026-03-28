@@ -360,6 +360,14 @@ applyQuizConfig();
 setDrawerState(false);
 
 async function initializeQuiz() {
+  hasCompletedCurrentQuiz = true;
+  quizWelcomeTitle.textContent = 'Quizzes encerrados';
+  quizWelcomeDescription.textContent = 'Os quizzes dos estandes foram encerrados. Obrigado pela participacao!';
+  quizStartButton.disabled = true;
+  quizStartButton.textContent = 'Encerrado';
+  setStepVisibility('welcome');
+  return;
+
   const currentUser = window.magaluApi.readStoredUser();
 
   if (!currentUser) {

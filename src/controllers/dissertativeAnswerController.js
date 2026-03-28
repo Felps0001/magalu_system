@@ -6,8 +6,10 @@ const {
   DISSERTATIVE_ACTIVITY_CODE,
   DISSERTATIVE_ACTIVITY_POINTS,
   DISSERTATIVE_ACTIVITY_TITLE,
+  DISSERTATIVE_POINTS_PER_QUESTION,
   DISSERTATIVE_QUESTIONS,
   MAX_DISSERTATIVE_ANSWER_LENGTH,
+  calculateDissertativePontos,
   createDissertativeAnswer,
   getQuestionByKey,
   isDissertativeActivityComplete,
@@ -32,7 +34,7 @@ function normalizeStoredResponse(response) {
     authorName: response.authorName,
     authorIdMagalu: response.authorIdMagalu || null,
     answers: normalizedAnswers,
-    pontos: Number(isComplete ? response.pontos || DISSERTATIVE_ACTIVITY_POINTS : 0),
+    pontos: Number(response.pontos || calculateDissertativePontos(normalizedAnswers)),
     isComplete,
     completedAt: response.completedAt || null,
     createdAt: response.createdAt,
@@ -129,7 +131,7 @@ async function getDissertativeAnswerStatusHandler(req, res) {
     res.json({
       activityCode: DISSERTATIVE_ACTIVITY_CODE,
       activityTitle: DISSERTATIVE_ACTIVITY_TITLE,
-      pontos: DISSERTATIVE_ACTIVITY_POINTS,
+      pontos: DISSERTATIVE_POINTS_PER_QUESTION,
       maxAnswerLength: MAX_DISSERTATIVE_ANSWER_LENGTH,
       questions,
       question: currentQuestion,
@@ -204,7 +206,7 @@ async function listDissertativeAnswersHandler(req, res) {
     res.json({
       activityCode: DISSERTATIVE_ACTIVITY_CODE,
       activityTitle: DISSERTATIVE_ACTIVITY_TITLE,
-      pontos: DISSERTATIVE_ACTIVITY_POINTS,
+      pontos: DISSERTATIVE_POINTS_PER_QUESTION,
       question: questionKey ? getQuestionByKey(questionKey) : null,
       total: items.length,
       items,
@@ -265,7 +267,7 @@ async function createDissertativeAnswerHandler(req, res) {
     const timestamp = new Date().toISOString();
     const nextAnswers = [...normalizedExistingAnswers, normalizedAnswer];
     const isComplete = isDissertativeActivityComplete(nextAnswers);
-    const nextPontos = isComplete ? DISSERTATIVE_ACTIVITY_POINTS : 0;
+    const nextPontos = calculateDissertativePontos(nextAnswers);
 
     let persistedResponse;
 

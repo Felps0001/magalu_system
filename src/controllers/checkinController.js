@@ -7,6 +7,12 @@ const CHECKINS_CACHE_TTL_SECONDS = Number(process.env.REDIS_TTL_CHECKINS_SECONDS
 
 async function createCheckinHandler(req, res) {
   try {
+    res.status(403).json({
+      error: 'Os quizzes foram encerrados. Nao e mais possivel registrar check-ins nos estandes.',
+      code: 'QUIZZES_CLOSED',
+    });
+    return;
+
     const checkinsCollection = await getCheckinsCollection();
     const checkin = createCheckin(req.body);
 
