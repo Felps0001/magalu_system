@@ -3659,13 +3659,10 @@ button:hover {
 
 .global-event-popup-media {
   display: block;
-  border-radius: 999px;
+  border-radius: 24px;
   overflow: hidden;
   text-decoration: none;
-  width: 45px;
-  height: 45px;
-  min-width: 45px;
-  min-height: 45px;
+  width: 100%;
   box-shadow: 0 10px 18px rgba(6, 36, 74, 0.16);
 }
 
