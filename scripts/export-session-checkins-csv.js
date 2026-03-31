@@ -9,6 +9,7 @@ const {
   getUsersCollection,
   getQuestionSessionsCollection,
 } = require('../src/config/collections');
+const { getDiretoriaByRegional } = require('../src/services/diretoria');
 
 const OUTPUT_FILE = path.resolve(__dirname, '..', 'reports', 'session-checkins-pontualidade.csv');
 
@@ -36,6 +37,19 @@ function escapeCsvField(value) {
 
 function buildCsvLine(fields) {
   return fields.map(escapeCsvField).join(';');
+}
+
+function getElapsedMinutes(startedAt, checkinEm) {
+  if (!startedAt || !checkinEm) return null;
+  const diffMs = new Date(checkinEm) - new Date(startedAt);
+  return Math.round(diffMs / 60000);
+}
+
+function getPontualidadeStatus(minutes) {
+  if (minutes == null) return '';
+  if (minutes <= 5) return 'Pontual';
+  if (minutes <= 15) return 'Moderado';
+  return 'Atrasado';
 }
 
 async function exportSessionCheckins() {
@@ -85,7 +99,10 @@ async function exportSessionCheckins() {
     'PALCO',
     'SESSAO',
     'PONTOS',
+    'SESSAO_INICIO',
     'CHECKIN_EM',
+    'TEMPO_MIN',
+    'PONTUALIDADE',
   ];
 
   const lines = [buildCsvLine(headers)];
@@ -93,20 +110,28 @@ async function exportSessionCheckins() {
   for (const checkin of checkins) {
     const user = checkin.user || {};
     const session = checkin.session || {};
+    const regional = (user.regional || user.regiao || '').trim();
+    const filial = (user.filial || user.loja || '').trim();
+    const diretoria = getDiretoriaByRegional(regional) || (user.diretoria || '').trim();
+    const elapsedMin = getElapsedMinutes(session.startedAt, checkin.checkinEm);
+    const pontualidade = getPontualidadeStatus(elapsedMin);
 
     lines.push(buildCsvLine([
       user.nome || '',
       user.cpf || '',
       user.id_magalu || '',
-      user.filial || '',
+      filial,
       user.cargo || '',
-      user.regional || '',
-      user.diretoria || '',
+      regional,
+      diretoria,
       user.turma || '',
       checkin.palestraLabel || checkin.palestraId || '',
       session.label || '',
       checkin.pontos || 0,
+      formatDate(session.startedAt),
       formatDate(checkin.checkinEm),
+      elapsedMin != null ? elapsedMin : '',
+      pontualidade,
     ]));
   }
 
